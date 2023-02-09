@@ -1,4 +1,4 @@
-export const navigationRoutes = {
+export const screens = {
     scenes: {
         onBoarding: {
             title: 'Boarding',
@@ -37,6 +37,10 @@ export const navigationRoutes = {
                     title: '',
                     name: 'tutor',
                     screens: {
+                        wrapper: {
+                            title: 'wrapper',
+                            name: 'protected-teacher'
+                        },
                         home: {
                             title: 'Dashboard',
                             name: 'teacher-dashboard'
@@ -45,10 +49,7 @@ export const navigationRoutes = {
                             title: '',
                             name: 'student-class'
                         },
-                        assessment: {
-                            title: '',
-                            name: 'assessment'
-                        },
+
                         readAssessment: {
                             title: '',
                             name: 'read-assessment'
@@ -65,9 +66,49 @@ export const navigationRoutes = {
                             title: '',
                             name: 'mark-attendance'
                         },
-                        classRegister: {
+                        sessionClass: {
                             title: '',
-                            name: 'class-register'
+                            name: 't-session-register',
+                            screen: {
+                                assessment: {
+                                    title: '',
+                                    name: 't-assessment',
+                                    screen: {
+                                        create: {
+                                            title: '',
+                                            name: 't-assessment-create',
+                                        },
+                                        detail: {
+                                            title: '',
+                                            name: 't-assessment-detail',
+                                            screens: {
+                                                feedback: {
+                                                    title: '',
+                                                    name: 't-student-assessment-feedback',
+                                                }
+                                            }
+                                        },
+                                        update: {
+                                            title: '',
+                                            name: 't-assessment-update',
+                                        }
+                                    }
+                                },
+                                classRegister: {
+                                    title: '',
+                                    name: 't-class-register'
+                                },
+                            }
+                        },
+                        announcement: {
+                            title: '',
+                            name: 'teacher-announcement',
+                            screen: {
+                                detail: {
+                                    title: '',
+                                    name: 'teacher-announcement-detail',
+                                }
+                            }
                         }
                     }
                 },
@@ -75,7 +116,7 @@ export const navigationRoutes = {
                     title: '',
                     name: 'tutor',
                     screens: {
-                        
+
                     }
                 }
             }

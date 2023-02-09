@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StatusBar,
     useColorScheme,
@@ -12,7 +12,17 @@ import SignIn from './authentication/sign-in';
 import { IAuthState } from '../interfaces/auth/IAuth';
 import TeacherDashboard from './dashboards/teacher-dashboard';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { navigationRoutes } from '../screen-routes/navigation';
+import { screens } from '../screen-routes/navigation';
+import ProtectedTeacher from './authentication/protected-teacher';
+import { OnboardedUser } from '../models/on-boarding/onboarded-user';
+import AnnouncementList from './announcement/announcement-list';
+import { useNavigation } from '@react-navigation/native';
+import AnnouncementDetail from './announcement/announcement-detail';
+import SessionClassIndex from './components/session-class';
+import AssessmentIndex from './components/session-class/assessment';
+import AssessmentCreate from './components/session-class/assessment/ceate';
+import AssessmentDetail from './components/session-class/assessment/detail';
+import StudentHomeAssessmentDetail from './components/session-class/assessment/student-h-assessment-detail';
 
 function mapStateToProps(state: IAppState) {
     const { backgroundColor } = state;
@@ -36,14 +46,22 @@ const Entry = (props: any) => {
     const backgroundStyle = { backgroundColor: isDarkMode ? AppDark : AppLight };
     const statusBar = <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
 
+    const [persistedUser, setPersistedUser] = useState<OnboardedUser>()
     useEffect(() => {
         GetAppState()(props.dispatch);
-    }, [])
+    }, []);
+
+
+    React.useEffect(() => {
+        if (onboardedUser) {
+            onboardedUser && setPersistedUser(JSON.parse(JSON.stringify(onboardedUser)))
+        }
+    }, [onboardedUser]);
 
     return (
         <>
             {statusBar}
-            <StackNavigator state={props.state} dispatch={props.dispatch} backgroundStyle={backgroundStyle} />
+            <StackNavigator state={props.state} dispatch={props.dispatch} backgroundStyle={backgroundStyle} persistedUser={persistedUser} />
         </>
     );
 };
@@ -54,19 +72,45 @@ export default Entry;
 const StackNavigator = (parentProps: any) => {
 
     const Stack = createNativeStackNavigator();
-    return (
+    const navigation = useNavigation();
+
+    return (//screens.scenes.mainapp.scenes.tutor.screens.home.name
         <>
-            <Stack.Navigator initialRouteName={navigationRoutes.scenes.auth.screens.signin.name}>
-                <Stack.Screen name={navigationRoutes.scenes.onBoarding.name} options={{ headerShown: false }}>
-                    {props => <Onboarding {...props} dispatch={parentProps.dispatch} state={parentProps.state} />}
+            
+            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.name}>
+                <Stack.Screen name={screens.scenes.onBoarding.name} options={{ headerShown: false }}>
+                    {props => <Onboarding {...props} dispatch={parentProps.dispatch} state={parentProps.state} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={navigationRoutes.scenes.auth.screens.signin.name}>
-                    {props => <SignIn {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} />}
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
+                    {props => <SignIn {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={navigationRoutes.scenes.mainapp.scenes.tutor.screens.home.name}>
-                    {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} />}
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
+                    {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
-                
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.wrapper.name}>
+                    {props => <ProtectedTeacher {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.announcement.name}>
+                    {props => <AnnouncementList {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.announcement.screen.detail.name}>
+                    {props => <AnnouncementDetail {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.name}>
+                    {props => <SessionClassIndex {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name}>
+                    {props => <AssessmentIndex {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name}>
+                    {props => <AssessmentCreate {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.detail.name}>
+                    {props => <AssessmentDetail {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.detail.screens.feedback.name}>
+                    {props => <StudentHomeAssessmentDetail {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
             </Stack.Navigator>
         </>
 

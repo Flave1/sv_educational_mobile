@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 import axiosInstance from "../../axios/axiosInstance";
 import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 import { actions } from "../action-types/app-state-action-types";
@@ -12,14 +13,16 @@ export const GetAppState = () => (dispatch: any) => {
     })
 }
 
-export const SetErrorToastState = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST });
+export const SetErrorToastState = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST, payload: message });
 export const ResetSuccessToastState = () => (dispatch: any) => dispatch({ type: actions.RESET_SUCCESS_TOAST });
 
 export const OffboardUser = () => (dispatch: any) => {
-    AsyncStorage.removeItem('onboardedUser');
-    getAllSchools()(dispatch);
-    GetAppState()(dispatch)
-    dispatch({ type: actions.OFF_BOARD });
+    AsyncStorage.removeItem('onboardedUser').then(() => {
+        getAllSchools()(dispatch);
+        // GetAppState()(dispatch)
+        dispatch({ type: actions.OFF_BOARD });
+    });
+
 }
 export const getAllSchools = () => (dispatch: any) => {
     dispatch({ type: actions.SHOW_LOADING });
@@ -28,7 +31,11 @@ export const getAllSchools = () => (dispatch: any) => {
             dispatch({ type: actions.HIDE_LOADING });
             dispatch({ type: actions.GET_ALL_SCHOOLS_SUCCESS, payload: res.data.result });
         }).catch((err: any) => {
-            dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
+            try {
+                dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
+            } catch (error) {
+                Alert.alert('Unexpected Error occurred ')
+            }
         })
 }
 
@@ -39,6 +46,10 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
             dispatch({ type: actions.VALIDATE_MOBILE_USER_SUCCESS, payload: res.data.result });
             dispatch({ type: actions.HIDE_LOADING });
         }).catch((err: any) => {
-            dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
+            try {
+                dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
+            } catch (error) {
+                Alert.alert('Unexpected Error occurred ')
+            }
         })
 }

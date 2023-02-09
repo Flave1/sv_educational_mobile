@@ -10,15 +10,36 @@ import {
 } from "@react-native-material/core";
 
 import Entypo from 'react-native-vector-icons/Entypo';
-import TeacherFooter from "../components/layouts/teacher-footer";
+import SessionClassProperties from "../components/session-class/session-class-properties";
 import CustomText from "../components/layouts/CustomText";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { AppDark, AppLight, TextDark, TextLight } from "../../tools/color";
+import FlexendSpinner from "../components/layouts/spinner/flex-end-spinner";
+import { SignOutUser } from "../../store/actions/auth-actions";
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { screens } from "../../screen-routes/navigation";
 
-const ProtectedTeacher = ({ backgroundColor, children }: any) => {
+const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => {
     const [revealed, setRevealed] = useState(false);
-    const [currentScreen, seCurrentScreen] = useState('Dasshboard');
+    const [currentScreen, seCurrentScreen] = useState('Dashboard');
+
     const isDarkMode = useColorScheme() === 'dark';
+
+    const dispatch = useDispatch();
+    const state = useSelector((state: any) => state);
+    const navigation = useNavigation();
+
+    AsyncStorage.getItem('token').then(res => {
+        !res && navigation.navigate(screens.scenes.auth.screens.signin)
+    });
+
+
+    const logOutAccount = () => {
+        SignOutUser()(dispatch)
+    }
     return (
         <Backdrop
             style={{ backgroundColor: backgroundColor }}
@@ -27,14 +48,14 @@ const ProtectedTeacher = ({ backgroundColor, children }: any) => {
                 <>
                     <HStack style={{ justifyContent: 'center' }}>
 
-                        <HStack style={{ justifyContent: 'flex-start', width:'80%' }}>
+                        <HStack style={{ justifyContent: 'flex-start', width: '80%' }}>
                             <View>
                                 <AppBar
-                                    title={currentScreen}
+                                    // title={currentScreen}
                                     transparent
                                     leading={props => (
                                         <IconButton
-                                            icon={props => (<Entypo name={revealed ? "list" : "menu"} {...props} />)}
+                                            icon={props => (<Entypo name={revealed ? "list" : "menu"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                             onPress={() => setRevealed(prevState => !prevState)}
                                             {...props}
                                         />
@@ -43,14 +64,14 @@ const ProtectedTeacher = ({ backgroundColor, children }: any) => {
                             </View>
                         </HStack>
 
-                        <HStack style={{ justifyContent: 'flex-end', alignItems:'flex-end', width:'20%' }} spacing={0}>
+                        <HStack style={{ justifyContent: 'flex-end', alignItems: 'flex-end', width: '20%' }} spacing={0}>
 
                             <AppBar
                                 title={currentScreen}
                                 transparent
                                 leading={props => (
                                     <IconButton
-                                        icon={(<Ionicons name={"search"} size={20} />)}
+                                        icon={(<Ionicons name={"search"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                     />
                                 )}
                             />
@@ -59,17 +80,18 @@ const ProtectedTeacher = ({ backgroundColor, children }: any) => {
                                 transparent
                                 leading={props => (
                                     <IconButton
-                                        icon={(<Ionicons name={"notifications-outline"} size={20} />)}
+                                        icon={(<Ionicons name={"notifications-outline"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                     />
                                 )}
                             />
                             <AppBar
-                            style={{alignItems:'flex-end'}}
+                                style={{ alignItems: 'flex-end' }}
                                 title={currentScreen}
                                 transparent
                                 leading={props => (
                                     <IconButton
-                                        icon={(<FontAwesome5 name={"user-circle"} size={20} />)}
+                                        onPress={logOutAccount}
+                                        icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                     />
                                 )}
                             />
@@ -106,13 +128,15 @@ const ProtectedTeacher = ({ backgroundColor, children }: any) => {
                 </View>
             }
         >
-            <Stack >
+            <Stack>
                 {/* <View style={{ height: '5%', backgroundColor: backgroundColor }}><BackdropSubheader title={<CustomText title={"Some Item here"} />} /></View> */}
-                <View style={{ height: '85%', backgroundColor: backgroundColor }}>{children}</View>
-                <View style={{ height: '15%', backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center', display: currentScreen === 'Dashboard' ? 'none' : 'flex' }}>
-                    <TeacherFooter hide={false} />
+                <View style={{ height: '85%', backgroundColor: backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>{children}</View>
+                <View style={{ height: '15%', backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+                    <SessionClassProperties hide={false} />
                 </View>
+
             </Stack>
+
         </Backdrop >
     );
 };

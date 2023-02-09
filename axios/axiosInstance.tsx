@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { Alert } from 'react-native';
 const axiosInstance = axios.create({
     baseURL: 'http://flavetechs.com/',
     // baseURL:'https://localhost:44357/',
@@ -14,6 +15,7 @@ axiosInstance.interceptors.response.use((response: any) => response, (error: any
 
 axiosInstance.interceptors.response.use(async (response: any) => response, (error: any) => { 
     if(error.response.status === 500){
+        Alert.alert('Unexpected Error occurred ')
         console.log('error.response', error.response)
     }
     if(error.response.status === 404){

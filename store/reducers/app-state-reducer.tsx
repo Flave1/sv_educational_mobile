@@ -1,7 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { APIService } from "../../axios/api-service";
-import { IAppState } from "../../interfaces/app-state/state";
-import { OnboardedUser } from "../../models/on-boarding/onboarded-user";
 import { actions } from "../action-types/app-state-action-types";
 import appState from "../states/app-state";
 export const appStateReducer = (state = appState, { type, payload }: any) => {
@@ -12,12 +9,15 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 ...state,
                 doneWithOnBoarding: true
             }
-        case actions.OFF_BOARD:
+        case actions.OFF_BOARD: {
+            AsyncStorage.removeItem('onboardedUser')
             return {
                 ...state,
                 doneWithOnBoarding: false,
                 onboardedUser: null
             }
+        }
+
 
         case actions.SHOW_LOADING:
             return {

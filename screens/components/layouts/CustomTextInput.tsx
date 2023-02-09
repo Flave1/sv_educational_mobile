@@ -1,7 +1,8 @@
+import { Text } from '@react-native-material/core';
 import React from 'react';
 import { TextInput as RNTextInput, View, StyleSheet, useColorScheme } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo'
-import { AppDark, AppLight, TextLight } from '../../../tools/color';
+import { AppDark, AppLight, TextDark, TextLight } from '../../../tools/color';
 
 export default function CustomTextInput({ icon, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
@@ -18,14 +19,14 @@ export default function CustomTextInput({ icon, ...otherProps }: any) {
         padding: 2,
       }}
     >
-      <View style={{ padding: 8 }}>
-        <Entypo name={icon} color={validationColor} size={16} />
+      <View style={{ padding: 8, }}>
+        <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
       </View>
       <View style={{ flex: 1 }}>
         <RNTextInput
-          style={{ color: validationColor, fontWeight:'bold', fontSize:20 }}
+          style={{ color: validationColor, fontWeight: 'bold', fontSize: 17 }}
           underlineColorAndroid='transparent'
-          placeholderTextColor={isDarkMode ? AppLight : AppDark}
+          placeholderTextColor={'grey'}
           {...otherProps}
         />
       </View>

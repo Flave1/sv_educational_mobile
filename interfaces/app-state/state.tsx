@@ -7,7 +7,7 @@ export class IAppState {
     doneWithOnBoarding: boolean = false;
     loading: boolean = false;
     allSchools: Array<School> = [];
-    onboardedUser = "";
+    onboardedUser = new Object();
     information: string = ""
     error: string = "";
     success: string = ""

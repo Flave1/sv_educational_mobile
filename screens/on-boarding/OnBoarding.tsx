@@ -6,10 +6,21 @@ import Footer from '../components/layouts/Footer';
 import GlobalStyles from '../components/layouts/GlobalStyle';
 import { AppDark, AppLight } from '../../tools/color';
 import SchoolSetup from './school-setup';
-
+import { screens } from '../../screen-routes/navigation';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Onboarding = (props: any) => {
+
+  // const navigation = useNavigation();
+  React.useEffect(() => {
+    if (props.persistedUser?.baseUrlSuffix) {
+      //props.navigation.navigate(screens.scenes.auth.screens.signin)
+      console.log('persistedUser', props.persistedUser);
+    }
+  }, [props.persistedUser?.baseUrlSuffix])
+
+
   const pagerRef: any = useRef(null);
   const [pageNumber, setPageNumber] = useState(0);
   const [LastPageRefNumber] = useState(3);
@@ -21,7 +32,6 @@ const Onboarding = (props: any) => {
     } else {
       pagerRef.current.setPage(pageNumber);
     }
-
   };
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -91,7 +101,7 @@ const Onboarding = (props: any) => {
           />
         </View>
         <View key="4">
-          <SchoolSetup backgroundColor={backgroundStyle.backgroundColor} dispatch={props.dispatch} state={props.state}/>
+          <SchoolSetup backgroundColor={backgroundStyle.backgroundColor} dispatch={props.dispatch} state={props.state} />
           <Footer
             backgroundColor={backgroundStyle.backgroundColor}
             leftButtonLabel="Back"
@@ -99,7 +109,6 @@ const Onboarding = (props: any) => {
               setPageNumber(pageNumber - 1)
               handlePageChange(pageNumber - 1);
             }}
-
           />
         </View>
       </ViewPager>

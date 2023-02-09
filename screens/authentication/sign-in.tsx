@@ -1,39 +1,32 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
-import { IAppState } from '../../interfaces/app-state/state';
+import React from 'react';
 import * as Yup from 'yup';
 import CustomTextInput from '../components/layouts/CustomTextInput';
 import CustomButton from '../components/layouts/CustomButton';
 import CustomText from '../components/layouts/CustomText';
-import { getAllSchools, OffboardUser } from '../../store/actions/app-state-actions';
+import { OffboardUser } from '../../store/actions/app-state-actions';
 import { IAuthState } from '../../interfaces/auth/IAuth';
 import { SignInUser } from '../../store/actions/auth-actions';
-import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
-import { navigationRoutes } from '../../screen-routes/navigation';
-import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
-const SignIn = ({ dispatch, state, backgroundColor }: any) => {
+import { screens } from '../../screen-routes/navigation';
+const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
 
     const { authResult }: IAuthState = state?.authState;
-    const { onboardedUser }: IAppState = state?.appState;
-    const navigation = useNavigation();
-    const [persistedUser, setPersistedUser] = useState(new OnboardedUser())
+
+    // React.useEffect(() => {
+    //     getAllSchools()(dispatch)
+    // }, [])
+    
 
     React.useEffect(() => {
-        getAllSchools()(dispatch)
-    }, [])
-
+        authResult && navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
+    }, [authResult])
 
     React.useEffect(() => {
-        !onboardedUser && navigation.navigate(navigationRoutes.scenes.onBoarding.name);
-        authResult && navigation.navigate(navigationRoutes.scenes.mainapp.scenes.tutor.screens.home.name);
-        if(onboardedUser){
-            
-            onboardedUser.length > 0 && setPersistedUser(JSON.parse(onboardedUser))
-        }
-    }, [onboardedUser, authResult])
-
+        !persistedUser.baseUrlSuffix  && navigation.navigate(screens.scenes.onBoarding.name)
+    })
+    
     const validation = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Username Too Short!')
@@ -59,7 +52,7 @@ const SignIn = ({ dispatch, state, backgroundColor }: any) => {
         <>
             <Stack style={{ backgroundColor: backgroundColor }}>
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
-                    <Avatar size={150} image={{ uri: persistedUser.schoolLogo ? persistedUser.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png' }}/>
+                    <Avatar size={150} image={{ uri: persistedUser.schoolLogo ? persistedUser.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png' }} />
                 </Stack>
                 <Stack center>
                     {((touched.userName && errors.userName)) && <Text color='red' >{errors.userName}</Text>}
@@ -112,9 +105,8 @@ const SignIn = ({ dispatch, state, backgroundColor }: any) => {
                     <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
                         <Pressable onPress={() => {
                             OffboardUser()(dispatch);
-                            navigation.navigate(navigationRoutes.scenes.onBoarding.name.toString())
+                            navigation.navigate(screens.scenes.onBoarding.name)
                         }}>
-
                             <CustomText style={{ fontWeight: 'bold' }} title="Off Board Account" />
                         </Pressable>
                         <Pressable>

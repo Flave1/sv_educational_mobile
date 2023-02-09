@@ -5,13 +5,19 @@ import authState from "../states/auth-state"
 export const authReducer = (state = authState, { type, payload }: any) => {
     switch (type) {
         case actions.SIGN_IN_USER: {
-            // AsyncStorage.setItem('authReult', payload)
+            AsyncStorage.setItem('token', payload.token)
             return {
                 ...state,
                 authResult: payload
             }
         }
-
+        case actions.SIGN_OUT_USER: {
+            AsyncStorage.removeItem('token')
+            return {
+                ...state,
+                authResult: null
+            }
+        }
 
         default:
             return state

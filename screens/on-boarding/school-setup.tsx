@@ -21,7 +21,7 @@ import Section from "../components/layouts/Section";
 import SelectDropdown from 'react-native-select-dropdown'
 import { useFormik } from "formik";
 import { useNavigation } from "@react-navigation/native";
-import { navigationRoutes } from "../../screen-routes/navigation";
+import { screens } from "../../screen-routes/navigation";
 
 
 
@@ -29,7 +29,7 @@ import { navigationRoutes } from "../../screen-routes/navigation";
 const SchoolSetup = ({ backgroundColor, dispatch, state }: any) => {
     const [showModal, setShowmodal] = useState(false);
     const [selectedSchool, setSelectedSchool] = useState(new School());
-    const { allSchools, doneWithOnBoarding, onboardedUser }: IAppState = state?.appState;
+    const { allSchools, onboardedUser }: IAppState = state?.appState;
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const SchoolSetup = ({ backgroundColor, dispatch, state }: any) => {
     }, []);
 
     useEffect(() => {
-        onboardedUser && navigation.navigate(navigationRoutes.scenes.auth.screens.signin.name.toString());
+        onboardedUser && navigation.navigate(screens.scenes.auth.screens.signin.name.toString());
     }, [onboardedUser])
     
 
