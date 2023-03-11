@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
 import axiosInstance from "../../axios/axiosInstance";
-import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
+import { ErrorHandler } from '../../Utils/ErrorHandler';
 import { actions } from "../action-types/app-state-action-types";
 
 export const onboardUser = () => ({ type: actions.ON_BOARD });
@@ -19,7 +18,6 @@ export const ResetSuccessToastState = () => (dispatch: any) => dispatch({ type: 
 export const OffboardUser = () => (dispatch: any) => {
     AsyncStorage.removeItem('onboardedUser').then(() => {
         getAllSchools()(dispatch);
-        // GetAppState()(dispatch)
         dispatch({ type: actions.OFF_BOARD });
     });
 
@@ -31,11 +29,7 @@ export const getAllSchools = () => (dispatch: any) => {
             dispatch({ type: actions.HIDE_LOADING });
             dispatch({ type: actions.GET_ALL_SCHOOLS_SUCCESS, payload: res.data.result });
         }).catch((err: any) => {
-            try {
-                dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
-            } catch (error) {
-                Alert.alert('Unexpected Error occurred ')
-            }
+            ErrorHandler.HandleUnexpectedError(err, actions, dispatch);
         })
 }
 
@@ -46,10 +40,6 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
             dispatch({ type: actions.VALIDATE_MOBILE_USER_SUCCESS, payload: res.data.result });
             dispatch({ type: actions.HIDE_LOADING });
         }).catch((err: any) => {
-            try {
-                dispatch({ type: actions.REQUEST_FAILED, payload: err?.response.data.message.friendlyMessage });
-            } catch (error) {
-                Alert.alert('Unexpected Error occurred ')
-            }
+            ErrorHandler.HandleUnexpectedError(err, actions, dispatch);
         })
 }

@@ -1,0 +1,1 @@
+export const UNAUTHORIZED = "[AxiosError: Request failed with status code 401]"

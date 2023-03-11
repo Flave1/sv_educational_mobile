@@ -11,16 +11,17 @@ const SessionClassIndex = ({ dispatch, state, backgroundColor, persistedUser, na
 
     const [classInfo] = useState<any>(route.params);
 
+    
     return (
         <ProtectedTeacher backgroundColor={backgroundColor}>
             <Stack style={{ flex: 1 }}>
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
                     <SquareBox
-                        AssIcon={<MaterialIcons name="assessment" color="white" size={20} />}
+                        AssIcon={<MaterialIcons name="assessment" color="white" size={15} />}
                         AssCount={classInfo.assessmentCount}
-                        NoteIcon={<MaterialCommunityIcons name="bookshelf" color="white" size={20} />}
+                        NoteIcon={<MaterialCommunityIcons name="bookshelf" color="white" size={15} />}
                         NoteCount={classInfo.studentNoteCount}
-                        studentCountIcon={<FontAwesome5 name="users" color="white" size={20} />}
+                        studentCountIcon={<FontAwesome5 name="users" color="white" size={15} />}
                         studentCount={classInfo.studentCounts}
                         className={classInfo.sessionClass}
                     />
@@ -29,7 +30,7 @@ const SessionClassIndex = ({ dispatch, state, backgroundColor, persistedUser, na
                 <Stack style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
 
                     <View style={{ flex: 1, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
-                        <SessionClassProperties hide={false} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }} selectItem={{ value: classInfo.sessionClassId, text: classInfo.sessionClass }} />
+                        <SessionClassProperties hide={false} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }} selectItem={{ value: classInfo.sessionClassId, text: classInfo.sessionClass }} navigation={navigation}/>
                     </View>
 
                 </Stack>

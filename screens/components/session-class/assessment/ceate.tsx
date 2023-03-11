@@ -57,7 +57,7 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
             values.sessionClassId = sessionClass.value;
             values.sessionClassSubjectId = sessionClassSubject.value;
             values.sessionClassGroupId = group.value;
-            createHomeAssessment(values, persistedUser.baseUrlSuffix, navigation)(dispatch)
+            createHomeAssessment(values, navigation)(dispatch)
         }
     });
 

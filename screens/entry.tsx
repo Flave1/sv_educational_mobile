@@ -23,6 +23,7 @@ import AssessmentIndex from './components/session-class/assessment';
 import AssessmentCreate from './components/session-class/assessment/ceate';
 import AssessmentDetail from './components/session-class/assessment/detail';
 import StudentHomeAssessmentDetail from './components/session-class/assessment/student-h-assessment-detail';
+import SchoolSetup from './on-boarding/school-setup';
 
 function mapStateToProps(state: IAppState) {
     const { backgroundColor } = state;
@@ -51,9 +52,11 @@ const Entry = (props: any) => {
         GetAppState()(props.dispatch);
     }, []);
 
-
     React.useEffect(() => {
-        if (onboardedUser) {
+        try {
+            onboardedUser && setPersistedUser(JSON.parse(onboardedUser))
+        } catch (error) {
+            console.log('error', error);
             onboardedUser && setPersistedUser(JSON.parse(JSON.stringify(onboardedUser)))
         }
     }, [onboardedUser]);
@@ -74,12 +77,15 @@ const StackNavigator = (parentProps: any) => {
     const Stack = createNativeStackNavigator();
     const navigation = useNavigation();
 
-    return (//screens.scenes.mainapp.scenes.tutor.screens.home.name
+    return (
         <>
-            
-            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.name}>
-                <Stack.Screen name={screens.scenes.onBoarding.name} options={{ headerShown: false }}>
-                    {props => <Onboarding {...props} dispatch={parentProps.dispatch} state={parentProps.state} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+
+            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.screens.viewpagers.name}>
+                <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
+                    {props => <Onboarding {...props} dispatch={parentProps.dispatch} state={parentProps.state} persistedUser={parentProps.persistedUser} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.onBoarding.screens.setup.name}>
+                    {props => <SchoolSetup {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
                     {props => <SignIn {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
@@ -111,6 +117,7 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.detail.screens.feedback.name}>
                     {props => <StudentHomeAssessmentDetail {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
+
             </Stack.Navigator>
         </>
 

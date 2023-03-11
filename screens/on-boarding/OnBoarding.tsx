@@ -5,20 +5,19 @@ import Page from './Page';
 import Footer from '../components/layouts/Footer';
 import GlobalStyles from '../components/layouts/GlobalStyle';
 import { AppDark, AppLight } from '../../tools/color';
-import SchoolSetup from './school-setup';
 import { screens } from '../../screen-routes/navigation';
 import { useNavigation } from '@react-navigation/native';
 
 
 const Onboarding = (props: any) => {
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   React.useEffect(() => {
-    if (props.persistedUser?.baseUrlSuffix) {
-      //props.navigation.navigate(screens.scenes.auth.screens.signin)
-      console.log('persistedUser', props.persistedUser);
+
+    if (props.persistedUser) {
+      navigation.navigate(screens.scenes.auth.screens.signin.name)
     }
-  }, [props.persistedUser?.baseUrlSuffix])
+  }, [props.persistedUser])
 
 
   const pagerRef: any = useRef(null);
@@ -38,7 +37,6 @@ const Onboarding = (props: any) => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? AppDark : AppLight,
   };
-
   return (
     <View style={[GlobalStyles.darkTheme, { flex: 1 }]}>
       <ViewPager style={{ flex: 1 }} initialPage={0} ref={pagerRef}>
@@ -95,22 +93,23 @@ const Onboarding = (props: any) => {
             }}
             rightButtonLabel="Get Started"
             rightButtonPress={() => {
-              setPageNumber(pageNumber + 1)
-              handlePageChange(pageNumber + 1);
+              navigation.navigate(screens.scenes.onBoarding.screens.setup.name);
             }}
           />
         </View>
-        <View key="4">
-          <SchoolSetup backgroundColor={backgroundStyle.backgroundColor} dispatch={props.dispatch} state={props.state} />
-          <Footer
-            backgroundColor={backgroundStyle.backgroundColor}
-            leftButtonLabel="Back"
-            leftButtonPress={() => {
-              setPageNumber(pageNumber - 1)
-              handlePageChange(pageNumber - 1);
-            }}
-          />
-        </View>
+        {/* <View key="4">
+          <SchoolSetup backgroundColor={backgroundStyle.backgroundColor} dispatch={props.dispatch} state={props.state} navigation={navigation} />
+          {
+            <Footer
+                  backgroundColor={backgroundStyle.backgroundColor}
+                  leftButtonLabel="Back"
+                  leftButtonPress={() => {
+                    setPageNumber(pageNumber - 1)
+                    handlePageChange(pageNumber - 1);
+                  }}
+            /> 
+          }
+        </View> */}
       </ViewPager>
     </View>
   );

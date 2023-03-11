@@ -4,19 +4,15 @@ import { StyleSheet, useColorScheme, View, Image } from "react-native";
 import { School } from "../../../models/on-boarding/all-schools";
 import { AppDark, AppLight } from "../../../tools/color";
 import CustomText from "./CustomText";
-const Section: React.FC<PropsWithChildren<{ school: School; setShowmodal: any, setSelectedSchool: any }>> = ({ school, setShowmodal, setSelectedSchool }) => {
+const Section: React.FC<PropsWithChildren<{ school: School; onPress: any, setSelectedSchool: any }>> = ({ school, onPress, setSelectedSchool }) => {
     const isDarkMode = useColorScheme() === 'dark';
     
     return (
-        <Pressable onPress={() => {
-            setShowmodal(true);
-            setSelectedSchool(school)
-            }
-        }
+        <Pressable onPress={onPress}
             style={[styles.sectionContainer, isDarkMode ? styles.borderLight : styles.borderDark]}>
             <View style={{ width: '30%' }}>
                 <Image
-                    source={{ uri: school.schoolLogo }}
+                    source={{ uri: !school.schoolLogo ? "https://www.kaleo-asbl.be/content/uploads/2017/05/Profil-site.jpg" : school.schoolLogo }}
                     style={styles.logo} />
             </View>
             <View style={{ width: '70%', alignContent: 'flex-end', alignSelf: 'flex-end', justifyContent: 'flex-end' }}>

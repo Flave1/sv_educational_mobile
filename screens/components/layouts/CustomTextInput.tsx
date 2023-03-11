@@ -1,12 +1,13 @@
 import { Text } from '@react-native-material/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput as RNTextInput, View, StyleSheet, useColorScheme } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo'
 import { AppDark, AppLight, TextDark, TextLight } from '../../../tools/color';
 
-export default function CustomTextInput({ icon, ...otherProps }: any) {
+export default function CustomTextInput({ icon, borderColor, textColor, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
-  const validationColor = isDarkMode ? AppLight : AppDark;
+  const bdColor = borderColor ? borderColor : isDarkMode ? AppLight : AppDark;
+  const txColor = textColor ? textColor : isDarkMode ? AppLight : AppDark;
+  const [showOnFocusStyle, setFocusStyles] = useState(false);
   return (
     <View
       style={{
@@ -14,7 +15,7 @@ export default function CustomTextInput({ icon, ...otherProps }: any) {
         alignItems: 'center',
         height: 48,
         borderRadius: 8,
-        borderColor: validationColor,
+        borderColor: bdColor,
         borderWidth: StyleSheet.hairlineWidth,
         padding: 2,
       }}
@@ -22,9 +23,15 @@ export default function CustomTextInput({ icon, ...otherProps }: any) {
       <View style={{ padding: 8, }}>
         <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
       </View>
-      <View style={{ flex: 1 }}>
+      <View style={[{ flex: 1, borderRadius: 5, backgroundColor: txColor? showOnFocusStyle ? '#C2C7C9' : '#C2C7C9' : '' }]}>
         <RNTextInput
-          style={{ color: validationColor, fontWeight: 'bold', fontSize: 17 }}
+          onFocus={() => {
+            setFocusStyles(true);
+          }}
+          onBlur={() => {
+            setFocusStyles(false)
+          }}
+          style={{ fontWeight: 'bold', fontSize: 20}}
           underlineColorAndroid='transparent'
           placeholderTextColor={'grey'}
           {...otherProps}
@@ -33,3 +40,9 @@ export default function CustomTextInput({ icon, ...otherProps }: any) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  onFocus: {
+    borderRadius: 5
+  }
+})

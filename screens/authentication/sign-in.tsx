@@ -1,6 +1,6 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import CustomTextInput from '../components/layouts/CustomTextInput';
 import CustomButton from '../components/layouts/CustomButton';
@@ -10,23 +10,26 @@ import { IAuthState } from '../../interfaces/auth/IAuth';
 import { SignInUser } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
+import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
 
     const { authResult }: IAuthState = state?.authState;
+    const [user, setUser] = useState<OnboardedUser>();
+   
+    React.useEffect(() => {
+        setUser(persistedUser)
+    }, [persistedUser])
 
-    // React.useEffect(() => {
-    //     getAllSchools()(dispatch)
-    // }, [])
-    
+    React.useEffect(() => {
+        !user && !persistedUser && navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
+    }, [user])
 
     React.useEffect(() => {
         authResult && navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
     }, [authResult])
 
-    React.useEffect(() => {
-        !persistedUser.baseUrlSuffix  && navigation.navigate(screens.scenes.onBoarding.name)
-    })
-    
     const validation = Yup.object().shape({
         userName: Yup.string()
             .min(2, 'Username Too Short!')
@@ -38,13 +41,14 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched } = useFormik({
         initialValues: {
-            userName: persistedUser.userName || "",
-            password: ""
+            userName: user?.userName || "",
+            password: "",
+            schoolUrl: user?.baseUrlSuffix
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            SignInUser(values, persistedUser.baseUrlSuffix)(dispatch)
+            SignInUser(values)(dispatch)
         }
     });
 
@@ -61,7 +65,7 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
                     <View style={{ width: '100%' }}>
                         <CustomTextInput
-                            icon='user'
+                            icon={<Feather name={'user-check'} size={16}  />}
                             placeholder='Email / Registration Number'
                             autoCapitalize='none'
                             autoCompleteType='email'
@@ -82,7 +86,7 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
 
                     <View style={{ marginBottom: 16, width: '100%' }}>
                         <CustomTextInput
-                            icon='key'
+                            icon={<FontAwesome name={'key'} size={16}  />}
                             placeholder='Enter your password'
                             secureTextEntry
                             autoCompleteType='password'
@@ -105,7 +109,7 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
                     <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
                         <Pressable onPress={() => {
                             OffboardUser()(dispatch);
-                            navigation.navigate(screens.scenes.onBoarding.name)
+                            navigation.navigate(screens.scenes.onBoarding.screens.viewpagers)
                         }}>
                             <CustomText style={{ fontWeight: 'bold' }} title="Off Board Account" />
                         </Pressable>

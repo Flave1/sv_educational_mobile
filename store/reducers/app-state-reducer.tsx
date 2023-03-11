@@ -10,7 +10,6 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 doneWithOnBoarding: true
             }
         case actions.OFF_BOARD: {
-            AsyncStorage.removeItem('onboardedUser')
             return {
                 ...state,
                 doneWithOnBoarding: false,
@@ -69,7 +68,7 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 allSchools: [],
                 doneWithOnBoarding: true,
                 onboardedUser: payload,
-                success: "Successfully Onboarded",
+                success: "Successfully onboarded!! Please provide your password to login",
             }
         }
 

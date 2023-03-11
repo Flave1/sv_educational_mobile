@@ -13,7 +13,7 @@ const AnnouncementDetail = ({ route, navigation, dispatch, state, backgroundColo
     const { announcementsId } = route.params;
 
     console.log('selectedAnnouncement', selectedAnnouncement);
-    
+
     React.useEffect(() => {
         if (persistedUser.baseUrlSuffix) {
             OpenAnnouncement(persistedUser.baseUrlSuffix, announcementsId)(dispatch)
@@ -25,11 +25,11 @@ const AnnouncementDetail = ({ route, navigation, dispatch, state, backgroundColo
             <ProtectedTeacher backgroundColor={backgroundColor}>
                 <View style={{ backgroundColor: isDarkMode ? AppLight : AppLight, height: '100%' }}>
                     <Banner
-                    style={{ marginVertical:20}}
+                        style={{ marginVertical: 20 }}
                         illustration={props => (
                             <Avatar image={{ uri: "https://w7.pngwing.com/pngs/537/580/png-transparent-bell-notification-communication-information-icon-thumbnail.png" }} />
                         )}
-                        
+
                         text={(selectedAnnouncement?.content)}
                         buttons={
                             <HStack spacing={2}>
@@ -45,7 +45,7 @@ const AnnouncementDetail = ({ route, navigation, dispatch, state, backgroundColo
 
 export default AnnouncementDetail;
 
- {/* <RenderHtml
+{/* <RenderHtml
                         contentWidth={100}
                         source={{
                             html: `

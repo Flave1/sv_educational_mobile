@@ -3,22 +3,19 @@ import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
-import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons"
 
 
 import { screens } from "../../../screen-routes/navigation";
-import { HStack } from "@react-native-material/core";
 import CustomText from "../layouts/CustomText";
 import { ScrollView } from "react-native-gesture-handler";
 import CircleBox from "../layouts/circle-box";
-const SessionClassProperties = ({ hide, activeScreen = 1, contentContainerStyle = null, selectItem }: any) => {
+const SessionClassProperties = ({ hide, activeScreen = 1, contentContainerStyle = null, selectItem , navigation}: any) => {
     const [selected, setSelected] = React.useState(activeScreen);
     React.useEffect(() => {
         setSelected(activeScreen);
     });
-
-    const navigation = useNavigation();
+    
     return (
         <>
             <ScrollView horizontal={true} style={[{ height: '100%' }]} contentContainerStyle={[contentContainerStyle]}>

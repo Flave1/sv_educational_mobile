@@ -3,6 +3,16 @@ export const screens = {
         onBoarding: {
             title: 'Boarding',
             name: 'on-boarding',
+            screens:{
+                setup:{
+                    title: 'OnboardingSetup',
+                    name: 'on-oarding-setup', 
+                },
+                viewpagers:{
+                    title: 'ViewPagers',
+                    name: 'view-pagers', 
+                }
+            }
         },
         auth: {
             title: '',
@@ -68,7 +78,7 @@ export const screens = {
                         },
                         sessionClass: {
                             title: '',
-                            name: 't-session-register',
+                            name: 't-session-class',
                             screen: {
                                 assessment: {
                                     title: '',

@@ -14,13 +14,13 @@ import SessionClassProperties from "../components/session-class/session-class-pr
 import CustomText from "../components/layouts/CustomText";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { AppDark, AppLight, TextDark, TextLight } from "../../tools/color";
-import FlexendSpinner from "../components/layouts/spinner/flex-end-spinner";
+import { AppDark, AppLight } from "../../tools/color";
 import { SignOutUser } from "../../store/actions/auth-actions";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { screens } from "../../screen-routes/navigation";
+import { IAuthState } from "../../interfaces/auth/IAuth";
 
 const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => {
     const [revealed, setRevealed] = useState(false);
@@ -30,16 +30,26 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
 
     const dispatch = useDispatch();
     const state = useSelector((state: any) => state);
+    const { authResult }: IAuthState = state?.authState;
     const navigation = useNavigation();
 
+
     AsyncStorage.getItem('token').then(res => {
-        !res && navigation.navigate(screens.scenes.auth.screens.signin)
+        if (!res) {
+            LogOutAccount()
+            navigation.navigate(screens.scenes.auth.screens.signin.name)
+        } else {
+
+        }
     });
 
 
-    const logOutAccount = () => {
+    const LogOutAccount = () => {
         SignOutUser()(dispatch)
     }
+
+
+
     return (
         <Backdrop
             style={{ backgroundColor: backgroundColor }}
@@ -90,7 +100,7 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
                                 transparent
                                 leading={props => (
                                     <IconButton
-                                        onPress={logOutAccount}
+                                        onPress={LogOutAccount}
                                         icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                     />
                                 )}
@@ -130,7 +140,12 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
         >
             <Stack>
                 {/* <View style={{ height: '5%', backgroundColor: backgroundColor }}><BackdropSubheader title={<CustomText title={"Some Item here"} />} /></View> */}
-                <View style={{ height: '85%', backgroundColor: backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>{children}</View>
+
+
+                <View style={{ height: '85%', backgroundColor: backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
+                    {children}
+                </View>
+
                 <View style={{ height: '15%', backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
                     <SessionClassProperties hide={false} />
                 </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View } from "react-native";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import TeacherAnnouncementBox from "../components/layouts/teacher-announcement-box";
@@ -13,22 +13,9 @@ import { ScrollView } from "react-native-gesture-handler";
 const TeacherDashboard = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
 
     const { dashboard } = state.dasboardState;
-    const [refreshCount, setRefreshCount] = useState(0)
     React.useEffect(() => {
-        setTimeout(() => {
-            if (!persistedUser.baseUrlSuffix) {
-                setRefreshCount(refreshCount + 1)
-            }
-        }, 3000)
+        GetDashboardData()(dispatch)
     }, []);
-
-
-    React.useEffect(() => {
-        if (persistedUser.baseUrlSuffix) {
-            GetDashboardData(persistedUser.baseUrlSuffix)(dispatch)
-        }
-
-    }, [refreshCount]);
 
     return (
         <ProtectedTeacher backgroundColor={backgroundColor}>
@@ -62,12 +49,9 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, persistedUser, nav
                                                 className={item.sessionClass}
                                             />
                                         </Pressable>
-
-
                                     )
                                 })
                             }
-
                         </HStack>
                     }
                 </Stack>

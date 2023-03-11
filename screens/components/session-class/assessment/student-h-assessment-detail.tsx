@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Badge, HStack, Pressable, Stack } from "@react-native-material/core";
+import { HStack, Pressable, Stack } from "@react-native-material/core";
 import ProtectedTeacher from "../../../authentication/protected-teacher";
 import ScreenTitle from "../../layouts/screen-title";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -8,9 +8,6 @@ import { SelectItem } from "../../../../models/select-item";
 import { getAssessmentStudents, getStudentFeedback } from "../../../../store/actions/assessment-actions";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomText from "../../layouts/CustomText";
-import BottomUpView from "../../layouts/bottom-up";
-import Entypo from "react-native-vector-icons/Entypo";
-import { screens } from "../../../../screen-routes/navigation";
 const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, navigation, route }: any) => {
     const [homeAsessmentFeedbackId] = useState<string>(route.params.homeAsessmentFeedbackId);
     const [showBottomUpComponent, setBottomUpComponent] = useState<boolean>(false);
@@ -26,7 +23,7 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, persist
     console.log('homeAsessmentFeedbackId', homeAsessmentFeedbackId);
 
     useEffect(() => {
-        getStudentFeedback(persistedUser.baseUrlSuffix, homeAsessmentFeedbackId)(dispatch)
+        getStudentFeedback(homeAsessmentFeedbackId)(dispatch)
     }, [homeAsessmentFeedbackId])
 
     return (
@@ -39,7 +36,7 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, persist
                             <HStack style={{ width: 100, justifyContent: 'center' }}>
                                 <CustomText title={students?.length} />
                                 <Pressable onPress={() => {
-                                    getAssessmentStudents(assessment.homeAssessmentId, sessionClass.value, persistedUser.baseUrlSuffix)(dispatch)
+                                    getAssessmentStudents(assessment.homeAssessmentId, sessionClass.value)(dispatch)
                                 }}>
                                     <CustomText title={<FontAwesome5 name="users" size={20} />} />
                                 </Pressable>
