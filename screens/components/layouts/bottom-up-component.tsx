@@ -1,6 +1,5 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { StyleSheet, useColorScheme, View } from "react-native";
-import { AppDark } from "../../../tools/color";
 
 const BottomUpComponent = ({ children , bottomSheetModalRef, snapPoints}: any) => {
     const isDarkMode = useColorScheme() === 'dark';

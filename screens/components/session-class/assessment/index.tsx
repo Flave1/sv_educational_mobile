@@ -76,7 +76,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, persistedUser, navi
     return (
         <ProtectedTeacher backgroundColor={backgroundColor}>
             <BottomSheetModalProvider>
-                <Stack spacing={10} style={{ flex: 1 }}>
+                <Stack spacing={10} style={{ flex: 1 }} onTouchStart={() =>  openOrCloseModal(false)}>
                     <Stack style={{ flex: 0, marginHorizontal: 21 }}>
                         <HStack style={{ alignItems: 'center' }}>
                             <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={25} />} title={'-' + sessionClass.text} />
@@ -173,11 +173,11 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, persistedUser, navi
                     <ScrollView style={[{ flex: 1 }]}  >
                         <HStack style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
                             {
-                                assessments.map((item: HomeAssessment, idx: any) => {
+                                assessments.map((item: HomeAssessment, idx: number) => {
                                     return (
                                         <Pressable
                                             key={idx}
-                                            onPress={() => {
+                                            onTouchStart={() => {
                                                 setSelectedItem(item.homeAssessmentId)
                                                 openOrCloseModal(!modalActionState)
                                             }}>

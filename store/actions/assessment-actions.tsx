@@ -48,12 +48,13 @@ export const getStudentFeedback = (homeassessmentFeedBackId: any) => (dispatch: 
         });
 }
 
-export const getAssessmentStudents = (homeassessmentId: any, sessionClassId: any) => (dispatch: any) => {
+export const getAssessmentStudents = (homeassessmentId: any, sessionClassId: any, openOrCloseModal: any) => (dispatch: any) => {
     dispatch({ type: app_state_actions.SHOW_LOADING });
     axiosInstance.get(`all/client/homeassessment/api/v1/get/assessment-students?homeassessmentId=${homeassessmentId}&sessionClassId=${sessionClassId}`)
         .then((res) => {
             dispatch({ type: actions.GET_SINGLE_HOME_ASSESSMENT_STUDENTS, payload: res.data.result });
             dispatch({ type: app_state_actions.HIDE_LOADING });
+            openOrCloseModal(true)
         }).catch((err) => {
             ErrorHandler.HandleUnexpectedError(err, actions, dispatch);
         });

@@ -7,11 +7,8 @@ import ProtectedTeacher from "../../authentication/protected-teacher";
 import SquareBox from "../layouts/sqaure-box";
 import SessionClassProperties from "./session-class-properties";
 import { View } from "react-native";
-const SessionClassIndex = ({ dispatch, state, backgroundColor, persistedUser, navigation, route }: any) => {
-
+const SessionClassIndex = ({ state, backgroundColor, persistedUser, navigation, route }: any) => {
     const [classInfo] = useState<any>(route.params);
-
-    
     return (
         <ProtectedTeacher backgroundColor={backgroundColor}>
             <Stack style={{ flex: 1 }}>
@@ -30,7 +27,12 @@ const SessionClassIndex = ({ dispatch, state, backgroundColor, persistedUser, na
                 <Stack style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
 
                     <View style={{ flex: 1, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
-                        <SessionClassProperties hide={false} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }} selectItem={{ value: classInfo.sessionClassId, text: classInfo.sessionClass }} navigation={navigation}/>
+                        <SessionClassProperties
+                            hide={false}
+                            contentContainerStyle={{ flex: 1, flexWrap: "wrap" }}
+                            selectItem={{ value: classInfo.sessionClassId, text: classInfo.sessionClass }}
+                            navigation={navigation}
+                        />
                     </View>
 
                 </Stack>
