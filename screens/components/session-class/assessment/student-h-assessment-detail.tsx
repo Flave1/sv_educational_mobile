@@ -20,6 +20,7 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
     const { feedback, assessment, students } = state.assessmentState;
     const [sessionClass] = useState<SelectItem>(route.params.sessionClass);
 
+
     useEffect(() => {
         getStudentFeedback(homeAsessmentFeedbackId)(dispatch)
     }, [homeAsessmentFeedbackId])
@@ -87,7 +88,6 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
                         </Stack>
 
                         <Stack spacing={10} style={{ height: '60%' }}>
-
                             <Stack spacing={5}>
                                 <Stack>
                                     <HStack>
@@ -127,18 +127,14 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
                                         }
                                     </ScrollView>
                                 </Stack>
-
                             </Stack>
-
-
                         </Stack>
-
                     </Stack>
                 </ScrollView>
-                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} >
+                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <HomeAssessmentFeedbackList students={students} openOrCloseModal={openOrCloseModal} navigation={navigation} sessionClass={sessionClass} />
                 </BottomUpComponent>
-                <BottomUpComponent bottomSheetModalRef={studentAttachmentModalRef} snapPoints={studentAttachmentSnapPoints} >
+                <BottomUpComponent bottomSheetModalRef={studentAttachmentModalRef} snapPoints={studentAttachmentSnapPoints} openOrCloseModal={openOrCloseStudentAttachmentModal}>
                     <AttachmentList attachments={feedback?.files} openOrCloseStudentAttachmentModal={openOrCloseStudentAttachmentModal} />
                 </BottomUpComponent>
             </BottomSheetModalProvider>

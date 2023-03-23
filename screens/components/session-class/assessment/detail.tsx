@@ -23,7 +23,7 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
     const { assessment, students } = state.assessmentState;
 
     useEffect(() => {
-        getSingleHomeAssessment(homeAssessmentId, sessionClass.value)(dispatch)
+        homeAssessmentId &&  getSingleHomeAssessment(homeAssessmentId, sessionClass.value)(dispatch)
     }, [homeAssessmentId])
 
     // MODAL##############MODAL
@@ -104,7 +104,7 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
 
                     </Stack>
                 </ScrollView>
-                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints}>
+                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <HomeAssessmentFeedbackList students={students} openOrCloseModal={openOrCloseModal} navigation={navigation} sessionClass={sessionClass}/>
                 </BottomUpComponent>
 

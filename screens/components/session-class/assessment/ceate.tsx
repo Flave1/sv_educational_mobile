@@ -6,7 +6,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ScrollView, View } from "react-native";
 import { SelectItem } from "../../../../models/select-item";
-import { createHomeAssessment } from "../../../../store/actions/assessment-actions";
+import { createHomeAssessment, getSingleHomeAssessment, updateHomeAssessment } from "../../../../store/actions/assessment-actions";
 import Entypo from "react-native-vector-icons/Entypo";
 import CustomTextInput from "../../layouts/CustomTextInput";
 import * as Yup from 'yup';
@@ -16,12 +16,25 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import CustomTextArea from "../../layouts/CustomTextArea";
 import CustomCheckBox from "../../layouts/checkbox-component";
-import { SetErrorToastState } from "../../../../store/actions/app-state-actions";
-const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, navigation, route }: any) => {
+import { setErrorToastState } from "../../../../store/actions/app-state-actions";
+import { ClassAssessment } from "../models/assessment";
+const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route }: any) => {
     const [type] = useState<string>('home-assessment');
     const [sessionClass] = useState<SelectItem>(route.params.sessionClass.name);
     const [sessionClassSubject] = useState<SelectItem>(route.params.sessionClassSubject.name);
     const [group] = useState<SelectItem>(route.params.group.name);
+    const [homeAssessmentId] = useState<SelectItem>(route.params.HomeAssessmentId);
+    const { assessment } = state.assessmentState;
+    const [ass, setAssessment] = useState<ClassAssessment>(assessment);
+
+    useEffect(() => {
+        homeAssessmentId ? setAssessment(assessment) : setAssessment(new ClassAssessment());
+    }, [assessment])
+
+    useEffect(() => {
+        homeAssessmentId && getSingleHomeAssessment(homeAssessmentId, sessionClass.value)(dispatch)
+    }, [homeAssessmentId])
+
 
     const validation = Yup.object().shape({
         title: Yup.string()
@@ -33,21 +46,22 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
             .required('Content Required'),
         assessmentScore: Yup.number()
             .min(0, 'Content Required')
-            .required('Content Required'),
+            .required('Assessment Score Required'),
     });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched } = useFormik({
         initialValues: {
-            title: "",
-            content: "",
-            comment: "",
-            assessmentScore: 0,
+            homeAssessmentId: homeAssessmentId ?? "",
+            title: ass?.title,
+            content: ass?.content,
+            comment: ass?.comment,
+            assessmentScore: ass?.assessmentScore,
             sessionClassId: sessionClass.text,
             sessionClassSubjectId: sessionClassSubject.text,
             sessionClassGroupId: group.text,
             shouldSendToStudents: false,
-            timeDeadLine: "12:40",
-            dateDeadLine: "12/12/2023",
+            timeDeadLine: ass?.timeDeadLine ?? "12:12",
+            dateDeadLine: ass?.dateDeadLine ?? "12/12/2022",
             total: 0,
             used: 0,
         },
@@ -57,15 +71,18 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
             values.sessionClassId = sessionClass.value;
             values.sessionClassSubjectId = sessionClassSubject.value;
             values.sessionClassGroupId = group.value;
-            createHomeAssessment(values, navigation)(dispatch)
+            if (!homeAssessmentId)
+                createHomeAssessment(values, navigation)(dispatch)
+            else
+                updateHomeAssessment(values, navigation)(dispatch)
         }
     });
 
 
     useEffect(() => {
-        touched.title && errors.title && (SetErrorToastState(errors.title)(dispatch))
-        touched.content && errors.content && (SetErrorToastState(errors.content)(dispatch))
-        touched.assessmentScore && errors.assessmentScore && (SetErrorToastState(errors.assessmentScore)(dispatch))
+        touched.title && errors.title && (setErrorToastState(errors.title)(dispatch))
+        touched.content && errors.content && (setErrorToastState(errors.content)(dispatch))
+        touched.assessmentScore && errors.assessmentScore && (setErrorToastState(errors.assessmentScore)(dispatch))
     }, [touched, errors])
 
     return (
@@ -249,10 +266,12 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
                                     }}
                                 />
                             </View>
+
+
                             <View style={{ width: '48.5%' }}>
                                 <CustomTextInput
                                     icon={<Entypo name={'dot-single'} size={16} />}
-                                    placeholder='Total'
+                                    placeholder='Score'
                                     autoCapitalize='none'
                                     autoCompleteType='numeric'
                                     keyboardType='numeric'
@@ -260,14 +279,14 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
                                     returnKeyType='next'
                                     multiline={true}
                                     returnKeyLabel='next'
-                                    onBlur={handleBlur('total')}
-                                    value={values.total}
-                                    error={errors.total}
-                                    touched={touched.total}
+                                    onBlur={handleBlur('assessmentScore')}
+                                    value={values.assessmentScore}
+                                    error={errors.assessmentScore}
+                                    touched={touched.assessmentScore}
                                     disabled={true}
                                     onChange={(e: any) => {
-                                        handleChange('total');
-                                        setFieldValue('total', e.nativeEvent.text)
+                                        handleChange('assessmentScore');
+                                        setFieldValue('assessmentScore', e.nativeEvent.text)
                                     }}
                                 />
                             </View>
@@ -296,29 +315,29 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, persistedUser, nav
                                     }}
                                 />
                             </View>
+
                             <View style={{ width: '48.5%' }}>
                                 <CustomTextInput
                                     icon={<Entypo name={'dot-single'} size={16} />}
-                                    placeholder='Score'
+                                    placeholder='Total'
                                     autoCapitalize='none'
                                     autoCompleteType='numeric'
                                     keyboardType='numeric'
                                     keyboardAppearance='dark'
                                     returnKeyType='next'
                                     multiline={true}
-                                    returnKeyLabel='next'
-                                    onBlur={handleBlur('assessmentScore')}
-                                    value={values.assessmentScore}
-                                    error={errors.assessmentScore}
-                                    touched={touched.assessmentScore}
                                     disabled={true}
+                                    returnKeyLabel='next'
+                                    onBlur={handleBlur('total')}
+                                    value={values.total}
+                                    error={errors.total}
+                                    touched={touched.total}
                                     onChange={(e: any) => {
-                                        handleChange('assessmentScore');
-                                        setFieldValue('assessmentScore', e.nativeEvent.text)
+                                        handleChange('total');
+                                        setFieldValue('total', e.nativeEvent.text)
                                     }}
                                 />
                             </View>
-
                         </HStack>
 
                         <Stack style={{ marginHorizontal: 50, marginTop: 10 }}>

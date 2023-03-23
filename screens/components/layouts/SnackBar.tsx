@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Snackbar, Button, Pressable } from "@react-native-material/core";
 import { IAppState } from "../../../interfaces/app-state/state";
-import { SetErrorToastState, ResetSuccessToastState } from "../../../store/actions/app-state-actions";
+import { setErrorToastState, resetSuccessToastState } from "../../../store/actions/app-state-actions";
 import { Alert } from "react-native";
 
 const AppToast = ({ state, dispatch }: any) => {
@@ -14,7 +14,7 @@ const AppToast = ({ state, dispatch }: any) => {
         error && setShowErrorToast(true);
         setTimeout(() => {
             setShowErrorToast(false)
-            SetErrorToastState("")(dispatch)
+            setErrorToastState("")(dispatch)
         }, 5000)
     }, [error])
 
@@ -22,7 +22,7 @@ const AppToast = ({ state, dispatch }: any) => {
         success && setShowSuccessToast(true);
         setTimeout(() => {
             setShowSuccessToast(false)
-            ResetSuccessToastState()(dispatch)
+            resetSuccessToastState()(dispatch)
         }, 3000)
     }, [success])
 

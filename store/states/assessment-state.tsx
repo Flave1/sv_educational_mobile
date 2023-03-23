@@ -8,5 +8,6 @@ export default {
         { text: 'Home Assessment', value: 'home-assessment' },
         { text: 'Class Assessment', value: 'class-assessment' },
         { text: 'CBT', value: 'cbt' }
-    ]
+    ],
+    score_reocrds:[]
 }

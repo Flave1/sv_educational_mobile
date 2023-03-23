@@ -12,8 +12,9 @@ export const GetAppState = () => (dispatch: any) => {
     })
 }
 
-export const SetErrorToastState = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST, payload: message });
-export const ResetSuccessToastState = () => (dispatch: any) => dispatch({ type: actions.RESET_SUCCESS_TOAST });
+export const setErrorToastState = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST, payload: message });
+export const resetSuccessToastState = () => (dispatch: any) => dispatch({ type: actions.RESET_SUCCESS_TOAST });
+export const setSuccessToast = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_SUCCESS_TOAST, payload: message });
 
 export const OffboardUser = () => (dispatch: any) => {
     AsyncStorage.removeItem('onboardedUser').then(() => {

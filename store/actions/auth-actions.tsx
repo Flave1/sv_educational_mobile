@@ -2,6 +2,7 @@ import axiosInstance from "../../axios/axiosInstance";
 import { actions } from "../action-types/auth-action-types";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
+import { Alert } from "react-native";
 
 export const SignInUser = (payload: any) => (dispatch: any) => {
     dispatch({ type: app_state_actions.SHOW_LOADING });
@@ -10,6 +11,7 @@ export const SignInUser = (payload: any) => (dispatch: any) => {
             dispatch({ type: actions.SIGN_IN_USER, payload: res.data.result.authResult });
             dispatch({ type: app_state_actions.HIDE_LOADING });
         }).catch((err: any) => {
+            console.log('error: ', payload);
             ErrorHandler.HandleUnexpectedError(err, app_state_actions, dispatch);
         })
 }

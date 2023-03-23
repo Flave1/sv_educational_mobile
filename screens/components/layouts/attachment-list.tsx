@@ -1,16 +1,14 @@
 import { Box, HStack, Text } from "@react-native-material/core";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Linking, Pressable, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Entypo from "react-native-vector-icons/Entypo";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { string } from "yup";
-import { AppDark } from "../../../tools/color";
 
-export function AttachmentList({ attachments, openOrCloseStudentAttachmentModal }: any) {
+export function AttachmentList({ attachments }: any) {
 
     class AttachedFiles {
         name: string = '';
@@ -18,8 +16,8 @@ export function AttachmentList({ attachments, openOrCloseStudentAttachmentModal 
         path: string = '';
     }
 
-    const [files, setFiles] = useState<AttachedFiles[]>(new Array<AttachedFiles>());
-    console.log('attachments', files);
+    const [files, setFiles] = useState<any>([]);
+
     useEffect(() => {
 
         for (let i = 0; i < attachments.length; i++) {
@@ -30,7 +28,8 @@ export function AttachmentList({ attachments, openOrCloseStudentAttachmentModal 
                 extension: splitedString[3],
                 path: ele
             }
-            setFiles([...files, file]);
+            files.push(file);
+            setFiles([...files]);
         }
     }, [attachments])
 
@@ -41,29 +40,39 @@ export function AttachmentList({ attachments, openOrCloseStudentAttachmentModal 
     const img = <Entypo name="image" color="black" size={150} />;
     const zip = <FontAwesome name="file-zip-o" color="yellow" size={150} />;
 
+    function openFile(url: string) {
+        Linking.canOpenURL(url).then(supported => {
+            if (supported) {
+                Linking.openURL(url);
+            } else {
+                console.log("Don't know how to open URI: " + url);
+            }
+        });
+    }
     const fileComponent = (file: AttachedFiles, idx: number) => {
 
-        if (file.extension === "jpeg")
-            return <Files key={idx} icon={img} text={file.name} />
+        if (file.extension === "jpeg" || file.extension === "jpg")
+            return <Files key={idx} icon={img} text={file.name} path={file.path} openFile={openFile}/>
         else if (file.extension === "png")
-            return <Files key={idx} icon={img} text={file.name} />
+            return <Files key={idx} icon={img} text={file.name} path={file.path} openFile={openFile}/>
         else if (file.extension === "xlsx" || file.extension === "xls")
-            return <Files key={idx} icon={excel} text={file.name} />
+            return <Files key={idx} icon={excel} text={file.name} path={file.path} openFile={openFile}/>
         else if (file.extension === "pdf")
-            return <Files key={idx} icon={pdf} text={file.name} />
+            return <Files key={idx} icon={pdf} text={file.name} path={file.path} openFile={openFile}/>
         else if (file.extension === "txt")
-            return <Files key={idx} icon={txt} text={file.name} />
+            return <Files key={idx} icon={txt} text={file.name} path={file.path} openFile={openFile}/>
         else if (file.extension === "docx" || file.extension === "doc")
-            return <Files key={idx} icon={word} text={file.name} />
+            return <Files key={idx} icon={word} text={file.name} path={file.path} openFile={openFile} />
         else if (file.extension === "zip")
-            return <Files key={idx} icon={zip} text={file.name} />
+            return <Files key={idx} icon={zip} text={file.name} path={file.path} openFile={openFile} />
     }
+
+
+
     return (
         <>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ justifyContent: 'center' }}>
-                <HStack style={{ justifyContent: 'flex-end', paddingEnd: 30 }} onTouchStart={() => openOrCloseStudentAttachmentModal(false)}>
-                    <FontAwesome name="close" color={AppDark} size={20} />
-                </HStack>
+               
                 <HStack style={[{ flexWrap: 'wrap', justifyContent: 'center', marginTop: 10 }]}>
                     {files.map((item: AttachedFiles, idx: number) => fileComponent(item, idx))}
                 </HStack>
@@ -73,7 +82,7 @@ export function AttachmentList({ attachments, openOrCloseStudentAttachmentModal 
 }
 
 
-function Files({ icon, onPress, text }: any) {
+function Files({ icon, onPress, text, path, openFile }: any) {
     return (
         <Pressable onPress={onPress} >
             <Box w={150} h={180} m={10} style={[{ alignItems: 'center' }]}>
@@ -81,9 +90,10 @@ function Files({ icon, onPress, text }: any) {
                     {icon}
                 </Box>
                 <Box style={{ width: '100%', alignItems: 'center' }}>
-                    <Text textBreakStrategy="balanced" style={{ fontWeight: 'bold', fontSize: 20, color: 'blue', textDecorationColor: 'blue', textDecorationLine: 'underline', textDecorationStyle: 'solid' }}>{text}</Text>
+                    <Pressable onPress={() => openFile(path)}>
+                        <Text textBreakStrategy="balanced" style={style.name}>{text}</Text>
+                    </Pressable>
                 </Box>
-
             </Box>
         </Pressable>
     )
@@ -94,5 +104,6 @@ const style = StyleSheet.create({
     border: {
         borderColor: 'red',
         borderWidth: 1
-    }
+    },
+    name: { fontWeight: 'bold', fontSize: 20, color: 'blue', textDecorationColor: 'blue', textDecorationLine: 'underline', textDecorationStyle: 'solid' }
 })

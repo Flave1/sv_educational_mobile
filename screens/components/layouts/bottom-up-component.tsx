@@ -1,23 +1,29 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { HStack } from "@react-native-material/core";
 import { StyleSheet, useColorScheme, View } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { AppDark } from "../../../tools/color";
 
-const BottomUpComponent = ({ children , bottomSheetModalRef, snapPoints}: any) => {
+const BottomUpComponent = ({ children, bottomSheetModalRef, snapPoints, openOrCloseModal }: any) => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
         <BottomSheetModal
-                    enableOverDrag={true}
-                    enableContentPanningGesture={true}
-                    enableDismissOnClose={true}
-                    enableHandlePanningGesture={true}
-                    enablePanDownToClose={true}
-                    ref={bottomSheetModalRef}
-                    index={0}
-                    snapPoints={snapPoints}
-                    style={{ backgroundColor: "#868C8E" }}>
-                    <View style={{flex:1}}>
-                        {children}
-                    </View>
-                </BottomSheetModal>
+            enableOverDrag={true}
+            enableContentPanningGesture={true}
+            enableDismissOnClose={true}
+            enableHandlePanningGesture={true}
+            enablePanDownToClose={true}
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            style={{ backgroundColor: "#868C8E" }}>
+            <View style={{ flex: 1 }}>
+                <HStack style={{ justifyContent: 'flex-end', paddingEnd: 30 }} onTouchStart={() => openOrCloseModal(false)}>
+                    <FontAwesome name="close" color={AppDark} size={20} />
+                </HStack>
+                {children}
+            </View>
+        </BottomSheetModal>
     )
 }
 

@@ -38,6 +38,11 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 ...state,
                 error: payload,
             }
+        case actions.SET_SUCCESS_TOAST:
+            return {
+                ...state,
+                success: payload,
+            }
 
         case actions.RESET_SUCCESS_TOAST:
             return {
