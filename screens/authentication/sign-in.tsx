@@ -6,29 +6,35 @@ import CustomTextInput from '../components/layouts/CustomTextInput';
 import CustomButton from '../components/layouts/CustomButton';
 import CustomText from '../components/layouts/CustomText';
 import { OffboardUser } from '../../store/actions/app-state-actions';
-import { IAuthState } from '../../interfaces/auth/IAuth';
 import { SignInUser } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
 import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { AppPurple } from '../../tools/color';
+import { AuhtService } from '../../services/AuthService';
 const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
 
-    const { authResult }: IAuthState = state?.authState;
-    const [user, setUser] = useState<OnboardedUser>();
-   
+    const [onboardedUser, setUser] = useState<OnboardedUser>();
+
     React.useEffect(() => {
         setUser(persistedUser)
     }, [persistedUser])
 
-    React.useEffect(() => {
-        !user && !persistedUser && navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
-    }, [user])
+    React.useEffect(() =>{
+        if (onboardedUser) {
+            AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
+                if (loggedIn)
+                    navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
+            })
+        } else {
+            navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
+        }
+    })
 
-    React.useEffect(() => {
-        authResult && navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
-    }, [authResult])
+
+
 
     const validation = Yup.object().shape({
         userName: Yup.string()
@@ -41,9 +47,9 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched } = useFormik({
         initialValues: {
-            userName: user?.userName || "",
+            userName: onboardedUser?.userName || "",
             password: "",
-            schoolUrl: user?.baseUrlSuffix
+            schoolUrl: onboardedUser?.baseUrlSuffix
         },
         enableReinitialize: true,
         validationSchema: validation,
@@ -56,7 +62,9 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
         <>
             <Stack style={{ backgroundColor: backgroundColor }}>
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
-                    <Avatar size={150} image={{ uri: persistedUser.schoolLogo ? persistedUser.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png' }} />
+                    <View style={{ borderColor: AppPurple, borderWidth: 6, borderRadius: 100 }}>
+                        <Avatar size={150} image={{ uri: persistedUser.schoolLogo ? persistedUser.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png' }} />
+                    </View>
                 </Stack>
                 <Stack center>
                     {((touched.userName && errors.userName)) && <Text color='red' >{errors.userName}</Text>}
@@ -65,7 +73,7 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
                     <View style={{ width: '100%' }}>
                         <CustomTextInput
-                            icon={<Feather name={'user-check'} size={16}  />}
+                            icon={<Feather name={'user-check'} size={16} />}
                             placeholder='Email / Registration Number'
                             autoCapitalize='none'
                             autoCompleteType='email'
@@ -86,7 +94,7 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
 
                     <View style={{ marginBottom: 16, width: '100%' }}>
                         <CustomTextInput
-                            icon={<FontAwesome name={'key'} size={16}  />}
+                            icon={<FontAwesome name={'key'} size={16} />}
                             placeholder='Enter your password'
                             secureTextEntry
                             autoCompleteType='password'
@@ -104,16 +112,18 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
                         />
                     </View>
                     <Stack style={{ marginHorizontal: 50, marginTop: 10 }}>
-                        <CustomButton onPress={handleSubmit} />
+                        <CustomButton
+                            title={'LOGIN'}
+                            onPress={handleSubmit} />
                     </Stack>
                     <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-                        <Pressable onPress={() => {
+                        <Pressable  onPress={() => {
                             OffboardUser()(dispatch);
                             navigation.navigate(screens.scenes.onBoarding.screens.viewpagers)
                         }}>
                             <CustomText style={{ fontWeight: 'bold' }} title="Off Board Account" />
                         </Pressable>
-                        <Pressable>
+                        <Pressable >
 
                             <CustomText style={{ fontWeight: 'bold' }} title="Forgot Password" />
                         </Pressable>

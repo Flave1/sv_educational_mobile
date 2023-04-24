@@ -4,16 +4,17 @@ import { TextInput as RNTextInput, View, StyleSheet, useColorScheme } from 'reac
 import Entypo from 'react-native-vector-icons/Entypo'
 import { AppDark, AppLight, TextDark, TextLight } from '../../../tools/color';
 
-export default function CustomTextArea({ icon, ...otherProps }: any) {
+export default function CustomTextArea({ icon, height, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
   const validationColor = isDarkMode ? AppLight : AppDark;
+  const textAreaHeight = !height ? 300 : height;
   return (
     <View
       style={{
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        height: 300,
+        height: textAreaHeight,
         borderRadius: 8,
         borderColor: validationColor,
         borderWidth: StyleSheet.hairlineWidth,
@@ -29,8 +30,10 @@ export default function CustomTextArea({ icon, ...otherProps }: any) {
           style={{
             fontWeight: 'bold', fontSize: 20,
             color: validationColor,
+            height: '100%',
             flexWrap: 'wrap',
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
+            borderColor: 'grey', borderWidth: 1
           }}
           underlineColorAndroid='transparent'
           placeholderTextColor={'grey'}

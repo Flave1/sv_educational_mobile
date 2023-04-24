@@ -7,3 +7,4 @@
     export const TextDark: string = "rgb(2,0,36)";
 
     export const AppLightBlue = '#00C9FF';
+    export const AppPurple = '#7c68ee';

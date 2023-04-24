@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { HStack, Pressable, Stack } from "@react-native-material/core";
+import { Divider, HStack, Pressable, Stack } from "@react-native-material/core";
 import ProtectedTeacher from "../../../authentication/protected-teacher";
 import ScreenTitle from "../../layouts/screen-title";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectItem } from "../../../../models/select-item";
-import { getAssessmentStudents, getStudentFeedback } from "../../../../store/actions/assessment-actions";
+import { getStudentAssessment, getStudentFeedback, scoreAssessment } from "../../../../store/actions/assessment-actions";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomText from "../../layouts/CustomText";
 import RenderHtml from 'react-native-render-html';
@@ -15,15 +15,35 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import BottomUpComponent from "../../layouts/bottom-up-component";
 import { HomeAssessmentFeedbackList } from "./home-assessment-feedback-list";
 import { AttachmentList } from "../../layouts/attachment-list";
+import CustomTextInput from "../../layouts/CustomTextInput";
+import CustomTextArea from "../../layouts/CustomTextArea";
+import { AppPurple } from "../../../../tools/color";
+import CustomButton from "../../layouts/CustomButton";
 const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigation, route }: any) => {
-    const [homeAsessmentFeedbackId] = useState<string>(route.params.homeAsessmentFeedbackId);
+    const [homeAsessmentFeedbackId, setHomeAsessmentFeedbackId] = useState<string>(route.params.homeAsessmentFeedbackId);
     const { feedback, assessment, students } = state.assessmentState;
-    const [sessionClass] = useState<SelectItem>(route.params.sessionClass);
+    const [sessionClass] = useState<SelectItem>(route.params.sessionClass.sessionClass);
+    const [teacherFeedback, setTeacherFeedback] = useState({ score: 0, comment: 'reviewed' });
+
+    console.log('sessionClass', sessionClass);
 
 
     useEffect(() => {
-        getStudentFeedback(homeAsessmentFeedbackId)(dispatch)
+        homeAsessmentFeedbackId && getStudentFeedback(homeAsessmentFeedbackId)(dispatch)
     }, [homeAsessmentFeedbackId])
+
+
+
+    useEffect(() => {
+        if (feedback) {
+            const payload = {
+                score: feedback?.score,
+                comment: feedback?.comment
+            };
+            setTeacherFeedback(payload);
+        }
+    }, [feedback])
+
 
     // MODAL##############MODAL
     const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
@@ -56,17 +76,13 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
     // STUDENT ATTACHMENT MODAL############## STUDENT ATTACHMENT MODAL
 
     return (
-        <ProtectedTeacher backgroundColor={backgroundColor}>
+        <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Assessment">
             <BottomSheetModalProvider>
-                <ScrollView onTouchStart={() => {
-                    openOrCloseModal(false);
-                }
-                }>
+                <ScrollView>
                     <Stack spacing={10} style={{ flex: 1, margin: 10, }}>
                         <Stack style={{ flex: 0 }}>
                             <HStack style={{ alignItems: 'center' }}>
                                 <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={20} />} title={'-' + sessionClass?.text + ' Assessment'} />
-
                                 <HStack style={{ width: 70, justifyContent: 'center' }}>
                                     <CustomText title={feedback?.files?.length} />
                                     <Pressable onTouchStart={() => {
@@ -79,7 +95,7 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
                                 <HStack style={{ width: 60, justifyContent: 'center' }}>
                                     <CustomText title={students?.length} />
                                     <Pressable onTouchStart={() => {
-                                        getAssessmentStudents(assessment.homeAssessmentId, sessionClass.value, openOrCloseModal)(dispatch)
+                                        getStudentAssessment(assessment.homeAssessmentId, sessionClass.value, openOrCloseModal)(dispatch)
                                     }}>
                                         <CustomText title={<FontAwesome5 name="users" size={20} />} />
                                     </Pressable>
@@ -116,27 +132,85 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
                                         }
                                     </ScrollView>
                                 </Stack>
-                                <CustomText style={style.label} title="Comment" />
-                                <Stack style={{ borderColor: 'grey', borderWidth: 1, flex: 1, borderRadius: 10, minHeight: 90 }}>
-                                    <ScrollView style={{ flex: 1 }} >
-                                        {
-                                            feedback?.comment && <RenderHtml
-                                                source={{ html: feedback.comment }}
-                                                contentWidth={200}
+
+                                <Text style={{ marginTop: 20 }}>Score Student</Text>
+                                <Divider style={{ backgroundColor: 'grey' }} />
+                                <Stack spacing={10}>
+                                    <Stack style={{ flex: 1, marginTop: 5 }}>
+                                        <CustomTextArea
+                                            placeholder='Enter feedback comment'
+                                            autoCapitalize='none'
+                                            keyboardAppearance='dark'
+                                            returnKeyType='go'
+                                            returnKeyLabel='go'
+                                            height={100}
+                                            defaultValue={teacherFeedback.comment}
+                                            onChange={(e: any) => {
+                                                teacherFeedback.comment = e.nativeEvent.text;
+                                                setTeacherFeedback(teacherFeedback);
+                                            }}
+                                        />
+                                    </Stack>
+                                    <HStack spacing={10} style={{ marginBottom: 20 }}>
+                                        <View style={{ width: '50%' }}>
+                                            <CustomTextInput
+                                                placeholder='Score'
+                                                autoCapitalize='none'
+                                                keyboardAppearance='dark'
+                                                keyboardType='numeric'
+                                                returnKeyType='go'
+                                                returnKeyLabel='go'
+                                                defaultValue={teacherFeedback.score}
+                                                onChange={(e: any) => {
+                                                    teacherFeedback.score = Number(e.nativeEvent.text);
+                                                    setTeacherFeedback(teacherFeedback);
+                                                }}
                                             />
-                                        }
-                                    </ScrollView>
+                                        </View>
+                                        <View style={{ width: '40%', justifyContent: 'center', alignItems: 'flex-end' }}>
+                                            <CustomButton
+                                                backgroundColor={AppPurple}
+                                                title="Submit" onPress={() => {
+                                                    scoreAssessment(
+                                                        homeAsessmentFeedbackId,
+                                                        teacherFeedback.score,
+                                                        teacherFeedback.comment,
+                                                        assessment.homeAssessmentId,
+                                                        sessionClass.value,
+                                                        openOrCloseModal
+                                                    )(dispatch)
+                                                }}
+                                            />
+                                        </View>
+                                    </HStack>
+
                                 </Stack>
                             </Stack>
                         </Stack>
                     </Stack>
                 </ScrollView>
-                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
-                    <HomeAssessmentFeedbackList students={students} openOrCloseModal={openOrCloseModal} navigation={navigation} sessionClass={sessionClass} />
+
+                <BottomUpComponent
+                    bottomSheetModalRef={bottomSheetModalRef}
+                    snapPoints={snapPoints}
+                    openOrCloseModal={openOrCloseModal}>
+                    <HomeAssessmentFeedbackList
+                        students={students}
+                        openOrCloseModal={openOrCloseModal}
+                        dispatch={dispatch}
+                        sessionClass={sessionClass}
+                        navigation={navigation} />
                 </BottomUpComponent>
-                <BottomUpComponent bottomSheetModalRef={studentAttachmentModalRef} snapPoints={studentAttachmentSnapPoints} openOrCloseModal={openOrCloseStudentAttachmentModal}>
-                    <AttachmentList attachments={feedback?.files} openOrCloseStudentAttachmentModal={openOrCloseStudentAttachmentModal} />
+
+                <BottomUpComponent
+                    bottomSheetModalRef={studentAttachmentModalRef}
+                    snapPoints={studentAttachmentSnapPoints}
+                    openOrCloseModal={openOrCloseStudentAttachmentModal}>
+                    <AttachmentList
+                        attachments={feedback?.files}
+                        openOrCloseStudentAttachmentModal={openOrCloseStudentAttachmentModal} />
                 </BottomUpComponent>
+
             </BottomSheetModalProvider>
         </ProtectedTeacher>
 
@@ -146,9 +220,9 @@ const StudentHomeAssessmentDetail = ({ dispatch, state, backgroundColor, navigat
 
 const style = StyleSheet.create({
     label: {
-        color: 'grey', fontWeight: 'bold'
+        color: 'grey', fontWeight: 'bold', padding: 3
     },
-    text: { textTransform: 'capitalize', fontWeight: 'bold', flexWrap: 'wrap', color: 'black', backgroundColor: '#139C85', padding: 3, borderRadius: 10 }
+    text: { textTransform: 'capitalize', fontWeight: 'bold', flexWrap: 'wrap', color: 'black', padding: 3 }
 })
 
 

@@ -3,14 +3,14 @@ export const screens = {
         onBoarding: {
             title: 'Boarding',
             name: 'on-boarding',
-            screens:{
-                setup:{
+            screens: {
+                setup: {
                     title: 'OnboardingSetup',
-                    name: 'on-oarding-setup', 
+                    name: 'on-boarding-setup',
                 },
-                viewpagers:{
+                viewpagers: {
                     title: 'ViewPagers',
-                    name: 'view-pagers', 
+                    name: 'view-pagers',
                 }
             }
         },
@@ -69,12 +69,18 @@ export const screens = {
                             name: 'create-assessment'
                         },
                         attendance: {
-                            title: '',
-                            name: 'attendance'
-                        },
-                        markAttendance: {
-                            title: '',
-                            name: 'mark-attendance'
+                            title: 'attendance',
+                            name: 'attendance',
+                            screens: {
+                                create: {
+                                    title: 'c-attendance',
+                                    name: 'c-attendance',
+                                },
+                                update: {
+                                    title: 'u-attendance',
+                                    name: 'u-attendance',
+                                }
+                            }
                         },
                         sessionClass: {
                             title: '',

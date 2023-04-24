@@ -21,6 +21,11 @@ export const classPropertiesReducer = (state = classPropertiesState, { type, pay
                 classGroup: payload
             }
         }
+        case actions.GET_CLASS_STUDENTS:
+            return {
+                ...state,
+                classStudents: payload
+            }
         default:
             return state
     }

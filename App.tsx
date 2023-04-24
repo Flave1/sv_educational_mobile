@@ -5,10 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppToast from './screens/components/layouts/SnackBar';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './screen-routes/RootNavigation';
-import { persistor } from './store/store';
-import { PersistGate } from 'redux-persist/integration/react'
 import FlexendSpinner from './screens/components/layouts/spinner/flex-end-spinner';
-
+// import SyncAdapter from 'react-native-sync-adapter'
 
 const App = () => {
   useEffect(() => {
@@ -23,10 +21,8 @@ const App = () => {
     <>
 
       <NavigationContainer ref={navigationRef}>
-        <PersistGate loading={null} persistor={persistor}>
-          <AppToast state={state} dispatch={dispatch} />
-          <Entry dispatch={dispatch} state={state} />
-        </PersistGate>
+        <AppToast state={state} dispatch={dispatch} />
+        <Entry dispatch={dispatch} state={state} />
       </NavigationContainer>
       <FlexendSpinner state={state} dispatch={dispatch} />
     </>

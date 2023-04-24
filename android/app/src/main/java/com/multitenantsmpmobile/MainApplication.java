@@ -2,11 +2,17 @@ package com.multitenantsmpmobile;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.multitenantsmpmobile.newarchitecture.MainApplicationReactNativeHost;
@@ -15,6 +21,7 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+    private ReactInstanceManager mReactInstanceManager;
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
         @Override
@@ -56,7 +63,35 @@ public class MainApplication extends Application implements ReactApplication {
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    //TRIGGER HEADLESS FILE
+
+      mReactInstanceManager = getReactNativeHost().getReactInstanceManager();
+      ReactContext context = mReactInstanceManager.getCurrentReactContext();
+      if (context != null) {
+          Intent service = new Intent(getApplicationContext(), AttendanceService.class);
+          Bundle bundle = new Bundle();
+
+          bundle.putString("foo", "bar");
+          service.putExtras(bundle);
+
+          getApplicationContext().startService(service);
+      } else {
+          // React context not available
+      }
+
   }
+
+//  @ReactMethod
+//  public void init(int syncInterval, int syncFlexTime){
+//      //Java code
+//  }
+//
+//  @Override
+//  public void onPerformSync(){
+//      Intent service = new Intent(getApplicationContext(), HeadlessJsTaskService.class);
+//      getApplicationContext().startService(service);
+//  }
 
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like

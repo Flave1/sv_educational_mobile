@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useColorScheme, View } from "react-native";
 import {
     Backdrop,
@@ -15,41 +15,52 @@ import CustomText from "../components/layouts/CustomText";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AppDark, AppLight } from "../../tools/color";
-import { SignOutUser } from "../../store/actions/auth-actions";
-import { useDispatch, useSelector } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { screens } from "../../screen-routes/navigation";
-import { IAuthState } from "../../interfaces/auth/IAuth";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { AuhtService } from "../../services/AuthService";
+import { connect } from "react-redux";
 
-const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => {
+const ProtectedTeacher = ({ backgroundColor, children, currentScreen, params, logout }: any) => {
     const [revealed, setRevealed] = useState(false);
-    const [currentScreen, seCurrentScreen] = useState('Dashboard');
 
     const isDarkMode = useColorScheme() === 'dark';
 
-    const dispatch = useDispatch();
-    const state = useSelector((state: any) => state);
-    const { authResult }: IAuthState = state?.authState;
     const navigation = useNavigation();
 
-
-    AsyncStorage.getItem('token').then(res => {
-        if (!res) {
-            LogOutAccount()
-            navigation.navigate(screens.scenes.auth.screens.signin.name)
-        } else {
-
-        }
-    });
+    React.useEffect(() => {
+        AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
+            if (!loggedIn) {
+                navigation.navigate(screens.scenes.auth.screens.signin.name);
+            }
+        })
+    })
 
 
-    const LogOutAccount = () => {
-        SignOutUser()(dispatch)
-    }
+    const [param, setParam] = useState<any>();
+    useEffect(() => {
+        params && setParam(params)
+    }, [params]);
 
-
-
+    const menu = <AppBar
+        transparent
+        leading={props => (
+            <IconButton
+                icon={props => (<Entypo name={revealed ? "list" : "menu"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
+                onPress={() => setRevealed(prevState => !prevState)}
+                {...props}
+            />
+        )}
+    />
+    const backBtn = <AppBar
+        transparent
+        leading={props => (
+            <IconButton
+                icon={props => (<MaterialIcons name={"keyboard-backspace"} size={25} color={isDarkMode ? AppLight : AppDark} />)}
+                onPress={() => navigation.goBack()}
+            />
+        )}
+    />
     return (
         <Backdrop
             style={{ backgroundColor: backgroundColor }}
@@ -60,17 +71,7 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
 
                         <HStack style={{ justifyContent: 'flex-start', width: '80%' }}>
                             <View>
-                                <AppBar
-                                    // title={currentScreen}
-                                    transparent
-                                    leading={props => (
-                                        <IconButton
-                                            icon={props => (<Entypo name={revealed ? "list" : "menu"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
-                                            onPress={() => setRevealed(prevState => !prevState)}
-                                            {...props}
-                                        />
-                                    )}
-                                />
+                                {currentScreen === "Dashboard" ? menu : backBtn}
                             </View>
                         </HStack>
 
@@ -100,7 +101,7 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
                                 transparent
                                 leading={props => (
                                     <IconButton
-                                        onPress={LogOutAccount}
+                                        onPress={logout}
                                         icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
                                     />
                                 )}
@@ -139,15 +140,13 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
             }
         >
             <Stack>
-                {/* <View style={{ height: '5%', backgroundColor: backgroundColor }}><BackdropSubheader title={<CustomText title={"Some Item here"} />} /></View> */}
-
-
-                <View style={{ height: '85%', backgroundColor: backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
+                <View style={{ height: currentScreen === "Dashboard" ? '100%' : '85%', backgroundColor: backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
                     {children}
                 </View>
 
-                <View style={{ height: '15%', backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
-                    <SessionClassProperties hide={false} />
+                <View style={{ display: currentScreen === "Dashboard" ? 'none' : 'flex', height: '15%', backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+                    <SessionClassProperties hide={false} params={params}
+                        selectedClass={{ value: param?.sessionClassId, text: param?.sessionClass }} />
                 </View>
 
             </Stack>
@@ -156,4 +155,15 @@ const ProtectedTeacher = ({ backgroundColor, persistedUser, children }: any) => 
     );
 };
 
-export default ProtectedTeacher;
+
+const mapStateToProps = (state: any) => {
+    return { state: state }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        logout: () => dispatch(AuhtService.SignOutUser())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProtectedTeacher);

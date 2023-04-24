@@ -1,5 +1,6 @@
 export default {
     tutorClasses: [],
     classSubjects: [],
-    classGroup: []
+    classGroup: [],
+    classStudents: []
 }

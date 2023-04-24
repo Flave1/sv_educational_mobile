@@ -4,7 +4,7 @@ import { AppButtonColorDark } from "../../../tools/color";
 
 
 const CircleBox = ({ icon, text, onPress }: any) => (
-    <Pressable onPress={onPress}>
+    <Pressable onTouchStart={onPress}>
         <Box w={100} h={83} m={2} style={{ alignItems: 'center', paddingTop: 10 }}>
             <Box w={50} h={50} radius={100} style={{ backgroundColor: AppButtonColorDark, justifyContent: 'center', alignItems: 'center' }}>
                 {icon}

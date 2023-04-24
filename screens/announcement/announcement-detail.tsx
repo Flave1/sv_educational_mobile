@@ -12,7 +12,6 @@ const AnnouncementDetail = ({ route, navigation, dispatch, state, backgroundColo
     const { selectedAnnouncement } = state.announcementState;
     const { announcementsId } = route.params;
 
-    console.log('selectedAnnouncement', selectedAnnouncement);
 
     React.useEffect(() => {
         if (persistedUser.baseUrlSuffix) {
@@ -22,7 +21,7 @@ const AnnouncementDetail = ({ route, navigation, dispatch, state, backgroundColo
 
     return (
         <>
-            <ProtectedTeacher backgroundColor={backgroundColor}>
+            <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Announcement">
                 <View style={{ backgroundColor: isDarkMode ? AppLight : AppLight, height: '100%' }}>
                     <Banner
                         style={{ marginVertical: 20 }}

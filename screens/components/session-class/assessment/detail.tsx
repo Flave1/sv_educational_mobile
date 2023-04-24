@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Badge, HStack, Pressable, Stack } from "@react-native-material/core";
+import { HStack, Pressable, Stack } from "@react-native-material/core";
 import ProtectedTeacher from "../../../authentication/protected-teacher";
 import ScreenTitle from "../../layouts/screen-title";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectItem } from "../../../../models/select-item";
-import { getAssessmentStudents, getSingleHomeAssessment } from "../../../../store/actions/assessment-actions";
+import { getStudentAssessment, getSingleHomeAssessment } from "../../../../store/actions/assessment-actions";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomText from "../../layouts/CustomText";
-import { screens } from "../../../../screen-routes/navigation";
 import BottomUpComponent from "../../layouts/bottom-up-component";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -22,8 +21,9 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
     const [homeAssessmentId] = useState<string>(route.params.HomeAssessmentId);
     const { assessment, students } = state.assessmentState;
 
+    
     useEffect(() => {
-        homeAssessmentId &&  getSingleHomeAssessment(homeAssessmentId, sessionClass.value)(dispatch)
+        homeAssessmentId && getSingleHomeAssessment(homeAssessmentId, sessionClass.value)(dispatch)
     }, [homeAssessmentId])
 
     // MODAL##############MODAL
@@ -40,21 +40,23 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
     };
     // MODAL#############MODAL
     return (
-        <ProtectedTeacher backgroundColor={backgroundColor}>
+        <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Assessment">
             <BottomSheetModalProvider>
-                <ScrollView onTouchStart={() => openOrCloseModal(false)}>
+                <ScrollView>
                     <Stack spacing={10} style={{ flex: 1, margin: 10, }}>
                         <Stack style={{ flex: 0 }}>
                             <HStack style={{ alignItems: 'center' }}>
                                 <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={20} />} title={'-' + sessionClass.text + ' Assessment'} />
-                                <HStack style={{ width: 100, justifyContent: 'center' }}>
-                                    <CustomText title={assessment?.studentCount} />
-                                    <Pressable onTouchStart={() => {
-                                        getAssessmentStudents(homeAssessmentId, sessionClass.value, openOrCloseModal)(dispatch)
-                                    }}>
-                                        <CustomText title={<FontAwesome5 name="users" size={20} />} />
-                                    </Pressable>
-                                </HStack>
+                                <Pressable onPress={() => {
+                                    getStudentAssessment(homeAssessmentId, sessionClass.value, openOrCloseModal)(dispatch)
+                                }} style={{ width: 100, justifyContent: 'center' }}>
+                                    <HStack>
+                                        <CustomText title={assessment?.studentCount} />
+                                        <View>
+                                            <CustomText title={<FontAwesome5 name="users" size={20} />} />
+                                        </View>
+                                    </HStack>
+                                </Pressable>
                                 <CustomText title={<MaterialIcons name="zoom-out-map" size={20} />} />
                             </HStack>
                         </Stack>
@@ -75,10 +77,22 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
                                         <CustomText style={style.text} title={assessment?.dateDeadLine} />
                                     </HStack>
                                 </Stack>
-                                <Stack style={{padding:5, borderColor: 'grey', borderWidth: 1, flex: 1, borderRadius: 10, minHeight: 400 }}>
-                                    <ScrollView style={{ flex: 1 }} >
+                                <Stack style={{
+                                    padding: 5,
+                                    borderColor: 'grey',
+                                    borderWidth: 1, flex: 1,
+                                    borderRadius: 10,
+                                    minHeight: 400
+                                }}>
+                                    <ScrollView style={{
+                                        flex: 1,
+                                        backgroundColor: 'white',
+                                        borderRadius: 5,
+                                        padding: 3
+                                    }} >
                                         {
-                                            assessment?.content && <RenderHtml
+                                            assessment?.content &&
+                                            <RenderHtml
                                                 source={{ html: assessment.content }}
                                                 contentWidth={200}
                                             />
@@ -86,26 +100,43 @@ const AssessmentDetail = ({ dispatch, state, backgroundColor, persistedUser, nav
                                     </ScrollView>
                                 </Stack>
                                 <CustomText style={style.label} title="Comment" />
-                                <Stack style={{ borderColor: 'grey', borderWidth: 1, flex: 1, borderRadius: 10, minHeight: 90, padding: 10 }}>
-                                <ScrollView style={{ flex: 1 }} >
+                                <Stack style={{
+                                    borderColor: 'grey',
+                                    borderWidth: 1,
+                                    flex: 1,
+                                    borderRadius: 10,
+                                    minHeight: 90,
+                                    padding: 10
+                                }}>
+                                    <ScrollView style={{
+                                        flex: 1,
+                                        backgroundColor: 'white',
+                                        borderRadius: 5,
+                                        padding: 3
+                                    }} >
                                         {
-                                            assessment?.comment && <RenderHtml
+                                            assessment?.comment &&
+                                            <RenderHtml
                                                 source={{ html: assessment.comment }}
                                                 contentWidth={200}
                                             />
                                         }
                                     </ScrollView>
                                 </Stack>
-
                             </Stack>
-
-
                         </Stack>
-
                     </Stack>
                 </ScrollView>
-                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
-                    <HomeAssessmentFeedbackList students={students} openOrCloseModal={openOrCloseModal} navigation={navigation} sessionClass={sessionClass}/>
+                <BottomUpComponent
+                    bottomSheetModalRef={bottomSheetModalRef}
+                    snapPoints={snapPoints}
+                    openOrCloseModal={openOrCloseModal}>
+                    <HomeAssessmentFeedbackList
+                        students={students}
+                        openOrCloseModal={openOrCloseModal}
+                        navigation={navigation}
+                        sessionClass={sessionClass}
+                        dispatch={dispatch}/>
                 </BottomUpComponent>
 
 

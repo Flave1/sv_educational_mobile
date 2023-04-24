@@ -2,9 +2,11 @@ import { Badge } from "@react-native-material/core";
 import React, { useState } from "react";
 import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { includeClassToScoreRecord } from "../../../../store/actions/assessment-actions";
+import { AppPurple } from "../../../../tools/color";
 import CustomCheckBox from "../../layouts/checkbox-component";
 
 export function HomeAssessmentScoreRecordList({ students, homeAssessmentId, dispatch, openOrCloseModal }: any) {
+
     function recordStatus(item: any) {
         if (item.status == "not started")
             return <Badge color="red" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={item.status} />
@@ -14,7 +16,7 @@ export function HomeAssessmentScoreRecordList({ students, homeAssessmentId, disp
             return <Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={item.status} />
     }
 
-    const [isChecked, setIsChecked] = useState(students.find((c: any) => c.included === false));
+    const [isChecked, setIsChecked] = useState<boolean>(students.find((c: any) => c.included === true) != null);
     const handleCheck = () => {
         setIsChecked(!isChecked);
     };
@@ -22,7 +24,7 @@ export function HomeAssessmentScoreRecordList({ students, homeAssessmentId, disp
     const showDialog = () => {
         Alert.alert(
             'Include Assessment',
-            isChecked ? 'Are you sure you want to Include this assessment into score entry?' : 'Are you sure you want to exclude this assessment from score entry?',
+            !isChecked ? 'Are you sure you want to Include this assessment into score entry?' : 'Are you sure you want to exclude this assessment from score entry?',
             [
                 {
                     text: 'CANCEL',
@@ -31,8 +33,7 @@ export function HomeAssessmentScoreRecordList({ students, homeAssessmentId, disp
                 {
                     text: 'YES',
                     onPress: () => {
-                        handleCheck();
-                        includeClassToScoreRecord(homeAssessmentId, isChecked, openOrCloseModal)(dispatch)
+                        includeClassToScoreRecord(homeAssessmentId, !isChecked, openOrCloseModal, handleCheck)(dispatch)
                     },
                 },
             ],
@@ -43,9 +44,9 @@ export function HomeAssessmentScoreRecordList({ students, homeAssessmentId, disp
 
     return (
         <>
-            <View style={{ width: '100%', backgroundColor: 'grey' }}>
+            <View style={{ width: '100%', backgroundColor: AppPurple }}>
                 <CustomCheckBox
-                    text="Include Student Assessments int score entry"
+                    text="Include scores into score entry"
                     isSelected={isChecked}
                     onValueChange={() => {
                         showDialog()

@@ -15,6 +15,7 @@ const Onboarding = (props: any) => {
   React.useEffect(() => {
 
     if (props.persistedUser) {
+     
       navigation.navigate(screens.scenes.auth.screens.signin.name)
     }
   }, [props.persistedUser])

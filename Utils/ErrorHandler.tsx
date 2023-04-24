@@ -1,24 +1,35 @@
-import { Alert } from "react-native";
-import { SignOutUser } from "../store/actions/auth-actions";
+// import { Vibration } from "react-native";
+import { AuhtService } from "../services/AuthService";
 
 export class ErrorHandler {
-    static HandleUnexpectedError(err: any, app_state_actions: any, dispatch: any) {
+    static HandleUnexpectedError(err: any, action: string, dispatch: any) {
+        const error: any = JSON.parse(err)
+        
         try {
-            if (err.response === undefined) {
-                dispatch({ type: app_state_actions.REQUEST_FAILED, payload: "Some internal error occurred" });
+           
+            if (error?.status === 500) {
+                dispatch({ type: action, payload: "Unexpected internal error occurred" });
                 return;
             }
-            if (err.response.status == 401) {
-                console.log('error captured', err);
-                Alert.alert('Session Expired')
-                dispatch({ type: app_state_actions.HIDE_LOADING });
-                SignOutUser()(dispatch)
+            if (error?.request?.status == 500) {
+                dispatch({ type: action, payload: "Unexpected Error occurred in background" });
                 return;
             }
-            dispatch({ type: app_state_actions.REQUEST_FAILED, payload: err.response.data.message.friendlyMessage });
+            if (error?.request?.status == 401) {
+                // Alert.alert('Session Expired', 'Your Session has expired')
+                // Vibration.vibrate(500)
+                dispatch({ type: action, payload: 'Your Session has expired' });
+                dispatch(AuhtService.SignOutUser())
+                return;
+            }
+            if (error?.request?.status == 400) {
+                dispatch({ type: action, payload: error?.data?.message?.friendlyMessage });
+                return;
+            }
+
         }
         catch (error: any) {
-            dispatch({ type: app_state_actions.REQUEST_FAILED, payload: "Unexpected Error occurred in background" });
+            dispatch({ type: action, payload: "Unexpected Error occurred in background" });
         }
     }
 }

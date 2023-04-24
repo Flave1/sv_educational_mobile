@@ -4,13 +4,13 @@ import CustomText from "./CustomText";
 import { useColorScheme } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { screens } from "../../../screen-routes/navigation";
-import { AppLightBlue } from "../../../tools/color";
+import { AppLightBlue, AppPurple } from "../../../tools/color";
 
 const TeacherAnnouncementBox = ({ state, dispatch, backgroundColor, navigation }: any) => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
         <Banner
-            style={{ backgroundColor: isDarkMode ? AppLightBlue : '#D6DBDF', borderBottomLeftRadius: 10, borderTopLeftRadius: 10 }}
+            style={{ backgroundColor: AppPurple, borderBottomLeftRadius: 10, borderTopLeftRadius: 10 }}
             text={<CustomText style={{  fontSize: 23 }} title="What Am I Doing here, Somebody please help.... Kus Announcement come here" />}
             buttons={
                 <HStack spacing={2}>

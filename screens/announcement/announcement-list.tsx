@@ -27,7 +27,7 @@ const AnnouncementList = ({ route, navigation, dispatch, state, backgroundColor,
 
     return (
         <>
-            <ProtectedTeacher backgroundColor={backgroundColor}>
+            <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Announcement Detail">
                 <View style={{ height: '100%' }}>
 
                     <NativeBaseProvider>

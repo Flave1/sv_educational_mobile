@@ -24,8 +24,6 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import BottomUpComponent from "../../layouts/bottom-up-component";
 import { HomeAssessmentScoreRecord } from "../models/assessment";
 import { HomeAssessmentScoreRecordList } from "./home-assessment-scorerecord-list";
-import { Fab } from "native-base";
-// import { openOrCloseModal } from "../../../../tools/open-close-modal";
 const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }: any) => {
     const { classSubjects, classGroup } = state.classPropsState;
     const { assessments, assessmentTypes, score_reocrds } = state.assessmentState;
@@ -68,8 +66,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
     const snapPoints = useMemo(() => ["90%"], []);
     const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
     const [modalActionState, setModalActionState] = useState(false);
-    const openOrCloseModal = (shouldOpenModal: boolean, assessmentStatus: string) => {
-        setSelectedAssessmentStatus(assessmentStatus)
+    const openOrCloseModal = (shouldOpenModal: boolean) => {
         setModalActionState(shouldOpenModal)
         if (shouldOpenModal && bottomSheetModalRef.current) {
             bottomSheetModalRef.current.present();
@@ -79,8 +76,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
     };
 
     const ScoreRecordBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
-    const [scoreRecordModalActionState, setScoreRecordModalActionState] = useState(false);
-    const openOrCloseScoreRecordModalActionStateModal = (shouldOpenModal: boolean) => {
+    const openOrCloseScoreRecordModal = (shouldOpenModal: boolean) => {
         setModalActionState(shouldOpenModal)
         if (shouldOpenModal && ScoreRecordBottomSheetModalRef.current) {
             ScoreRecordBottomSheetModalRef.current.present();
@@ -88,6 +84,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
             ScoreRecordBottomSheetModalRef.current.close();
         }
     };
+
 
     const showDialog = () => {
         Alert.alert(
@@ -101,8 +98,28 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                 {
                     text: 'YES',
                     onPress: () => {
-                        openOrCloseModal(false, "");
                         deleteHomeAssessment(selectItemId, sessionClass.value, sessionClassSubject.value, group.value)(dispatch);
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const showChangeStatusDialog = (status: string) => {
+        Alert.alert(
+            status === "open" ?'Close assessment' : "Open assessment",
+            status === "open" ? 'When you close assessment, students will not be able to submit feedback' : 'When you open assessment, students will be able to provide feedback',
+            [
+                {
+                    text: 'CANCEL',
+                    onPress: () => { '' },
+                },
+                {
+                    text: 'CONTINUE',
+                    onPress: () => {
+                        openOrCloseModal(false)
+                        open_closeHomeAssessment(selectItemId, sessionClass.value, sessionClassSubject.value, group.value)(dispatch);
                     },
                 },
             ],
@@ -119,13 +136,9 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
     }
 
     return (
-        <ProtectedTeacher backgroundColor={backgroundColor}>
+        <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Assessment">
             <BottomSheetModalProvider>
-                <Stack spacing={10} style={{ flex: 1 }} onTouchStart={() => {
-                    openOrCloseModal(false, "");
-                    openOrCloseScoreRecordModalActionStateModal(false);
-                }
-                }>
+                <Stack spacing={10} style={{ flex: 1 }} >
                     <Stack style={{ flex: 0, marginHorizontal: 21 }}>
                         <HStack style={{ alignItems: 'center' }}>
                             <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={25} />} title={'-' + sessionClass.text} />
@@ -169,7 +182,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                                             sessionClassSubject: { name: sessionClassSubject },
                                             group: { name: group }
                                         }
-                                    })
+                                    });
                                 }}>
                                 <CustomText title={<Ionicons size={30} name="md-add-circle" />} />
                             </Pressable>
@@ -228,7 +241,8 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                                             key={idx}
                                             onTouchStart={() => {
                                                 setSelectedItem(item.homeAssessmentId)
-                                                openOrCloseModal(!modalActionState, item.status)
+                                                openOrCloseModal(!modalActionState);
+                                                setSelectedAssessmentStatus(item.status)
                                             }}>
 
                                             <HomeAssessmentBox
@@ -250,38 +264,37 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <Stack>
                         <ListComponent text={'View/detail'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
-                            openOrCloseModal(false, "")
+                            openOrCloseModal(false)
                             navigation.navigate({
                                 name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.detail.name,
                                 params: params
                             })
                         }} />
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
-                            openOrCloseModal(false, "")
+                            openOrCloseModal(false)
                             navigation.navigate({
                                 name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
                                 params: params
                             })
                         }} />
                         <ListComponent
-                            text={assessmentStatus === "close" ? 'Close assessment' : 'Open assessment'}
+                            text={assessmentStatus === "open" ? 'Close assessment' : 'Open assessment'}
                             icon={<Entypo name={assessmentStatus === "close" ? "eye-with-line" : "eye"} size={20} />}
                             onPress={() => {
-                                openOrCloseModal(false, "")
-                                open_closeHomeAssessment(selectItemId, sessionClass.value, sessionClassSubject.value, group.value)(dispatch);
+                                showChangeStatusDialog(assessmentStatus)
                             }} />
                         <ListComponent text={'Delete'} icon={<Ionicons name="trash-bin" size={20} />}
                             onPress={() => showDialog()} />
                         <ListComponent text={'Score Record'} icon={<Ionicons name="list-circle" size={20} />}
                             onPress={() => {
-                                openOrCloseModal(false, "")
-                                getHomeAssessmentScoreRecords(selectItemId, openOrCloseScoreRecordModalActionStateModal)(dispatch);
+                                openOrCloseModal(false)
+                                getHomeAssessmentScoreRecords(selectItemId, openOrCloseScoreRecordModal)(dispatch);
                             }} />
                     </Stack>
                 </BottomUpComponent>
 
-                <BottomUpComponent bottomSheetModalRef={ScoreRecordBottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseScoreRecordModalActionStateModal}>
-                    <HomeAssessmentScoreRecordList students={homeAssessmentScoreRecorList} homeAssessmentId={selectItemId} dispatch={dispatch} openOrCloseModal={openOrCloseScoreRecordModalActionStateModal}/>
+                <BottomUpComponent bottomSheetModalRef={ScoreRecordBottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseScoreRecordModal}>
+                    <HomeAssessmentScoreRecordList students={homeAssessmentScoreRecorList} homeAssessmentId={selectItemId} dispatch={dispatch} openOrCloseModal={openOrCloseScoreRecordModal} />
                 </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>

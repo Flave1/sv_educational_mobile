@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import { screens } from "../../screen-routes/navigation";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { TextDark } from "../../tools/color";
+import { AppDark, TextDark } from "../../tools/color";
 import CustomDropdownInput from "../components/layouts/CustomDropdownInput";
 import CustomTextInput from "../components/layouts/CustomTextInput";
 import Feather from "react-native-vector-icons/Feather";
@@ -87,11 +87,12 @@ const SchoolSetup = ({ backgroundColor, dispatch, state, navigation }: any) => {
                 enableHandlePanningGesture={true}
                 enablePanDownToClose={true}
                 ref={bottomSheetModalRef}
+                backgroundStyle={{ backgroundColor: AppDark }}
                 index={0}
                 snapPoints={snapPoints}
                 style={{ backgroundColor: "#868C8E" }}>
                 <View>
-                    <UserValidationForm selectedSchool={selectedSchool} dispatch={dispatch} backgroundColor={backgroundColor} />
+                    <UserValidationForm selectedSchool={selectedSchool} dispatch={dispatch} backgroundColor={backgroundColor} openOrCloseModal={openOrCloseModal} />
                 </View>
             </BottomSheetModal>
         </BottomSheetModalProvider>
@@ -101,7 +102,7 @@ const SchoolSetup = ({ backgroundColor, dispatch, state, navigation }: any) => {
 export default SchoolSetup;
 
 
-const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
+const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any) => {
     const [usernameOrRegNumberLabel, setUsernameOrRegNumberPlaceHolder] = useState<String>('Student Reg Number OR Email');
     const userTypes = ["STUDENT", "TEACHER", "PARENT"];
 
@@ -136,13 +137,13 @@ const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
                 </Stack>
 
                 <HStack style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
-                    <Text style={{ textTransform: 'uppercase', color: TextDark, fontWeight: 'bold' }} >{selectedSchool.schoolName}</Text>
+                    <Text style={{ textTransform: 'uppercase', color: 'white', fontWeight: 'bold' }} >{selectedSchool.schoolName}</Text>
                 </HStack>
                 <Stack spacing={3}>
                     <HStack style={{ alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ textTransform: 'uppercase', color: screenLocalColor }} >{selectedSchool.address}</Text>
+                        <Text style={{ textTransform: 'uppercase', color: 'white' }} >{selectedSchool.address}</Text>
                     </HStack>
-                    <HStack style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <HStack style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
                         <Text onPress={() => Linking.openURL(selectedSchool.schoolUrl)} style={{ color: 'blue' }} >{selectedSchool.schoolUrl}</Text>
                     </HStack>
                     <Divider style={{ marginBottom: 4, marginTop: 10 }} leadingInset={16} trailingInset={32} />
@@ -152,12 +153,12 @@ const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
                         {((touched.usernameOrRegNumber && errors.usernameOrRegNumber)) && <Text color='red' >{errors.usernameOrRegNumber}</Text>}
                     </Stack>
                     <View style={{ width: '100%' }}>
-                        <Text  color={screenLocalColor}>Select user type here</Text>
+                        <Text color={screenLocalColor}>Select user type here</Text>
                         <Divider style={{ marginBottom: 4, marginTop: 10, opacity: -4 }} leadingInset={16} trailingInset={32} />
                         <CustomDropdownInput data={userTypes}
                             searchPlaceHolder="Search"
                             defaultButtonText="Select User Type"
-                            backgroundColor={screenLocalColor}
+                            backgroundColor={'#7c68ee'}
                             buttonTextAfterSelection={(selectedItem: string, index: any) => {
                                 return selectedItem
                             }}
@@ -178,7 +179,7 @@ const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
                         />
                     </View>
 
-                    <Divider style={{ marginBottom: 4, marginTop: 20, opacity:-4 }} leadingInset={16} trailingInset={32} />
+                    <Divider style={{ marginBottom: 4, marginTop: 20, opacity: -4 }} leadingInset={16} trailingInset={32} />
 
                     <Stack style={{ width: '100%' }}>
                         <Text color={screenLocalColor} >{usernameOrRegNumberLabel}</Text>
@@ -191,6 +192,8 @@ const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
                             textColor={screenLocalColor}
                             autoCompleteType='text'
                             keyboardType='text'
+                            returnKeyType='go'
+                            returnKeyLabel='go'
                             keyboardAppearance='dark'
                             value={values.usernameOrRegNumber}
                             error={errors.usernameOrRegNumber}
@@ -204,21 +207,29 @@ const UserValidationForm = ({ selectedSchool, dispatch }: any) => {
 
 
                 </Stack>
-                {/* <HStack spacing={3} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}></HStack> */}
-                <HStack spacing={3} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
-
-                    <CustomButton
-                        title="Submit"
-                        compact
-                        backgroundColor={screenLocalColor}
-                        onPress={() => {
-                            handleSubmit()
-                        }}
-                    />
+                <HStack spacing={6} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+                    <View>
+                        <CustomButton
+                            title="Cancel"
+                            compact
+                            backgroundColor={screenLocalColor}
+                            onPress={() => {
+                                openOrCloseModal(false, null)
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <CustomButton
+                            title="Submit"
+                            compact
+                            backgroundColor={'#7c68ee'}
+                            onPress={() => {
+                                handleSubmit()
+                            }}
+                        />
+                    </View>
                 </HStack>
             </Stack>
         </ScrollView>
     )
 }
-
-// export default SchoolSetupProvider;

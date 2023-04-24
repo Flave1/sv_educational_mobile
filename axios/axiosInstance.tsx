@@ -15,11 +15,9 @@ axiosInstance.interceptors.response.use((response: any) => response, (error: any
 
 axiosInstance.interceptors.response.use(async (response: any) => response, (error: any) => { 
     if(error.response.status === 500){
-        Alert.alert('Unexpected Error occurred ')
-        console.log('error.response', error.response)
+        return error.response
     }
     if(error.response.status === 404){
-        console.log('error.response', error.response)
         return error.response
     }
     throw error;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
@@ -10,12 +10,18 @@ import { screens } from "../../../screen-routes/navigation";
 import CustomText from "../layouts/CustomText";
 import { ScrollView } from "react-native-gesture-handler";
 import CircleBox from "../layouts/circle-box";
-const SessionClassProperties = ({ hide, activeScreen = 1, contentContainerStyle = null, selectItem , navigation}: any) => {
+const SessionClassProperties = ({ activeScreen = 1, contentContainerStyle = null, selectedClass, navigation, params }: any) => {
     const [selected, setSelected] = React.useState(activeScreen);
     React.useEffect(() => {
         setSelected(activeScreen);
     });
-    
+
+    const [param, setParam] = useState();
+    useEffect(() => {
+        params && setParam(params)
+    }, [params])
+
+
     return (
         <>
             <ScrollView horizontal={true} style={[{ height: '100%' }]} contentContainerStyle={[contentContainerStyle]}>
@@ -30,10 +36,16 @@ const SessionClassProperties = ({ hide, activeScreen = 1, contentContainerStyle 
                     onPress={() => {
                         navigation.navigate({
                             name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
-                            params: selectItem
+                            params: selectedClass
                         })
                     }} icon={<MaterialIcons name="assessment" color="white" size={30} />} text={<CustomText title={'Assessment'} />} />
-                <CircleBox icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
+                <CircleBox
+                    onPress={() => {
+                        navigation.navigate({
+                            name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
+                            params: selectedClass
+                        })
+                    }} icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
                 <CircleBox icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
                 <CircleBox icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
                 <CircleBox icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />

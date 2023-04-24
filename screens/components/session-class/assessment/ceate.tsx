@@ -26,6 +26,7 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
     const [homeAssessmentId] = useState<SelectItem>(route.params.HomeAssessmentId);
     const { assessment } = state.assessmentState;
     const [ass, setAssessment] = useState<ClassAssessment>(assessment);
+    const screenLocalColor = "#868C8E";
 
     useEffect(() => {
         homeAssessmentId ? setAssessment(assessment) : setAssessment(new ClassAssessment());
@@ -86,12 +87,12 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
     }, [touched, errors])
 
     return (
-        <ProtectedTeacher backgroundColor={backgroundColor}>
+        <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Assessment">
             <ScrollView>
                 <Stack spacing={10} style={{ flex: 1, margin: 10, }}>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={20} />} title={'-' + sessionClass.text} />
+                            <ScreenTitle icon={<MaterialIcons name="assessment" color="white" size={20} />} title={homeAssessmentId ? 'UPDATE ' + sessionClass.text + ' ASSESSMENT' : 'CREATE ASSESSMENT FOR ' + sessionClass.text} />
                         </HStack>
                     </Stack>
 
@@ -340,9 +341,21 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
                             </View>
                         </HStack>
 
-                        <Stack style={{ marginHorizontal: 50, marginTop: 10 }}>
-                            <CustomButton onPress={handleSubmit} />
-                        </Stack>
+                        <HStack spacing={3} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
+                            <View>
+
+                                <CustomButton
+
+                                    backgroundColor={screenLocalColor}
+                                    title="CLOSE" onPress={() => {
+                                        navigation.goBack()
+                                    }}
+                                />
+                            </View>
+                            <View>
+                                <CustomButton title="SUBMIT" onPress={handleSubmit} />
+                            </View>
+                        </HStack>
 
                     </Stack>
 

@@ -23,7 +23,7 @@ export default function CustomTextInput({ icon, borderColor, textColor, ...other
       <View style={{ padding: 8, }}>
         <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
       </View>
-      <View style={[{ flex: 1, borderRadius: 5, backgroundColor: txColor? showOnFocusStyle ? '#C2C7C9' : '#C2C7C9' : '' }]}>
+      <View style={[{ flex: 1, borderRadius: 5}]}>
         <RNTextInput
           onFocus={() => {
             setFocusStyles(true);
@@ -31,7 +31,7 @@ export default function CustomTextInput({ icon, borderColor, textColor, ...other
           onBlur={() => {
             setFocusStyles(false)
           }}
-          style={{ fontWeight: 'bold', fontSize: 20}}
+          style={{ fontWeight: 'bold', fontSize: 20, color: !textColor ?  'white' : 'black'}}
           underlineColorAndroid='transparent'
           placeholderTextColor={'grey'}
           {...otherProps}
@@ -40,7 +40,7 @@ export default function CustomTextInput({ icon, borderColor, textColor, ...other
     </View>
   );
 }
-
+// backgroundColor: txColor? showOnFocusStyle ? '#C2C7C9' : '#C2C7C9' : '' 
 const styles = StyleSheet.create({
   onFocus: {
     borderRadius: 5
