@@ -10,17 +10,17 @@ import { SafeAreaView, ScrollView, View, Linking } from "react-native";
 import { IAppState } from "../../interfaces/app-state/state";
 import { School } from "../../models/on-boarding/all-schools";
 import { getAllSchools, ValidateMobileUser } from "../../store/actions/app-state-actions";
-import Section from "../components/layouts/Section";
 import { useFormik } from "formik";
 import { screens } from "../../screen-routes/navigation";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { AppDark, TextDark } from "../../tools/color";
-import CustomDropdownInput from "../components/layouts/CustomDropdownInput";
-import CustomTextInput from "../components/layouts/CustomTextInput";
-import Feather from "react-native-vector-icons/Feather";
-import CustomButton from "../components/layouts/CustomButton";
+import { AppDark } from "../../tools/color";
 import * as Yup from 'yup';
+import Feather from "react-native-vector-icons/Feather";
+import CustomButton from "../layouts/CustomButton";
+import CustomDropdownInput from "../layouts/CustomDropdownInput";
+import CustomTextInput from "../layouts/CustomTextInput";
+import Section from "../layouts/Section";
 
 
 

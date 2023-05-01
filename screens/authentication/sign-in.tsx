@@ -2,9 +2,6 @@ import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
-import CustomTextInput from '../components/layouts/CustomTextInput';
-import CustomButton from '../components/layouts/CustomButton';
-import CustomText from '../components/layouts/CustomText';
 import { OffboardUser } from '../../store/actions/app-state-actions';
 import { SignInUser } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
@@ -14,6 +11,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AppPurple } from '../../tools/color';
 import { AuhtService } from '../../services/AuthService';
+import CustomButton from '../layouts/CustomButton';
+import CustomText from '../layouts/CustomText';
+import CustomTextInput from '../layouts/CustomTextInput';
 const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
 
     const [onboardedUser, setUser] = useState<OnboardedUser>();

@@ -2,11 +2,12 @@ import React, { useRef, useState } from 'react';
 import { useColorScheme, View } from 'react-native';
 import ViewPager from '@react-native-community/viewpager';
 import Page from './Page';
-import Footer from '../components/layouts/Footer';
-import GlobalStyles from '../components/layouts/GlobalStyle';
 import { AppDark, AppLight } from '../../tools/color';
 import { screens } from '../../screen-routes/navigation';
 import { useNavigation } from '@react-navigation/native';
+import Footer from '../layouts/Footer';
+
+import GlobalStyles from '../layouts/GlobalStyle'
 
 
 const Onboarding = (props: any) => {

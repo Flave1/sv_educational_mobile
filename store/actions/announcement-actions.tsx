@@ -1,11 +1,11 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { NativeFeatures } from "../../tools/device-properties";
+import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions } from "../action-types/announcement-action-types";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 
 export const GetAnnouncements = (_baseurlSuffix: any, pageNumber: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/${_baseurlSuffix}/announcements/api/v1/get/announcements?PageNumber=${pageNumber}&PageSize=${20}`)
@@ -25,7 +25,7 @@ export const ResetAnnouncementState = () => (dispatch: any) => {
 }
 
 export const OpenAnnouncement = (_baseurlSuffix: any, id: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post(`smp/${_baseurlSuffix}/announcements/api/v1/update/seen-announcement`, { announcementsId: id })

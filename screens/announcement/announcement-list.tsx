@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { ListItem, Avatar } from "@react-native-material/core";
 import ProtectedTeacher from "../authentication/protected-teacher";
-import { Button, useColorScheme, View } from "react-native";
-import TeacherAnnouncementBox from "../components/layouts/teacher-announcement-box";
-import { AppDark, AppLight } from "../../tools/color";
+import { useColorScheme, View } from "react-native";
 import { GetAnnouncements, ResetAnnouncementState } from "../../store/actions/announcement-actions";
 import { FlatList, NativeBaseProvider } from "native-base";
 import { screens } from "../../screen-routes/navigation";
-import { useNavigation, StackActions } from "@react-navigation/native";
 
 const AnnouncementList = ({ route, navigation, dispatch, state, backgroundColor, persistedUser }: any) => {
 

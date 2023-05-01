@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-    AppState,
     StatusBar,
     useColorScheme,
 } from 'react-native';
@@ -17,13 +16,15 @@ import { OnboardedUser } from '../models/on-boarding/onboarded-user';
 import AnnouncementList from './announcement/announcement-list';
 import { useNavigation } from '@react-navigation/native';
 import AnnouncementDetail from './announcement/announcement-detail';
-import SessionClassIndex from './components/session-class';
-import AssessmentIndex from './components/session-class/assessment';
-import AssessmentCreate from './components/session-class/assessment/ceate';
-import AssessmentDetail from './components/session-class/assessment/detail';
-import StudentHomeAssessmentDetail from './components/session-class/assessment/student-h-assessment-detail';
-import SchoolSetup from './on-boarding/school-setup'; 
-import AttendanceIndex from './components/attendance';
+import SchoolSetup from './on-boarding/school-setup';
+import AssessmentIndex from './assessment';
+import AssessmentCreate from './assessment/ceate';
+import AssessmentDetail from './assessment/detail';
+import StudentHomeAssessmentDetail from './assessment/student-h-assessment-detail';
+import SessionClassIndex from './session-class/index';
+import AttendanceIndex from './attendance/index';
+import TakeAttendanceRecord from './attendance/take-attendance';
+import ContinueAttendance from './attendance/continue-attendance';
 
 
 
@@ -101,6 +102,12 @@ const StackNavigator = (parentProps: any) => {
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.name}>
                     {props => <AttendanceIndex {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.takeAttendanceRecord.name}>
+                    {props => <TakeAttendanceRecord {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.continueAttendanceRecord.name}>
+                    {props => <ContinueAttendance {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
 
             </Stack.Navigator>

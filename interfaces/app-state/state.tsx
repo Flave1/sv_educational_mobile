@@ -1,5 +1,4 @@
 import { School } from "../../models/on-boarding/all-schools";
-import { OnboardedUser } from "../../models/on-boarding/onboarded-user";
 
 export class IAppState {
     backgroundColor: string = "";

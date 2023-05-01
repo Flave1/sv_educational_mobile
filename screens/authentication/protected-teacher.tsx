@@ -10,8 +10,6 @@ import {
 } from "@react-native-material/core";
 
 import Entypo from 'react-native-vector-icons/Entypo';
-import SessionClassProperties from "../components/session-class/session-class-properties";
-import CustomText from "../components/layouts/CustomText";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AppDark, AppLight } from "../../tools/color";
@@ -20,6 +18,8 @@ import { screens } from "../../screen-routes/navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { AuhtService } from "../../services/AuthService";
 import { connect } from "react-redux";
+import CustomText from "../layouts/CustomText";
+import SessionClassProperties from "../session-class/session-class-properties";
 
 const ProtectedTeacher = ({ backgroundColor, children, currentScreen, params, logout }: any) => {
     const [revealed, setRevealed] = useState(false);

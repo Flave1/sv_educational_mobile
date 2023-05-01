@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from "../../axios/axiosInstance";
 import { ErrorHandler } from '../../Utils/ErrorHandler';
 import { actions } from "../action-types/app-state-action-types";
-import { NativeFeatures } from '../../tools/device-properties';
+import { Device } from '../../tools/device-properties';
 
 export const onboardUser = () => ({ type: actions.ON_BOARD });
 
@@ -25,7 +25,7 @@ export const OffboardUser = () => (dispatch: any) => {
 
 }
 export const getAllSchools = () => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: actions.SHOW_LOADING });
             axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
@@ -41,7 +41,7 @@ export const getAllSchools = () => (dispatch: any) => {
 }
 
 export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: actions.SHOW_LOADING });
             axiosInstance.post('fws/client/fws/api/v1/sms-mobile/validate/mobile-user', payload)

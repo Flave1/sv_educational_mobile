@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import CustomText from '../components/layouts/CustomText';
+import CustomText from '../layouts/CustomText';
 
 const Page = ({ backgroundColor, iconName, title }: any) => {
   const icon = <Feather name={iconName} size={300} />

@@ -57,7 +57,7 @@ export const screens = {
                         },
                         sclass: {
                             title: '',
-                            name: 'student-class'
+                            name: 't-student-class'
                         },
 
                         readAssessment: {
@@ -66,19 +66,19 @@ export const screens = {
                         },
                         createAssessment: {
                             title: '',
-                            name: 'create-assessment'
+                            name: 't-create-assessment'
                         },
                         attendance: {
-                            title: 'attendance',
-                            name: 'attendance',
+                            title: 't-attendance',
+                            name: 't-attendance',
                             screens: {
-                                create: {
-                                    title: 'c-attendance',
-                                    name: 'c-attendance',
+                                takeAttendanceRecord: {
+                                    title: 't-take-attendance-record',
+                                    name: 't-take-attendance-record',
                                 },
-                                update: {
-                                    title: 'u-attendance',
-                                    name: 'u-attendance',
+                                continueAttendanceRecord: {
+                                    title: 't-continue-attendance-record',
+                                    name: 't-continue-attendance-record',
                                 }
                             }
                         },

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import SplashScreen from "react-native-splash-screen";
 import Entry from './screens/entry';
 import { useDispatch, useSelector } from 'react-redux';
-import AppToast from './screens/components/layouts/SnackBar';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './screen-routes/RootNavigation';
-import FlexendSpinner from './screens/components/layouts/spinner/flex-end-spinner';
+import AppToast from './screens/layouts/SnackBar';
+import FlexendSpinner from './screens/layouts/spinner/flex-end-spinner';
 // import SyncAdapter from 'react-native-sync-adapter'
 
 const App = () => {

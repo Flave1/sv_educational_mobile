@@ -1,12 +1,12 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { NativeFeatures } from "../../tools/device-properties";
+import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/assessment-actions-types";
 import { setSuccessToast } from "./app-state-actions";
 
 export const GetAssessments = (sessionClassId: any, sessionClassSubjectId: any, groupId: any, pageNumber: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/homeassessment/api/v1/get/home-assessments?sessionClassId=${sessionClassId}&sessionClassSubjectId=${sessionClassSubjectId}&groupId=${groupId}&pageNumber=${pageNumber}`)
@@ -22,7 +22,7 @@ export const GetAssessments = (sessionClassId: any, sessionClassSubjectId: any, 
 }
 
 export const createHomeAssessment = (values: any, navigation: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post(`smp/server/homeassessment/api/v1/create/home-assessment`, values)
@@ -40,7 +40,7 @@ export const createHomeAssessment = (values: any, navigation: any) => (dispatch:
 }
 
 export const updateHomeAssessment = (values: any, navigation: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post(`smp/server/homeassessment/api/v1/update/home-assessment`, values)
@@ -58,7 +58,7 @@ export const updateHomeAssessment = (values: any, navigation: any) => (dispatch:
 }
 
 export const getSingleHomeAssessment = (homeassessmentId: any, sessionClassId: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/homeassessment/api/v1/get/single/mobile-home-assessments?homeassessmentId=${homeassessmentId}&sessionClassId=${sessionClassId}`)
@@ -74,7 +74,7 @@ export const getSingleHomeAssessment = (homeassessmentId: any, sessionClassId: a
 }
 
 export const getStudentFeedback = (homeassessmentFeedBackId: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`/smp/server/smp/studentassessment/api/v1/get-single/home-assessments-on-mobile?homeassessmentFeedBackId=${homeassessmentFeedBackId}`)
@@ -90,7 +90,7 @@ export const getStudentFeedback = (homeassessmentFeedBackId: any) => (dispatch: 
 }
 
 export const getStudentAssessment = (homeassessmentId: any, sessionClassId: any, openOrCloseModal: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/homeassessment/api/v1/get/assessment-students?homeassessmentId=${homeassessmentId}&sessionClassId=${sessionClassId}`)
@@ -107,7 +107,7 @@ export const getStudentAssessment = (homeassessmentId: any, sessionClassId: any,
 }
 
 export const open_closeHomeAssessment = (homeAssessmentId: any, sessionClassId: any, sessionClassSubjectId: any, groupId: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             const payload = {
                 homeAssessmentId
@@ -127,7 +127,7 @@ export const open_closeHomeAssessment = (homeAssessmentId: any, sessionClassId: 
 }
 
 export const deleteHomeAssessment = (item: string, sessionClassId: string, sessionClassSubjectId: string, groupId: string) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             const payload = {
                 item
@@ -147,7 +147,7 @@ export const deleteHomeAssessment = (item: string, sessionClassId: string, sessi
 }
 
 export const getHomeAssessmentScoreRecords = (homeAssessmentId: any, openOrCloseScoreRecordModal: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post('smp/server/homeassessment/api/v1/get/home-assessment/score-record', { homeAssessmentId })
@@ -164,7 +164,7 @@ export const getHomeAssessmentScoreRecords = (homeAssessmentId: any, openOrClose
 }
 
 export const includeClassToScoreRecord = (homeAssessmentId: string, include: boolean, openOrCloseModal: any, handleCheck: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             const payload = {
                 homeAssessmentId,
@@ -187,7 +187,7 @@ export const includeClassToScoreRecord = (homeAssessmentId: string, include: boo
 
 
 export const scoreAssessment = (homeAssessmentFeedBackId: string, score: number, comment: string, homeAssessmentId: string, sessionClassId: string, openOrCloseModal: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             const payload = {
                 homeAssessmentFeedBackId,

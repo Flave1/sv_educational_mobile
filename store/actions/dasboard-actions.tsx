@@ -2,10 +2,10 @@ import axiosInstance from "../../axios/axiosInstance";
 import { actions } from "../action-types/dashboard-action-types";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
-import { NativeFeatures } from "../../tools/device-properties";
+import { Device } from "../../tools/device-properties";
 
 export const GetDashboardData = () => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });

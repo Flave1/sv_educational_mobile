@@ -1,9 +1,9 @@
-import { ClassStudents } from "../models/class-properties/students";
+import { ClassStudent } from "../models/class-properties/students";
 
 export class ClassService {
     static re_initialize_students = async (
-        freshStudents: ClassStudents[],
-        existingStudents: ClassStudents[]): Promise<ClassStudents[]> => {
+        freshStudents: ClassStudent[],
+        existingStudents: ClassStudent[]): Promise<ClassStudent[]> => {
         if (existingStudents.length > 0) {
             const otherClassStudents = existingStudents
                 .filter(function(_std){

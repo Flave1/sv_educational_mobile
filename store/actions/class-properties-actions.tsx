@@ -1,13 +1,13 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { ClassStudents } from "../../models/class-properties/students";
+import { ClassStudent } from "../../models/class-properties/students";
 import { ClassService } from "../../services/Class-service";
-import { NativeFeatures } from "../../tools/device-properties";
+import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/class-properties";
 
 export const GetTutorClasses = () => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/api/v1/result/get/staff-classes`)
@@ -23,7 +23,7 @@ export const GetTutorClasses = () => (dispatch: any) => {
 }
 
 export const GetClassSubjects = (sessionClassId: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/class/api/v1/getall/class-subjects?sessionClassId=${sessionClassId}`)
@@ -38,7 +38,7 @@ export const GetClassSubjects = (sessionClassId: any) => (dispatch: any) => {
     })
 }
 export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/class/api/v1/getall/class-group?sessionClassId=${sessionClassId}&sessionClassSubjectId=${sessionClassSubjectId}`)
@@ -53,8 +53,8 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
     })
 }
 
-export const GetClassStudents = (sessionClassId: any, existingStudents: ClassStudents[]) => (dispatch: any) => {
-    NativeFeatures.isInternetAvailable().then((hasInternetAccess: boolean) => {
+export const GetClassStudents = (sessionClassId: any, existingStudents: ClassStudent[]) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/class/api/v1/get-students/${sessionClassId}`)
