@@ -17,9 +17,6 @@ const SessionClassProperties = ({ activeScreen = 1, contentContainerStyle = null
         setSelected(activeScreen);
     });
 
-
-    console.log('sessionClass', sessionClass);
-
     // const [param, setParam] = useState();
     // useEffect(() => {
     //     params && setParam(params)

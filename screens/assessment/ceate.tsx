@@ -188,7 +188,8 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
                         </View>
 
                         <View style={{ width: '100%' }}>
-                            <CustomTextInput
+                            <CustomTextArea
+                                height={100}
                                 icon={<FontAwesome5 name={'comment'} size={16} />}
                                 placeholder='Comment'
                                 autoCapitalize='none'
@@ -202,7 +203,6 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
                                 value={values.comment}
                                 error={errors.comment}
                                 touched={touched.comment}
-                                disabled={true}
                                 onChange={(e: any) => {
                                     handleChange('comment');
                                     setFieldValue('comment', e.nativeEvent.text)
@@ -345,7 +345,6 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
                             <View>
 
                                 <CustomButton
-
                                     backgroundColor={screenLocalColor}
                                     title="CLOSE" onPress={() => {
                                         navigation.goBack()

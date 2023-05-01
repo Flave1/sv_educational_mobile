@@ -8,10 +8,10 @@ export default function CustomButton({ onPress, backgroundColor, title, height, 
   const isDarkMode = useColorScheme() === 'dark';
   const bgColor = backgroundColor ? backgroundColor : isDarkMode ? '#7c68ee' : AppButtonColorDark;
   const hyt = height ? height : 50;
-  const wit = width ? width : 70;
+  const wit = width ? width : 100;
   return (
     <Pressable
-      style={{ backgroundColor: bgColor, justifyContent: 'center', alignContent: 'center', borderRadius: 20 }} onTouchStart={onPress} >
+      style={{ backgroundColor: bgColor, justifyContent: 'center', alignContent: 'center', borderRadius: 15 }} onTouchStart={onPress} >
       <View style={[style, { height: hyt, width: wit, justifyContent: 'center', alignItems: 'center' }]}>
         <CustomText style={{ fontWeight: 'bold', color: 'white' }} title={title} />
       </View>
