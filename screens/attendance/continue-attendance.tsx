@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HStack, Pressable, Stack } from "@react-native-material/core";
+import { HStack, Stack } from "@react-native-material/core";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SelectItem } from "../../models/select-item";
@@ -7,7 +7,7 @@ import ProtectedTeacher from "../authentication/protected-teacher";
 import ScreenTitle from "../layouts/screen-title";
 import { connect } from "react-redux";
 import { CustomCheckBox } from "../layouts/checkbox-component";
-import { changeStudentAvailabilityStatus, getRegisterFromServer, getRegisterLocally, getRegisters, openRegister, updateUnsechronized } from "../../store/actions/attendance-actions";
+import { changeStudentAvailabilityStatus, getRegisterFromServer, getRegisterLocally, getRegisters, updateUnsechronized } from "../../store/actions/attendance-actions";
 import { AttendanceService } from "../../services/attendance-service";
 import { ClassRegister } from "../../models/class-properties/attendance";
 import { Device } from "../../tools/device-properties";
