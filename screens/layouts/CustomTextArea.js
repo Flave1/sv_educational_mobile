@@ -50,6 +50,7 @@ export default function CustomTextArea({ icon, height, ...otherProps }) {
           onTextChange={handleEditorChange}
           placeholder="Type something..."
         /> */}
+        <Text>sasasas</Text>
       </Stack>
     </View>
   );
