@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { TextInput as RNTextInput, View, StyleSheet, useColorScheme, Text } from 'react-native';
 import { AppDark, AppLight } from '../../tools/color';
-import { Stack } from 'native-base';
-// import { QuillDeltaToHtmlConverter, QuillToolbar, Quill } from 'react-native-quill';
+// import { Stack } from 'native-base';
+import { QuillDeltaToHtmlConverter, QuillToolbar, Quill } from 'react-native-quill';
+import { Stack } from '@react-native-material/core';
 
-export default function CustomTextArea({ icon, height, ...otherProps }: any) {
+export default function CustomTextArea({ icon, height, ...otherProps }) {
   const isDarkMode = useColorScheme() === 'dark';
   const validationColor = isDarkMode ? AppLight : AppDark;
   const textAreaHeight = !height ? 300 : height;
@@ -12,7 +13,7 @@ export default function CustomTextArea({ icon, height, ...otherProps }: any) {
   const [editorHtml, setEditorHtml] = useState('');
   const [editorDelta, setEditorDelta] = useState(null);
 
-  const handleEditorChange = (value: any) => {
+  const handleEditorChange = (value) => {
     setEditorHtml(value);
   };
 
