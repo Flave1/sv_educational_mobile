@@ -1,5 +1,5 @@
-import { appStateReducer } from './reducers/app-state-reducer'
-import { authReducer } from './reducers/auth-reducer'
+import { appStateReducer } from './reducers/app-state-reducer';
+import { authReducer } from './reducers/auth-reducer';
 import { persistStore, persistReducer } from 'redux-persist';
 import { persistConfig } from './persistConfig';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -34,4 +34,3 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 // const store = createStore(rootReducer);//applyMiddleware(thunk),
 export const store = createStore(persistedReducer);
 export const persistor = persistStore(store);
-
