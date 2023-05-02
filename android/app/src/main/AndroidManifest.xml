@@ -12,12 +12,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".AttendanceService"
-            android:enabled="true"
-            android:exported="true"></service>
-
-<!--        <service android:name="com.multitenantsmpmobile.AttendanceService" />-->
 
         <activity
             android:name=".MainActivity"
