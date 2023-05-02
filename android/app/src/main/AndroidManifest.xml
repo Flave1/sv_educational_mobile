@@ -17,7 +17,7 @@
 <!--            android:enabled="true"-->
 <!--            android:exported="true"></service>-->
 
-        <service android:name="com.multitenantsmpmobile.AttendanceService" />
+<!--        <service android:name="com.multitenantsmpmobile.AttendanceService" />-->
 
         <activity
             android:name=".MainActivity"

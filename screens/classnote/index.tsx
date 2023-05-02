@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, HStack, Stack } from "@react-native-material/core";
 import CustomDropdownInput from "../layouts/CustomDropdownInput";
 import { View, Alert } from "react-native";
@@ -11,13 +11,22 @@ import { GetClassSubjects } from "../../store/actions/class-properties-actions";
 import CustomScrollview from "../layouts/CustomScrollView";
 import ClassnotesBox from "./classnotes-box";
 import { _paginationGetClassnotes, getClassnotes } from "../../store/actions/classnote-actions";
+import BottomUpComponent from "../layouts/bottom-up-component";
+import ListComponent from "../layouts/list-component";
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import { screens } from "../../screen-routes/navigation";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Entypo from "react-native-vector-icons/Entypo";
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
-    const [sessionClassSubject, setSubject] = useState<SelectItem>(new SelectItem());
-    const [selectedStatus, setStatus] = useState<SelectItem>(new SelectItem());
+    const [sessionClassSubject, setSubject] = useState<SelectItem>({ value: '', text: '', lookUpId: '' });
+    const [selectedStatus, setStatus] = useState<SelectItem>({ value: '-1', text: 'All', lookUpId: '' });
     const [pageNumber] = useState<number>(1);
-    const [selectItemId] = useState<string>('')
+    const [selectItemId, setSelectedItem] = useState<string>('');
 
     useEffect(() => {
         sessionClass?.value && props.getSubjects(sessionClass?.value)
@@ -64,6 +73,18 @@ const ClassnoteIndex = (props: any) => {
         sessionClassSubject: { name: sessionClassSubject }
     }
 
+    const snapPoints = useMemo(() => ["90%"], []);
+    const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [modalActionState, setModalActionState] = useState(false);
+    const openOrCloseModal = (shouldOpenModal: boolean) => {
+        setModalActionState(shouldOpenModal)
+        if (shouldOpenModal && bottomSheetModalRef.current) {
+            bottomSheetModalRef.current.present();
+        } else if (bottomSheetModalRef.current) {
+            bottomSheetModalRef.current.close();
+        }
+    };
+
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
@@ -80,7 +101,7 @@ const ClassnoteIndex = (props: any) => {
                                         searchPlaceHolder="Search"
                                         height={40}
                                         defaultButtonText="Select Subject"
-                                        search={true}
+                                        // search={true}
                                         buttonTextAfterSelection={(selectedItem: ClassSubjects, index: any) => {
                                             return selectedItem.subjectName
                                         }}
@@ -102,6 +123,7 @@ const ClassnoteIndex = (props: any) => {
                                         defaultButtonText="Select Status"
                                         // disabled={sessionClass.value === ''}
                                         // search={true}
+                                        default={-2}
                                         buttonTextAfterSelection={(selectedItem: SelectItem, index: any) => {
                                             return selectedItem.text
                                         }}
@@ -124,8 +146,10 @@ const ClassnoteIndex = (props: any) => {
                                         <ClassnotesBox
                                             item={item} key={idx}
                                             onPress={() => {
-                                                // setSelectedItem(item.classRegisterId)
-                                                // openOrCloseModal(!modalActionState)
+                                                console.log('pressed');
+
+                                                setSelectedItem(item.teacherClassNoteId)
+                                                openOrCloseModal(!modalActionState)
                                             }}
                                         />
                                     )
@@ -137,7 +161,45 @@ const ClassnoteIndex = (props: any) => {
 
                 </Stack>
 
-
+                <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
+                    <Stack>
+                        <ListComponent text={'Open'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
+                            openOrCloseModal(false)
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.continueAttendanceRecord.name,
+                                params: params
+                            })
+                        }} />
+                        <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
+                            openOrCloseModal(false)
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                                params: params
+                            })
+                        }} />
+                        <ListComponent text={'Share'} icon={<Fontisto name="share" size={20} />} onPress={() => {
+                            openOrCloseModal(false)
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                                params: params
+                            })
+                        }} />
+                        <ListComponent text={'Send'} icon={<FontAwesome name="send" size={20} />} onPress={() => {
+                            openOrCloseModal(false)
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                                params: params
+                            })
+                        }} />
+                        <ListComponent text={'Download'} icon={<Entypo name="download" size={20} />} onPress={() => {
+                            openOrCloseModal(false)
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                                params: params
+                            })
+                        }} />
+                    </Stack>
+                </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>
 
