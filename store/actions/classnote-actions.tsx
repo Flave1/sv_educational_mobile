@@ -21,8 +21,19 @@ export const getClassnotes = (sessionClassId: string, subjectId: string, status:
             dispatch({ type: app_state_actions.REQUEST_FAILED, payload: FETCH_NO_INTERNET_ACCESS })
     })
 }
-export const _paginationGetClassnotes = (sessionClassId: string, subjectId: string, status: number = -2, pageNumber: number = 1) => (dispatch: any) => {
+export const _paginationGetClassnotes = (params: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+
+        let sessionClassId = params.sessionClassId || '';
+        let subjectId = params.sessionCsubjectIdlassId || '';
+        let status = params.status || '';
+        let pageNumber = params.pageNumber || '';
+
+        console.log('sessionClassId', sessionClassId);
+        console.log('subjectId', subjectId);
+        console.log('status', status);
+        console.log('pageNumber', pageNumber);
+
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/classnotes/api/v1/get/classnotes/by-teacher/mobile?classId=${sessionClassId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)

@@ -20,7 +20,8 @@ function CustomScrollview({ children, totalPages, pageNumber, getAction, params 
 
     useEffect(() => {
         if (isEndReached === true && pageNumber !== totalPages) {
-            getAction(params, pageNumber + 1)
+            params.pageNumber = pageNumber + 1;
+            getAction(params)
         }
     }, [isEndReached])
 

@@ -84,7 +84,6 @@ const ClassnoteIndex = (props: any) => {
             bottomSheetModalRef.current.close();
         }
     };
-
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
@@ -93,7 +92,7 @@ const ClassnoteIndex = (props: any) => {
                         totalPages={props.totalPages}
                         pageNumber={props.pageNumber}
                         getAction={props.__getAll}
-                        params={(sessionClass.value).toString()}>
+                        params={{ 'sessionClassId': sessionClass?.lookUpId, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <Box w={184}  >
                                 <View >
@@ -223,8 +222,8 @@ function mapDispatchToProps(dispatch: any) {
         getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
-        __getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
-            _paginationGetClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch)
+        __getAll: (params:any) =>
+            _paginationGetClassnotes(params)(dispatch)
     };
 }
 

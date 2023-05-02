@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, View } from "react-native";
-import { AppButtonColorDark, AppLightBlue, AppPurple } from "../../tools/color";
-import CustomText from "../layouts/CustomText";
+import { AppButtonColorDark, AppLightBlue } from "../../tools/color";
 import { Stack, HStack, Text } from "@react-native-material/core";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
@@ -11,10 +10,10 @@ function ClassnotesBox(props: any) {
             key={props.idx} style={styles.pressable}>
             <HStack style={styles.badgebar}>
                 <View style={styles.shortdate}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>{props.item.dateCreated}</Text>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>{props.item.dateCreated}</Text>
                 </View>
                 <View style={styles.ellipsis}>
-                    <FontAwesome5 style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }} name="ellipsis-h" size={25} />
+                    <FontAwesome5 style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }} name="ellipsis-h" size={25} />
                 </View>
             </HStack>
             <Stack style={{ borderRadius: 12 }}>
@@ -48,23 +47,22 @@ const styles = StyleSheet.create({
     badgebar: {
         justifyContent: 'space-between',
         padding: 5,
-        height: 30,
+        height: 50,
         alignItems: 'center',
-        marginBottom: 5
     },
     shortdate: {
         backgroundColor: AppLightBlue,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 12,
-        width: 120
+        width: 140
     },
     ellipsis: {
         backgroundColor: AppLightBlue,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 12,
-        width: 30
+        width: 40
     },
     title: {
         color: '#EBF1EE',
@@ -89,6 +87,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 5,
         height: 30,
+        alignItems:'center'
     },
     date: {
         color: '#EBF1EE',
