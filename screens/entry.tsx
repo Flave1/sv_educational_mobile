@@ -25,6 +25,7 @@ import SessionClassIndex from './session-class/index';
 import AttendanceIndex from './attendance/index';
 import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
+import ClassnoteIndex from './classnote/index';
 
 
 
@@ -101,13 +102,16 @@ const StackNavigator = (parentProps: any) => {
                     {props => <StudentHomeAssessmentDetail {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.name}>
-                    {props => <AttendanceIndex {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                    {props => <AttendanceIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.takeAttendanceRecord.name}>
-                    {props => <TakeAttendanceRecord {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                    {props => <TakeAttendanceRecord {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.continueAttendanceRecord.name}>
-                    {props => <ContinueAttendance {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                    {props => <ContinueAttendance {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classnote.name}>
+                    {props => <ClassnoteIndex {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
 
             </Stack.Navigator>

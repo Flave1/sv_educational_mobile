@@ -21,11 +21,12 @@ const TakeAttendanceRecord = (props: any) => {
 
     useEffect(() => {
         props.classStudents && setStudents(props.classStudents.filter((x: ClassStudent) => x.sessionClassID === sessionClass.value));
-    }, [sessionClass.value]);
+    }, [sessionClass.value, props.classStudents]);
 
     useEffect(() => {
         students && sessionClass.value && props.openRegister(sessionClass.value, students);
     }, [students]);
+
 
     useEffect(() => {
         for (let i = 0; i < students.length; i++) {
@@ -39,7 +40,7 @@ const TakeAttendanceRecord = (props: any) => {
         }
 
         setRecords([...new Set(records.map((obj) => JSON.stringify(obj)))].map((str) => JSON.parse(str)));
-    }, []);
+    }, [students]);
 
 
     const handleCheck = async (item: any, isSelected: Boolean) => {
@@ -67,10 +68,11 @@ const TakeAttendanceRecord = (props: any) => {
 
     const handleSave = () => {
         props.getAll(sessionClass.value);
-        props.navigation.navigate({
-            name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-            params: sessionClass
-        });
+        props.navigation.goBack();
+        // props.navigation.navigate({
+        //     name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
+        //     params: sessionClass
+        // });
     };
 
 

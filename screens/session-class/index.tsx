@@ -4,7 +4,6 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import SquareBox from "../layouts/sqaure-box";
-import SessionClassProperties from "./session-class-properties";
 import { connect } from "react-redux";
 import { ScrollView, View } from "react-native";
 import { ClassStudent } from "../../models/class-properties/students";
@@ -19,10 +18,9 @@ const SessionClassIndex = (props: any) => {
 
     useEffect(() => {
         classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId, props.classStudents);
-    }, [classInfo.sessionClassId])
+    }, [classInfo.sessionClassId]);
 
-    // console.log('selectedClass', { value: classInfo.sessionClassId, text: classInfo.sessionClass });
-
+    const sessionClass = { value: classInfo.sessionClassId, text: classInfo.sessionClass, lookUpId: classInfo.classLookupId };
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Assessment">
             <Stack style={{ flex: 1 }}>
@@ -40,12 +38,7 @@ const SessionClassIndex = (props: any) => {
 
                 <Stack style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <View style={{ flex: 1, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
-                        {/* <SessionClassProperties
-                            hide={false}
-                            contentContainerStyle={{ flex: 1, flexWrap: "wrap" }}
-                            sessionClass={{ value: classInfo.sessionClassId, text: classInfo.sessionClass }}
-                            navigation={props.navigation}
-                        /> */}
+
 
                         <ScrollView horizontal={true} style={[{ height: '100%' }]} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }}>
                             <CircleBox
@@ -59,18 +52,25 @@ const SessionClassIndex = (props: any) => {
                                 onPress={() => {
                                     props.navigation.navigate({
                                         name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
-                                        params: { value: classInfo.sessionClassId, text: classInfo.sessionClass }
+                                        params: { sessionClass: sessionClass }
                                     })
                                 }} icon={<MaterialIcons name="assessment" color="white" size={30} />} text={<CustomText title={'Assessment'} />} />
                             <CircleBox
                                 onPress={() => {
                                     props.navigation.navigate({
                                         name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-                                        params: { value: classInfo.sessionClassId, text: classInfo.sessionClass }
+                                        params: { sessionClass: sessionClass }
                                     })
                                 }} icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
                             <CircleBox icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
-                            <CircleBox icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
+                            <CircleBox
+                                onPress={() => {
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
+                                }}
+                                icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
                             <CircleBox icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />
                             <CircleBox icon={<FontAwesome5 name="user-friends" color="white" size={30} />} text={<CustomText title={'Groups'} />} />
                             <CircleBox icon={<MaterialIcons name="subject" color="white" size={30} />} text={<CustomText title={'Subjects'} />} />

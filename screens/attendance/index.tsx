@@ -7,7 +7,6 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { SelectItem } from "../../models/select-item";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import AttendanceBox from "./attendance-box";
-import { ClassRegister } from "../../models/class-properties/attendance";
 import { getRegisters, _paginationGetRegisters } from "../../store/actions/attendance-actions";
 import CustomScrollview from "../layouts/CustomScrollView";
 import { screens } from "../../screen-routes/navigation";
@@ -26,8 +25,6 @@ const AttendanceIndex = (props: any) => {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [selectItemId, setSelectedItem] = useState<string>('');
     const [students, setStudents] = useState<ClassStudent[]>([]);
-
-
     useEffect(() => {
          props.classStudents && setStudents(props.classStudents.filter((x: any) => x.sessionClassID === sessionClass.value));
     }, [sessionClass.value]);
@@ -47,13 +44,12 @@ const AttendanceIndex = (props: any) => {
             bottomSheetModalRef.current.close();
         }
     };
-
+    
     const params = {
         classRegisterId: selectItemId,
         sessionClass: sessionClass,
     }
 
-    console.log('students', students);
     
     return (<>
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Attendance" params={props.params}>
@@ -71,7 +67,7 @@ const AttendanceIndex = (props: any) => {
                                 onPress={() => {
                                     props.navigation.navigate({
                                         name: screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.takeAttendanceRecord.name,
-                                        params: params
+                                        params
                                     });
                                 }}>
                                 <CustomText title={<Ionicons size={30} name="md-add-circle" />} />

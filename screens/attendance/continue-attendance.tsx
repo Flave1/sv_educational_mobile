@@ -61,15 +61,17 @@ const ContinueAttendanceRecord = (props: any) => {
         sessionClass: sessionClass,
     }
 
+    console.log('sessionClass', sessionClass);
+
     const handleSave = () => {
         props.getAll(classRegisterId);
-        props.navigation.navigate({
-            name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-            params: params
-        });
+        props.navigation.goBack();
+        // props.navigation.navigate({
+        //     name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
+        //     params: sessionClass
+        // });
     };
 
-    console.log('params', params);
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Attendance">

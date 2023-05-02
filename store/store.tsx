@@ -8,6 +8,7 @@ import { announcementReducer } from './reducers/announcement-reducer';
 import { classPropertiesReducer } from './reducers/class-properties-reducer';
 import { assessmentReducer } from './reducers/assessment-reducer';
 import { attendanceReducer } from './reducers/attendance-reducer';
+import { classnotesReducer } from './reducers/classnote-reducer';
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     announcementState: announcementReducer,
     classPropsState: classPropertiesReducer,
     assessmentState: assessmentReducer,
-    attendanceState: attendanceReducer
+    attendanceState: attendanceReducer,
+    classnotesState: classnotesReducer
 })
 
 

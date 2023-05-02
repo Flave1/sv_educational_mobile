@@ -1,30 +1,12 @@
 import React, { useState } from 'react';
-import { TextInput as RNTextInput, View, StyleSheet, useColorScheme, Text } from 'react-native';
+import { TextInput, View, StyleSheet, useColorScheme, Text } from 'react-native';
 import { AppDark, AppLight } from '../../tools/color';
-// import { Stack } from 'native-base';
-import { QuillDeltaToHtmlConverter, QuillToolbar, Quill } from 'react-native-quill';
 import { Stack } from '@react-native-material/core';
 
 export default function CustomTextArea({ icon, height, ...otherProps }) {
   const isDarkMode = useColorScheme() === 'dark';
   const validationColor = isDarkMode ? AppLight : AppDark;
   const textAreaHeight = !height ? 300 : height;
-
-  const [editorHtml, setEditorHtml] = useState('');
-  const [editorDelta, setEditorDelta] = useState(null);
-
-  const handleEditorChange = (value) => {
-    setEditorHtml(value);
-  };
-
-  // const handleSave = () => {
-  //   if (editorDelta) {
-  //     const converter = new QuillDeltaToHtmlConverter(editorDelta);
-  //     const html = converter.convert();
-  //     setEditorHtml(html);
-  //   }
-  // };
-
 
   return (
     <View
@@ -43,14 +25,14 @@ export default function CustomTextArea({ icon, height, ...otherProps }) {
         <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
       </View> */}
       <Stack style={{ flex: 1 }}>
-        {/* <QuillToolbar />
-        <Quill
-          theme="snow"
-          onChange={setEditorDelta}
-          onTextChange={handleEditorChange}
-          placeholder="Type something..."
-        /> */}
-        <Text>sasasas</Text>
+
+        <TextInput
+          style={{ fontWeight: 'bold', fontSize: 20 }}
+          underlineColorAndroid='transparent'
+          placeholderTextColor={'grey'}
+          {...otherProps}
+        />
+
       </Stack>
     </View>
   );

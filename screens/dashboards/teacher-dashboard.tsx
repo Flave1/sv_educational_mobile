@@ -35,7 +35,6 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
     }
 
 
-
     return (
         <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Dashboard" params={params}>
             <ScrollView style={{ flex: 1 }}>

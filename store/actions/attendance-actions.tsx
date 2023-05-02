@@ -43,7 +43,7 @@ export const _paginationGetRegisters = (sessionClassId: any, pageNumber: any) =>
 
 export const openRegister = (sessionClassId: string, studentsCount: number) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
-        if (!hasInternetAccess) {
+        if (hasInternetAccess) {
             const payload = { sessionClassId };
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post(`smp/server/attendance/api/v1/create-register`, payload)

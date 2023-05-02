@@ -82,6 +82,20 @@ export const screens = {
                                 }
                             }
                         },
+                        classnote: {
+                            title: 't-classnote',
+                            name: 't-classnote',
+                            screens: {
+                                createClassnote: {
+                                    title: 't-classnote-create',
+                                    name: 't-classnote-create',
+                                },
+                                updateClassnote: {
+                                    title: 't-classnote-update',
+                                    name: 't-classnote-update',
+                                }
+                            }
+                        },
                         sessionClass: {
                             title: '',
                             name: 't-session-class',

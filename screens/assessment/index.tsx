@@ -29,10 +29,10 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
     const { assessments, assessmentTypes, score_reocrds } = state.assessmentState;
 
     const [type, setType] = useState<string>('home-assessment');
-    const [sessionClass, setClass] = useState<SelectItem>(route.params);
+    const [sessionClass] = useState<SelectItem>(route.params.sessionClass);
     const [sessionClassSubject, setSubject] = useState<SelectItem>(new SelectItem());
-    const [group, setGroup] = useState<SelectItem>({ value: 'all-students', text: 'All Students' });
-    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [group, setGroup] = useState<SelectItem>({ value: 'all-students', text: 'All Students', lookUpId:'' });
+    const [pageNumber] = useState<number>(1);
     const [selectItemId, setSelectedItem] = useState<string>('')
     const [assessmentStatus, setSelectedAssessmentStatus] = useState<string>("");
     const [homeAssessmentScoreRecorList, setHomeAssessmentScoreRecorList] = useState<HomeAssessmentScoreRecord>();
@@ -204,7 +204,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                                         return item.subjectName
                                     }}
                                     onSelect={(selectedItem: ClassSubjects, index: any) => {
-                                        setSubject({ value: selectedItem.sessionClassSubjectId, text: selectedItem.subjectName })
+                                        setSubject({ value: selectedItem.sessionClassSubjectId, text: selectedItem.subjectName, lookUpId:'' })
                                     }}
                                 />
                             </View>
@@ -225,7 +225,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                                         return item.groupName
                                     }}
                                     onSelect={(selectedItem: any, index: any) => {
-                                        setGroup({ value: selectedItem.groupId, text: selectedItem.groupName })
+                                        setGroup({ value: selectedItem.groupId, text: selectedItem.groupName , lookUpId:''})
                                     }}
                                 />
                             </View>
