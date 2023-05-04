@@ -67,7 +67,7 @@ const ProtectedTeacher = ({ backgroundColor, children, currentScreen, params, lo
             revealed={revealed}
             header={
                 <>
-                    <HStack style={{ justifyContent: 'center' }}>
+                    {/* <HStack style={{ justifyContent: 'center' }}>
 
                         <HStack style={{ justifyContent: 'flex-start', width: '80%' }}>
                             <View>
@@ -107,7 +107,7 @@ const ProtectedTeacher = ({ backgroundColor, children, currentScreen, params, lo
                                 )}
                             />
                         </HStack>
-                    </HStack>
+                    </HStack> */}
                 </>
             }
             backLayer={
