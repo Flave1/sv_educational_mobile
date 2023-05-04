@@ -16,6 +16,8 @@ import CustomText from "../layouts/CustomText";
 const SessionClassIndex = (props: any) => {
     const [classInfo] = useState<any>(props.route.params);
 
+    console.log('classInfo', classInfo);
+    
     useEffect(() => {
         classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId, props.classStudents);
     }, [classInfo.sessionClassId]);
@@ -43,32 +45,32 @@ const SessionClassIndex = (props: any) => {
                         <ScrollView horizontal={true} style={[{ height: '100%' }]} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }}>
                             <CircleBox
                                 onPress={() => {
-                                    props.navigation.navigate({
-                                        name: screens.scenes.mainapp.scenes.tutor.screens.home.name,
-                                        params: null
-                                    })
+                                    // props.navigation.navigate({
+                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.home.name,
+                                    //     params: null
+                                    // })
                                 }} icon={<MaterialIcons name="home" color="white" size={30} />} text={<CustomText title={'Home'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    props.navigation.navigate({
-                                        name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
-                                        params: { sessionClass: sessionClass }
-                                    })
+                                    // props.navigation.navigate({
+                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
+                                    //     params: { sessionClass: sessionClass }
+                                    // })
                                 }} icon={<MaterialIcons name="assessment" color="white" size={30} />} text={<CustomText title={'Assessment'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    props.navigation.navigate({
-                                        name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-                                        params: { sessionClass: sessionClass }
-                                    })
+                                    // props.navigation.navigate({
+                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
+                                    //     params: { sessionClass: sessionClass }
+                                    // })
                                 }} icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
                             <CircleBox icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    props.navigation.navigate({
-                                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.name,
-                                        params: { sessionClass: sessionClass }
-                                    })
+                                    // props.navigation.navigate({
+                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.classnote.name,
+                                    //     params: { sessionClass: sessionClass }
+                                    // })
                                 }}
                                 icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
                             <CircleBox icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />

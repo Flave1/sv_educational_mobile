@@ -67,7 +67,7 @@ const StackNavigator = (parentProps: any) => {
 
     return (
         <>
-            <Stack.Navigator initialRouteName={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
+            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.screens.setup.name}>
                 <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
                     {props => <Onboarding {...props} dispatch={parentProps.dispatch} state={parentProps.state} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
