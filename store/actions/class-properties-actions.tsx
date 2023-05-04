@@ -55,7 +55,7 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
 
 export const GetClassStudents = (sessionClassId: any, existingStudents: ClassStudent[]) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
-        if (!hasInternetAccess) {
+        if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/class/api/v1/get-students/mobile/${sessionClassId}`)
                 .then((res) => {

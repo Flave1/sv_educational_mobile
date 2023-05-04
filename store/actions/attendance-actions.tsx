@@ -22,7 +22,9 @@ export const getRegisters = (sessionClassId: any, pageNumber: any) => (dispatch:
         }
     })
 }
-export const _paginationGetRegisters = (sessionClassId: any, pageNumber: any) => (dispatch: any) => {
+export const _paginationGetRegisters = (params: any) => (dispatch: any) => {
+    let sessionClassId = params.sessionClassId || '';
+    let pageNumber = params.pageNumber || '';
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });

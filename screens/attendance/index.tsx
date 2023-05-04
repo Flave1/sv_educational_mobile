@@ -58,7 +58,7 @@ const AttendanceIndex = (props: any) => {
                     totalPages={props.totalPages}
                     pageNumber={props.pageNumber}
                     getAction={props.__getAll}
-                    params={(sessionClass.value).toString()}>
+                    params={{'sessionClassId': sessionClass.value}}>
                     <Stack style={{ flex: 0, marginHorizontal: 21 }}>
                         <HStack style={{ alignItems: 'center' }}>
                             <ScreenTitle icon={<MaterialIcons name="app-registration" color="white" size={25} />} title={'-' + sessionClass.text + ' ATTENDANCE'} />
@@ -140,7 +140,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         getAll: (classId: string, pageNumber: number) => getRegisters(classId, pageNumber)(dispatch),
-        __getAll: (classId: string, pageNumber: number) => _paginationGetRegisters(classId, pageNumber)(dispatch)
+        __getAll: (params: any) => _paginationGetRegisters(params)(dispatch)
     };
 }
 

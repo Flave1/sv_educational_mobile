@@ -15,9 +15,6 @@ import { screens } from "../../screen-routes/navigation";
 import CustomText from "../layouts/CustomText";
 const SessionClassIndex = (props: any) => {
     const [classInfo] = useState<any>(props.route.params);
-
-    console.log('classStudents', props.classStudents);
-    
     useEffect(() => {
         classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId, props.classStudents);
     }, [classInfo.sessionClassId]);
