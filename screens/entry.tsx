@@ -33,8 +33,8 @@ const Entry = (props: any) => {
 
     const { onboardedUser }: IAppState = props.state?.appState;
     const isDarkMode = useColorScheme() === 'dark';
-    const backgroundStyle = { backgroundColor: isDarkMode ? AppDark : AppLight };
-    const statusBar = <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={backgroundStyle.backgroundColor} />
+    const backgroundStyle = { backgroundColor: isDarkMode ? AppLight : AppLight };
+    const statusBar = <StatusBar barStyle={isDarkMode ? 'light-content' : 'light-content'} backgroundColor={backgroundStyle.backgroundColor} />
 
 
     const [persistedUser, setPersistedUser] = useState<OnboardedUser>()

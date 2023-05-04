@@ -11,5 +11,6 @@ export default {
     onboardedUser: null,
     information: "",
     error: "",
-    success: ""
+    success: "",
+    fullScreen: false
 }

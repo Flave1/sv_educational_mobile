@@ -55,3 +55,10 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
         }
     })
 }
+
+export const displayFullScreen = (display: boolean) => {
+    return {
+        type: actions.DISPLAY_FULL_SCREEN,
+        payload: display
+    }
+}
