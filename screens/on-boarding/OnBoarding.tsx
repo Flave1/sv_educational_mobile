@@ -37,7 +37,7 @@ const Onboarding = (props: any) => {
 
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? AppDark : AppLight,
+    backgroundColor: isDarkMode ? AppLight : AppLight,
   };
   return (
     <View style={[GlobalStyles.darkTheme, { flex: 1 }]}>

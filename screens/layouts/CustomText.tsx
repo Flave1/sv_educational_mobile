@@ -9,7 +9,7 @@ export default function CustomText(props: any) {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <Text  style={[props.style, {
-      color: isDarkMode ? TextLight : TextDark
+      color: isDarkMode ? TextLight : TextLight
     }]}>
       {props.title}
     </Text>

@@ -48,7 +48,7 @@ const ProtectedTeacher = (props: any) => {
         transparent
         leading={props => (
             <IconButton
-                icon={props => (<Entypo name={revealed ? "list" : "menu"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
+                icon={props => (<Entypo name={revealed ? "list" : "menu"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                 onPress={() => setRevealed(prevState => !prevState)}
                 {...props}
             />
@@ -58,7 +58,7 @@ const ProtectedTeacher = (props: any) => {
         transparent
         leading={props => (
             <IconButton
-                icon={props => (<MaterialIcons name={"keyboard-backspace"} size={25} color={isDarkMode ? AppLight : AppDark} />)}
+                icon={props => (<MaterialIcons name={"keyboard-backspace"} size={25} color={isDarkMode ? AppLight : AppLight} />)}
                 onPress={() => navigation.goBack()}
             />
         )}
@@ -83,7 +83,7 @@ const ProtectedTeacher = (props: any) => {
                             transparent
                             leading={props => (
                                 <IconButton
-                                    icon={(<Ionicons name={"search"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
+                                    icon={(<Ionicons name={"search"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
                         />
@@ -92,7 +92,7 @@ const ProtectedTeacher = (props: any) => {
                             transparent
                             leading={props => (
                                 <IconButton
-                                    icon={(<Ionicons name={"notifications-outline"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
+                                    icon={(<Ionicons name={"notifications-outline"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
                         />
@@ -103,7 +103,7 @@ const ProtectedTeacher = (props: any) => {
                             leading={props => (
                                 <IconButton
                                     onPress={props.logout}
-                                    icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppDark} />)}
+                                    icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
                         />

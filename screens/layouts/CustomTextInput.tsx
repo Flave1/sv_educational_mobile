@@ -5,8 +5,8 @@ import { AppLight, AppDark, TextLight, TextDark } from '../../tools/color';
 
 export default function CustomTextInput({ icon, borderColor, textColor, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
-  const bdColor = borderColor ? borderColor : isDarkMode ? AppLight : AppDark;
-  const txColor = textColor ? textColor : isDarkMode ? AppLight : AppDark;
+  const bdColor = borderColor ? borderColor : isDarkMode ? AppLight : AppLight;
+  const txColor = textColor ? textColor : isDarkMode ? AppLight : AppLight;
   const [showOnFocusStyle, setFocusStyles] = useState(false);
   return (
     <View
