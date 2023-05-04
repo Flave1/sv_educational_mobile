@@ -66,6 +66,8 @@ const ClassnoteIndex = (props: any) => {
         );
     };
 
+    // console.log('classnotes', props.classnotes);
+    
 
     const params = {
         HomeAssessmentId: selectItemId,
@@ -163,11 +165,7 @@ const ClassnoteIndex = (props: any) => {
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <Stack>
                         <ListComponent text={'Open'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
-                            openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.attendance.screens.continueAttendanceRecord.name,
-                                params: params
-                            })
+                            openOrCloseModal(false);
                         }} />
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
                             openOrCloseModal(false)
