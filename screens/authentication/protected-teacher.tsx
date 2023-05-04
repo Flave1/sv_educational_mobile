@@ -81,7 +81,7 @@ const ProtectedTeacher = (props: any) => {
                         <AppBar
                             title={props.currentScreen}
                             transparent
-                            leading={props => (
+                            leading={smd => (
                                 <IconButton
                                     icon={(<Ionicons name={"search"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
@@ -90,7 +90,7 @@ const ProtectedTeacher = (props: any) => {
                         <AppBar
                             title={props.currentScreen}
                             transparent
-                            leading={props => (
+                            leading={smd => (
                                 <IconButton
                                     icon={(<Ionicons name={"notifications-outline"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
@@ -100,7 +100,7 @@ const ProtectedTeacher = (props: any) => {
                             style={{ alignItems: 'flex-end' }}
                             title={props.currentScreen}
                             transparent
-                            leading={props => (
+                            leading={smd => (
                                 <IconButton
                                     onPress={props.logout}
                                     icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
