@@ -20,6 +20,7 @@ import Feather from "react-native-vector-icons/Feather";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
+import ReadClassnote from "./read-classnots";
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -86,6 +87,20 @@ const ClassnoteIndex = (props: any) => {
             bottomSheetModalRef.current.close();
         }
     };
+
+
+    const readNoteSnapPoints = useMemo(() => ["100%"], []);
+    const readNoteBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [readNoteModalActionState, setReadNoteModalActionState] = useState(false);
+    const openOrCloseReadNoteModal = (shouldOpenModal: boolean) => {
+        setReadNoteModalActionState(shouldOpenModal)
+        if (shouldOpenModal && readNoteBottomSheetModalRef.current) {
+            readNoteBottomSheetModalRef.current.present();
+        } else if (readNoteBottomSheetModalRef.current) {
+            readNoteBottomSheetModalRef.current.close();
+        }
+    };
+
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
@@ -165,6 +180,7 @@ const ClassnoteIndex = (props: any) => {
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <Stack>
                         <ListComponent text={'Open'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
+                            openOrCloseReadNoteModal(true);
                             openOrCloseModal(false);
                         }} />
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
@@ -196,6 +212,10 @@ const ClassnoteIndex = (props: any) => {
                             })
                         }} />
                     </Stack>
+                </BottomUpComponent>
+
+                <BottomUpComponent bottomSheetModalRef={readNoteBottomSheetModalRef} snapPoints={readNoteSnapPoints} openOrCloseModal={openOrCloseReadNoteModal}>
+                   <ReadClassnote />
                 </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>

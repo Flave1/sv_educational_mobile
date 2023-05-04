@@ -16,8 +16,6 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 onboardedUser: null
             }
         }
-
-
         case actions.SHOW_LOADING:
             return {
                 ...state,
@@ -36,13 +34,22 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
         case actions.SET_ERROR_TOAST:
             return {
                 ...state,
-                error: payload,
+                fullScreen: payload,
             }
         case actions.SET_SUCCESS_TOAST:
             return {
                 ...state,
                 success: payload,
             }
+        case actions.DISPLAY_FULL_SCREEN:{
+            console.log('payload', payload);
+            
+            return {
+                ...state,
+                success: payload,
+            }
+        }
+            
 
         case actions.RESET_SUCCESS_TOAST:
             return {
@@ -64,7 +71,6 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 error: ""
             }
             return mySate;
-
         }
         case actions.VALIDATE_MOBILE_USER_SUCCESS: {
             AsyncStorage.setItem('onboardedUser', JSON.stringify(payload));
@@ -85,8 +91,6 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 success: "",
             }
         }
-
-
         default:
             return state
     }
