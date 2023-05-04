@@ -16,7 +16,7 @@ import CustomText from "../layouts/CustomText";
 const SessionClassIndex = (props: any) => {
     const [classInfo] = useState<any>(props.route.params);
 
-    console.log('classInfo', classInfo);
+    console.log('classStudents', props.classStudents);
     
     useEffect(() => {
         classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId, props.classStudents);
@@ -40,37 +40,36 @@ const SessionClassIndex = (props: any) => {
 
                 <Stack style={{ marginTop: 25, justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <View style={{ flex: 1, width: '80%', justifyContent: 'center', alignItems: 'center' }}>
-
-
                         <ScrollView horizontal={true} style={[{ height: '100%' }]} contentContainerStyle={{ flex: 1, flexWrap: "wrap" }}>
                             <CircleBox
                                 onPress={() => {
-                                    // props.navigation.navigate({
-                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.home.name,
-                                    //     params: null
-                                    // })
+
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.home.name,
+                                        params: null
+                                    })
                                 }} icon={<MaterialIcons name="home" color="white" size={30} />} text={<CustomText title={'Home'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    // props.navigation.navigate({
-                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
-                                    //     params: { sessionClass: sessionClass }
-                                    // })
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
                                 }} icon={<MaterialIcons name="assessment" color="white" size={30} />} text={<CustomText title={'Assessment'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    // props.navigation.navigate({
-                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-                                    //     params: { sessionClass: sessionClass }
-                                    // })
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
                                 }} icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
                             <CircleBox icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
                             <CircleBox
                                 onPress={() => {
-                                    // props.navigation.navigate({
-                                    //     name: screens.scenes.mainapp.scenes.tutor.screens.classnote.name,
-                                    //     params: { sessionClass: sessionClass }
-                                    // })
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
                                 }}
                                 icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
                             <CircleBox icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />
@@ -91,7 +90,10 @@ function mapStateToProps(state: any) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return { getStudents: (sessionClassId: string, students: ClassStudent[]) => GetClassStudents(sessionClassId, students)(dispatch) };
+    return {
+        getStudents: (sessionClassId: string, students: ClassStudent[]) =>
+            GetClassStudents(sessionClassId, students)(dispatch)
+    };
 }
 
 

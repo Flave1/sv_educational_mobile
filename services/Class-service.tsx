@@ -11,8 +11,11 @@ export class ClassService {
                         return _std.registrationNumber === std.registrationNumber
                     })
                 });
+                
             return [...otherClassStudents, ...freshStudents];
         } else {
+            
+            console.log('sts 2',  ...freshStudents);
             return freshStudents
         }
 
