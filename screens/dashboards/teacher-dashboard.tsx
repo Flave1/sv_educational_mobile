@@ -17,7 +17,7 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
     React.useEffect(() => {
         AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
             if (!loggedIn) {
-                navigation.navigate(screens.scenes.auth.screens.signin.name);
+                // navigation.navigate(screens.scenes.auth.screens.signin.name);
                 return
             } else
                 GetDashboardData()(dispatch)
