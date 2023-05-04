@@ -9,7 +9,7 @@ const Section: React.FC<PropsWithChildren<{ school: School; onPress: any, setSel
     
     return (
         <Pressable onPress={onPress}
-            style={[styles.sectionContainer, isDarkMode ? styles.borderLight : styles.borderDark]}>
+            style={[styles.sectionContainer, isDarkMode ? styles.borderLight : styles.borderLight]}>
             <View style={{ width: '30%' }}>
                 <Image
                     source={{ uri: !school.schoolLogo ? "https://www.kaleo-asbl.be/content/uploads/2017/05/Profil-site.jpg" : school.schoolLogo }}

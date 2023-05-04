@@ -5,7 +5,7 @@ import { AppDark, AppLight, TextLight } from "../../tools/color";
 
 const CustomCheckBoxWithBorder = ({ text, onValueChange, isSelected = false }: any) => {
     const isDarkMode = useColorScheme() === 'dark';
-    const validationColor = isDarkMode ? AppLight : AppDark;
+    const validationColor = isDarkMode ? AppLight : AppLight;
     return (
         <View
             style={{
@@ -29,7 +29,7 @@ export default CustomCheckBoxWithBorder;
 
 export const CustomCheckBox = ({ text, onValueChange, isSelected = false }: any) => {
     const isDarkMode = useColorScheme() === 'dark';
-    const validationColor = isDarkMode ? AppLight : AppDark;
+    const validationColor = isDarkMode ? AppLight : AppLight;
     return (
         <View
             style={{

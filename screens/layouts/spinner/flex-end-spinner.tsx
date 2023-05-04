@@ -1,7 +1,6 @@
 import { Stack } from "@react-native-material/core";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, useColorScheme } from "react-native";
-import { IAppState } from "../../../../interfaces/app-state/state";
 
 const FlexendSpinner = ({ state, dispatch }: any) => {
     const isDarkMode = useColorScheme() === 'dark';

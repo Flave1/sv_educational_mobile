@@ -3,9 +3,9 @@ import { TextInput, View, StyleSheet, useColorScheme, Text } from 'react-native'
 import { AppDark, AppLight } from '../../tools/color';
 import { Stack } from '@react-native-material/core';
 
-export default function CustomTextArea({ icon, height, ...otherProps }) {
+export default function CustomTextArea({ icon, height, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
-  const validationColor = isDarkMode ? AppLight : AppDark;
+  const validationColor = isDarkMode ? AppLight : AppLight;
   const textAreaHeight = !height ? 300 : height;
 
   return (

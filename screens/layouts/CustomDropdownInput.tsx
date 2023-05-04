@@ -8,7 +8,7 @@ import { AppButtonColorDark, AppDark, AppLight, TextLight } from '../../tools/co
 export default function CustomDropdownInput({ data, height, backgroundColor, onSelect, icon, ...otherProps }: any) {
   const boxHeight = height ? height : 50;
   const isDarkMode = useColorScheme() === 'dark';
-  const validationColor = isDarkMode ? AppLight : AppDark;
+  const validationColor = isDarkMode ? AppLight : AppLight;
   const bgColor = backgroundColor ? backgroundColor : AppButtonColorDark
   return (
     <SelectDropdown
