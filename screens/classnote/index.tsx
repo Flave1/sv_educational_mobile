@@ -162,8 +162,6 @@ const ClassnoteIndex = (props: any) => {
                                         <ClassnotesBox
                                             item={item} key={idx}
                                             onPress={() => {
-                                                console.log('pressed');
-
                                                 setSelectedItem(item.teacherClassNoteId)
                                                 openOrCloseModal(!modalActionState)
                                             }}

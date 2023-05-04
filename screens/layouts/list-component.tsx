@@ -7,8 +7,8 @@ const ListComponent = ({ text, icon, onPress }: any) => {
     return (
         <Pressable onPress={onPress}>
             <HStack spacing={7} style={{ margin: 10 }}>
-                <Text style={{ fontWeight: 'bold', color: TextLight }}>{icon}</Text>
-                <Text style={{ fontWeight: 'bold', color: TextLight }}>{text}</Text>
+                <Text style={{ fontWeight: 'bold', color: TextDark }}>{icon}</Text>
+                <Text style={{ fontWeight: 'bold', color: TextDark }}>{text}</Text>
             </HStack>
         </Pressable>
 

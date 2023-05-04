@@ -9,7 +9,7 @@ export const attendanceReducer = (state = initialState, { type, payload }: any) 
                 registers: payload.data,
                 totalPages: payload.totalPages,
                 pageNumber: payload.pageNumber,
-                unsynchronized: []
+                // unsynchronized: []
             }
         case actions.__GET_CLASS_REGISTER:
             return {
