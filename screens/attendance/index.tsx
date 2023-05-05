@@ -19,6 +19,7 @@ import ListComponent from "../layouts/list-component";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { ClassStudent } from "../../models/class-properties/students";
+import RenameAttendance from "./rename-attendance";
 
 const AttendanceIndex = (props: any) => {
 
@@ -42,6 +43,17 @@ const AttendanceIndex = (props: any) => {
             bottomSheetModalRef.current.present();
         } else if (bottomSheetModalRef.current) {
             bottomSheetModalRef.current.close();
+        }
+    };
+    const renameAttendanceSnapPoints = useMemo(() => ["50%"], []);
+    const renameAttendanceBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [renameAttendanceModalActionState, setRenameAttendanceModalActionState] = useState(false);
+    const openOrCloseRenameAttendanceModal = (shouldOpenModal: boolean) => {
+        setRenameAttendanceModalActionState(shouldOpenModal)
+        if (shouldOpenModal && renameAttendanceBottomSheetModalRef.current) {
+            renameAttendanceBottomSheetModalRef.current.present();
+        } else if (renameAttendanceBottomSheetModalRef.current) {
+            renameAttendanceBottomSheetModalRef.current.close();
         }
     };
     
@@ -102,11 +114,12 @@ const AttendanceIndex = (props: any) => {
                             })
                         }} />
                         <ListComponent text={'Rename'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
-                            openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                           openOrCloseRenameAttendanceModal(true)
+                           openOrCloseModal(false)
+                            // props.navigation.navigate({
+                            //     name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                            //     params: params
+                            // })
                         }} />
                         <ListComponent text={'Delete'} icon={<AntDesign name="delete" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -116,6 +129,12 @@ const AttendanceIndex = (props: any) => {
                             })
                         }} />
                     </Stack>
+                </BottomUpComponent>
+
+                <BottomUpComponent bottomSheetModalRef={renameAttendanceBottomSheetModalRef} snapPoints={renameAttendanceSnapPoints} openOrCloseModal={openOrCloseRenameAttendanceModal}>
+                   <RenameAttendance 
+                   sessionClass={sessionClass.value} 
+                   classRegisterId={selectItemId} />
                 </BottomUpComponent>
 
             </BottomSheetModalProvider>

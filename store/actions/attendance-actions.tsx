@@ -124,3 +124,21 @@ export const changeStudentAvailabilityStatus = (classRegisterId: string, session
             ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
         });
 }
+
+export const renameAttendance = (values: any, navigation: any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.post(`/smp/server/attendance/api/v1/update/class-register?ClassRegisterId=${values.id}&RegisterLabel=${values.name}`)
+                .then((res) => {
+                    navigation.goBack();
+                    getRegisters(values.sessionClass, 1)(dispatch);
+                    dispatch({ type: actions.RENAME_ATTENDANCE });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
