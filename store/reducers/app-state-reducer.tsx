@@ -41,15 +41,12 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 ...state,
                 success: payload,
             }
-        case actions.DISPLAY_FULL_SCREEN:{
-            console.log('payload', payload);
-            
+        case actions.DISPLAY_FULL_SCREEN:
             return {
                 ...state,
-                success: payload,
+                fullScreen: payload,
             }
-        }
-            
+
 
         case actions.RESET_SUCCESS_TOAST:
             return {

@@ -53,16 +53,14 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
     })
 }
 
-export const GetClassStudents = (sessionClassId: any, existingStudents: ClassStudent[]) => (dispatch: any) => {
+export const GetClassStudents = (sessionClassId: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/class/api/v1/get-students/mobile/${sessionClassId}`)
                 .then((res) => {
-                    ClassService.re_initialize_students(res.data.result, existingStudents).then(result => {
-                        dispatch({ type: actions.GET_CLASS_STUDENTS, payload: result });
-                        dispatch({ type: app_state_actions.HIDE_LOADING });
-                    });
+                    dispatch({ type: actions.GET_CLASS_STUDENTS, payload: res.data.result });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
