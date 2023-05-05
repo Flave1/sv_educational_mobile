@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, HStack, Stack } from "@react-native-material/core";
+import { Box, HStack, Pressable, Stack } from "@react-native-material/core";
 import CustomDropdownInput from "../layouts/CustomDropdownInput";
-import { View, Alert } from "react-native";
+import { View, Alert, StyleSheet } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { ClassSubjects } from "../../models/class-properties/class-subjects";
 import { SelectItem } from "../../models/select-item";
@@ -22,6 +22,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
 import { displayFullScreen } from "../../store/actions/app-state-actions";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { AppLightBlue } from "../../tools/color";
+
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -106,9 +109,45 @@ const ClassnoteIndex = (props: any) => {
         !readNoteModalActionState ? props.displayFullScreen(false) : props.displayFullScreen(true);
     }, [readNoteModalActionState])
 
+    const styles = StyleSheet.create({
+        addButtonContainer: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+            position: 'absolute',
+            top: '85%',
+            left: '83%',
+            width: 50,
+            height: 50,
+            zIndex: 999,
+            backgroundColor: AppLightBlue,
+            borderRadius: 25,
+        },
+
+    });
+
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
+                <View style={styles.addButtonContainer} >
+                    <Pressable
+                 onPress={() => {
+                    props.navigation.navigate({
+                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
+                         params: {
+                           sessionClass: { name: sessionClass },
+                        //     sessionClassSubject: { name: sessionClassSubject },
+                        //     group: { name: group }
+                         }
+                    });
+                }}>
+                    <MaterialCommunityIcons
+                        name="plus"
+                        size={50}
+                        color={'white'}
+                    />
+                    </Pressable>
+                </View>
                 <Stack spacing={10} style={{ flex: 1 }} >
                     <CustomScrollview
                         totalPages={props.totalPages}
@@ -117,7 +156,9 @@ const ClassnoteIndex = (props: any) => {
                         params={{ 'sessionClassId': sessionClass?.lookUpId, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <Box w={184}  >
+
                                 <View >
+
                                     <CustomDropdownInput data={props.classSubjects}
                                         searchPlaceHolder="Search"
                                         height={40}
