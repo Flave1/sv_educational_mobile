@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { displayFullScreen } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -16,6 +16,9 @@ function ReadClassnote(props: any) {
         });
     });
 
+    console.log('classNote', classNote);
+
+
     return (
         <>
             <View style={{ flexDirection: 'row', position: 'absolute' }}>
@@ -23,13 +26,13 @@ function ReadClassnote(props: any) {
                 <MaterialCommunityIcons name="dock-right" size={30} color={'black'} style={styles.docks} />
             </View>
             <View style={styles.divider} />
-            <Text style={styles.title}>What to discuss</Text>
-            <Text>
+            <ScrollView style={{ padding: 5 }}>
+                <Text style={styles.title}>{classNote?.classNoteId}</Text>
                 <RenderHtml
-                    source={{ html: classNote.noteContent }}
+                    source={{ html: classNote?.noteContent }}
                     contentWidth={200}
                 />
-            </Text>
+            </ScrollView>
         </>
     )
 }
