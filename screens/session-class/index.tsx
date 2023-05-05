@@ -16,7 +16,7 @@ import CustomText from "../layouts/CustomText";
 const SessionClassIndex = (props: any) => {
     const [classInfo] = useState<any>(props.route.params);
     useEffect(() => {
-       classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId, props.classStudents);
+        classInfo.sessionClassId && props.getStudents(classInfo.sessionClassId);
     }, [classInfo.sessionClassId]);
 
     const sessionClass = { value: classInfo.sessionClassId, text: classInfo.sessionClass, lookUpId: classInfo.classLookupId };
@@ -82,17 +82,15 @@ const SessionClassIndex = (props: any) => {
     );
 };
 
-function mapStateToProps(state: any) {
-    return { classStudents: state.classPropsState.classStudents };
-}
+
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        getStudents: (sessionClassId: string, students: ClassStudent[]) =>
-            GetClassStudents(sessionClassId, students)(dispatch)
+        getStudents: (sessionClassId: string) =>
+            GetClassStudents(sessionClassId)(dispatch)
     };
 }
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SessionClassIndex);
+export default connect(null, mapDispatchToProps)(SessionClassIndex);

@@ -21,6 +21,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
+import { displayFullScreen } from "../../store/actions/app-state-actions";
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -68,7 +69,7 @@ const ClassnoteIndex = (props: any) => {
     };
 
     // console.log('classnotes', props.classnotes);
-    
+
 
     const params = {
         HomeAssessmentId: selectItemId,
@@ -100,6 +101,10 @@ const ClassnoteIndex = (props: any) => {
             readNoteBottomSheetModalRef.current.close();
         }
     };
+
+    useEffect(() => {
+        !readNoteModalActionState ? props.displayFullScreen(false) : props.displayFullScreen(true);
+    }, [readNoteModalActionState])
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
@@ -178,8 +183,8 @@ const ClassnoteIndex = (props: any) => {
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <Stack>
                         <ListComponent text={'Open'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
-                            openOrCloseReadNoteModal(true);
                             openOrCloseModal(false);
+                            openOrCloseReadNoteModal(true);
                         }} />
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -213,7 +218,7 @@ const ClassnoteIndex = (props: any) => {
                 </BottomUpComponent>
 
                 <BottomUpComponent bottomSheetModalRef={readNoteBottomSheetModalRef} snapPoints={readNoteSnapPoints} openOrCloseModal={openOrCloseReadNoteModal}>
-                   <ReadClassnote />
+                    <ReadClassnote teacherClassNoteId={selectItemId} />
                 </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>
@@ -238,8 +243,10 @@ function mapDispatchToProps(dispatch: any) {
         getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
-        __getAll: (params:any) =>
-            _paginationGetClassnotes(params)(dispatch)
+        __getAll: (params: any) =>
+            _paginationGetClassnotes(params)(dispatch),
+
+        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
     };
 }
 

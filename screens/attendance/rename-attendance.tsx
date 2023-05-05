@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 import { displayFullScreen } from "../../store/actions/app-state-actions";
@@ -8,62 +8,65 @@ import { HStack, Stack, Text } from "@react-native-material/core";
 import CustomTextInput from "../layouts/CustomTextInput";
 import Feather from 'react-native-vector-icons/Feather';
 import CustomButton from "../layouts/CustomButton";
+import { ClassRegister } from "../../models/class-properties/attendance";
+import { AttendanceService } from "../../services/attendance-service";
+import { renameRegister } from "../../store/actions/attendance-actions";
 
 
-function RenameAttendance(props: any) {
+function RenameRegister(props: any) {
     const screenLocalColor = "#868C8E";
-    useEffect(() => {
-        props.displayFullScreen(true);
-        console.log('props', props);
 
-    }, [])
+    const [attendance, setAttendance] = useState<ClassRegister>(new ClassRegister());
+    
+    useEffect(() => {
+        AttendanceService.getRegister(props.classRegisterId, props.registers).then(result => {
+            setAttendance(result);
+        });
+    });
 
     const validation = Yup.object().shape({
-        userName: Yup.string()
-            .min(2, 'Username Too Short!')
-            .max(50, 'Username Too Long!')
-            .required('Username is required to login'),
-        password: Yup.string().required("Password Required")
-            .min(4, 'Password must be a minimum of 4 characters'),
+        classRegisterLabel: Yup.string()
+            .min(2, 'name Too Short!')
+            .required('name is required'),
     });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched } = useFormik({
         initialValues: {
-            name: "",
+            classRegisterLabel: attendance.classRegisterLabel||"",
             sessionClass:props.sessionClass,
-            // onboardedUser?.name || "",
+            classRegisterId:attendance.classRegisterId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values: any) => {
-
+            props.renameRegister(values, props.openOrCloseRenameAttendanceModal)
         }
     });
 
     return (
         <>
-            <Stack >
-                {((touched.name && errors.name)) && <Text color='red'>{errors.name}</Text>}
+            <Stack center>
+                {((touched.classRegisterLabel && errors.classRegisterLabel)) && <Text color='red'>{errors.classRegisterLabel}</Text>}
             </Stack>
             <Stack spacing={10} style={{  height: '60%', justifyContent: 'center',padding:20 }}>
                 <View style={{ width: '80%' }}>
                     <CustomTextInput
                         icon={<Feather name={'edit-3'} size={31} />}
-                        placeholder='rename attendance'
+                        //placeholder='rename attendance'
                         autoCapitalize='none'
                         autoCompleteType='text'
                         keyboardType='text'
                         keyboardAppearance='dark'
                         returnKeyType='next'
                         returnKeyLabel='next'
-                        onBlur={handleBlur('name')}
-                        value={values.name}
-                        error={errors.name}
-                        touched={touched.name}
-                        style={{ borderColor: 'gray', borderWidth: 1, color: 'black' }}
+                        onBlur={handleBlur('classRegisterLabel')}
+                        value={values.classRegisterLabel}
+                        error={errors.classRegisterLabel}
+                        touched={touched.classRegisterLabel}
+                        style={{ borderColor: 'black', borderWidth: 1, color: 'black' }}
                         onChange={(e: any) => {
-                            handleChange('name');
-                            setFieldValue('name', e.nativeEvent.text)
+                            handleChange('classRegisterLabel');
+                            setFieldValue('classRegisterLabel', e.nativeEvent.text)
                         }}
             />
                 </View>
@@ -74,7 +77,7 @@ function RenameAttendance(props: any) {
                                 <CustomButton
                                     backgroundColor={screenLocalColor}
                                     title="CLOSE" onPress={() => {
-                                        props.navigation.goBack()
+                                      props.openOrCloseRenameAttendanceModal(false)  
                                     }}
                                 />
                             </View>
@@ -87,12 +90,13 @@ function RenameAttendance(props: any) {
 }
 
 function mapStateToProps(state: any) {
-    return { fullScreen: state.appState.fullScreen ?? false }
+    return { registers: state.attendanceState.registers}
 }
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
+        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display)),
+       renameRegister:(values:any, openOrCloseRenameAttendanceModal:any) => renameRegister(values,openOrCloseRenameAttendanceModal)(dispatch)
+
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(RenameAttendance);
-// export default ReadClassnote;
+export default connect(mapStateToProps, mapDispatchToProps)(RenameRegister);

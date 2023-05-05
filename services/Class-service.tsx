@@ -1,3 +1,4 @@
+import { ClassNote } from "../models/class-properties/Tutor-class";
 import { ClassStudent } from "../models/class-properties/students";
 
 export class ClassService {
@@ -6,19 +7,20 @@ export class ClassService {
         existingStudents: ClassStudent[]): Promise<ClassStudent[]> => {
         if (existingStudents.length > 0) {
             const otherClassStudents = existingStudents
-                .filter(function(_std){
-                    return !freshStudents.find(function(std){
+                .filter(function (_std) {
+                    return !freshStudents.find(function (std) {
                         return _std.registrationNumber === std.registrationNumber
                     })
                 });
-                
+
             return [...otherClassStudents, ...freshStudents];
         } else {
-            
-            console.log('sts 2',  ...freshStudents);
             return freshStudents
         }
+    }
 
+    static getSingleClassNote = async (teacherClassNoteId: string, notes: ClassNote[]): Promise<ClassNote> => {
+        return notes.find(d => d.teacherClassNoteId == teacherClassNoteId) as ClassNote;
     }
 
 }

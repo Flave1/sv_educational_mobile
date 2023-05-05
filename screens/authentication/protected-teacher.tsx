@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useColorScheme, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import {
     Backdrop,
     AppBar,
@@ -21,14 +21,25 @@ import { connect } from "react-redux";
 import CustomText from "../layouts/CustomText";
 import SessionClassProperties from "../session-class/session-class-properties";
 import { displayFullScreen } from "../../store/actions/app-state-actions";
+import ListComponent from "../layouts/list-component";
+import Feather from "react-native-vector-icons/Feather";
+import Animated, { Transitioning, Transition } from 'react-native-reanimated';
 
 const ProtectedTeacher = (props: any) => {
     const [revealed, setRevealed] = useState(false);
-    const [isFullScreen, setFullScreen] = useState<false>(props.fullScreen);
-
+    const [isFullScreen, setFullScreen] = useState<false>(props.appState.fullScreen);
+    const [mainDisplayHeight, setMainDisplayHeight] = useState<string>('85%');
+    const transitionRef = useRef<any>(null);
     const isDarkMode = useColorScheme() === 'dark';
-
     const navigation = useNavigation();
+    const fadeAnim = useRef(new Animated.Value(0)).current; 
+    
+    const transition = (
+        <Transition.Sequence>
+            <Transition.In type="slide-left" durationMs={500} delayMs={1000} />
+            <Transition.Out type="slide-left" durationMs={500} />
+        </Transition.Sequence>
+    );
 
     React.useEffect(() => {
         AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
@@ -37,6 +48,15 @@ const ProtectedTeacher = (props: any) => {
             }
         })
     })
+
+    useEffect(() => {
+        transitionRef.current.animateNextTransition()
+        setFullScreen(props.appState.fullScreen);
+        if (props.appState.fullScreen)
+            setMainDisplayHeight('100%');
+        else
+            setMainDisplayHeight('85%');
+    }, [props.appState.fullScreen])
 
 
     const [param, setParam] = useState<any>();
@@ -68,7 +88,10 @@ const ProtectedTeacher = (props: any) => {
             style={{ backgroundColor: props.backgroundColor }}
             revealed={revealed}
             header={
-                <HStack style={{ justifyContent: 'center', display: isFullScreen ? 'none' : 'flex' }}>
+                <Transitioning.View 
+                transition={transition} 
+                ref={transitionRef}
+                style={{ justifyContent: 'center', display: isFullScreen ? 'none' : 'flex', flexDirection:'row'}}>
 
                     <HStack style={{ justifyContent: 'flex-start', width: '80%' }}>
                         <View>
@@ -108,46 +131,34 @@ const ProtectedTeacher = (props: any) => {
                             )}
                         />
                     </HStack>
-                </HStack>
+                </Transitioning.View>
             }
             backLayer={
-                <View style={{ height: 120, margin: 10, padding: 10, marginTop: 0 }}>
-                    <Pressable pressEffectColor="#2C3E50" >
-                        <HStack spacing={15}>
-                            <CustomText style={{ marginTop: 5 }} title={<FontAwesome5 name="users" size={20} />} />
-                            <CustomText style={{ fontSize: 25 }} title="JSS 1" />
-                        </HStack>
-                    </Pressable>
-                    <Pressable pressEffectColor="#2C3E50" >
-                        <HStack spacing={15}>
-                            <CustomText style={{ marginTop: 5 }} title={<FontAwesome5 name="users" size={20} />} />
-                            <CustomText style={{ fontSize: 25 }} title="JSS 1" />
-                        </HStack>
-                    </Pressable>
-                    <Pressable pressEffectColor="#2C3E50" >
-                        <HStack spacing={15}>
-                            <CustomText style={{ marginTop: 5 }} title={<FontAwesome5 name="users" size={20} />} />
-                            <CustomText style={{ fontSize: 25 }} title="JSS 1" />
-                        </HStack>
-                    </Pressable>
-                    <Pressable pressEffectColor="#2C3E50" >
-                        <HStack spacing={15}>
-                            <CustomText style={{ marginTop: 5 }} title={<FontAwesome5 name="users" color="white" size={20} />} />
-                            <CustomText style={{ fontSize: 25 }} title="JSS 1" />
-                        </HStack>
-                    </Pressable>
-                </View>
+                <Transitioning.View
+                    transition={transition}
+                    style={{ display: isFullScreen ? 'none' : 'flex', height: 120, margin: 10, padding: 10, marginTop: 0 }}>
+                    <ListComponent text={'JSS 1'} icon={<Feather name="file-plus" size={20} />} />
+                    <ListComponent text={'JSS 2'} icon={<Feather name="file-plus" size={20} />} />
+                    <ListComponent text={'JSS 3'} icon={<Feather name="file-plus" size={20} />} />
+                    <ListComponent text={'JSS 4'} icon={<Feather name="file-plus" size={20} />} />
+                </Transitioning.View>
             }
         >
             <Stack>
-                <View style={{ height: props.currentScreen === "Dashboard" ? '100%' : '85%', backgroundColor: props.backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
+                <Transitioning.View
+                    transition={transition} 
+                    // ref={transitionRef}
+                    style={{ height: mainDisplayHeight, backgroundColor: props.backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
                     {props.children}
-                </View>
+                </Transitioning.View>
 
-                <View style={{ display: props.currentScreen === "Dashboard" ? 'none' : 'flex', height: '15%', backgroundColor: props.backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+                <Transitioning.View
+                    transition={transition}
+                    // ref={transitionRef} 
+                    style={{ display: isFullScreen ? 'none' : 'flex', height: '15%', backgroundColor: props.backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
                     <SessionClassProperties hide={false} params={props.params}
                         selectedClass={{ value: param?.sessionClassId, text: param?.sessionClass }} />
-                </View>
+                </Transitioning.View>
 
             </Stack>
 
@@ -157,7 +168,7 @@ const ProtectedTeacher = (props: any) => {
 
 
 const mapStateToProps = (state: any) => {
-    return { state: state.appState }
+    return { appState: state.appState }
 }
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -166,5 +177,13 @@ const mapDispatchToProps = (dispatch: any) => {
         displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
     }
 }
+
+const style = StyleSheet.create({
+    transitionDelaycss: {
+        // transitionProperty:'',
+        transitionDuration: '5s',
+        transitionDelay: '2s',
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtectedTeacher);
