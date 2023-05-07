@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Alert, Pressable } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import ScreenTitle from "../layouts/screen-title";
 import { HStack, Stack } from "@react-native-material/core";
@@ -7,7 +7,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { SelectItem } from "../../models/select-item";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import AttendanceBox from "./attendance-box";
-import { getRegisters, _paginationGetRegisters } from "../../store/actions/attendance-actions";
+import { getRegisters, _paginationGetRegisters, deleteRegister } from "../../store/actions/attendance-actions";
 import CustomScrollview from "../layouts/CustomScrollView";
 import { screens } from "../../screen-routes/navigation";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -19,12 +19,13 @@ import ListComponent from "../layouts/list-component";
 import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { ClassStudent } from "../../models/class-properties/students";
+import RenameRegister from "./rename-attendance";
 
 const AttendanceIndex = (props: any) => {
-
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [selectItemId, setSelectedItem] = useState<string>('');
     const [students, setStudents] = useState<ClassStudent[]>([]);
+    
     useEffect(() => {
          props.classStudents && setStudents(props.classStudents.filter((x: any) => x.sessionClassID === sessionClass.value));
     }, [sessionClass.value]);
@@ -32,6 +33,26 @@ const AttendanceIndex = (props: any) => {
     useEffect(() => {
         students && props.getAll(sessionClass.value, 1);
     }, []);
+
+    const showDialog = () => {
+        Alert.alert(
+            'Delete Class Register',
+            'Are you sure you want to delete this class register?',
+            [
+                {
+                    text: 'CANCEL',
+                    onPress: () => { '' },
+                },
+                {
+                    text: 'YES',
+                    onPress: () => {
+                        props.delete(selectItemId, sessionClass.value);
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    };
 
     const snapPoints = useMemo(() => ["90%"], []);
     const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
@@ -42,6 +63,17 @@ const AttendanceIndex = (props: any) => {
             bottomSheetModalRef.current.present();
         } else if (bottomSheetModalRef.current) {
             bottomSheetModalRef.current.close();
+        }
+    };
+    const renameAttendanceSnapPoints = useMemo(() => ["50%"], []);
+    const renameAttendanceBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [renameAttendanceModalActionState, setRenameAttendanceModalActionState] = useState(false);
+    const openOrCloseRenameAttendanceModal = (shouldOpenModal: boolean) => {
+        setRenameAttendanceModalActionState(shouldOpenModal)
+        if (shouldOpenModal && renameAttendanceBottomSheetModalRef.current) {
+            renameAttendanceBottomSheetModalRef.current.present();
+        } else if (renameAttendanceBottomSheetModalRef.current) {
+            renameAttendanceBottomSheetModalRef.current.close();
         }
     };
     
@@ -102,20 +134,30 @@ const AttendanceIndex = (props: any) => {
                             })
                         }} />
                         <ListComponent text={'Rename'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
-                            openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                           openOrCloseRenameAttendanceModal(true)
+                           openOrCloseModal(false)
+                            // props.navigation.navigate({
+                            //     name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                            //     params: params
+                            // })
                         }} />
                         <ListComponent text={'Delete'} icon={<AntDesign name="delete" size={20} />} onPress={() => {
                             openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                            showDialog()
+                            // props.navigation.navigate({
+                            //     name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
+                            //     params: params
+                            // })
                         }} />
                     </Stack>
+                </BottomUpComponent>
+
+                <BottomUpComponent bottomSheetModalRef={renameAttendanceBottomSheetModalRef} snapPoints={renameAttendanceSnapPoints} openOrCloseModal={openOrCloseRenameAttendanceModal}>
+                   <RenameRegister 
+                   sessionClass={sessionClass.value} 
+                   classRegisterId={selectItemId} 
+                   openOrCloseRenameAttendanceModal={openOrCloseRenameAttendanceModal}
+                   />
                 </BottomUpComponent>
 
             </BottomSheetModalProvider>
@@ -140,7 +182,8 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         getAll: (classId: string, pageNumber: number) => getRegisters(classId, pageNumber)(dispatch),
-        __getAll: (params: any) => _paginationGetRegisters(params)(dispatch)
+        __getAll: (params: any) => _paginationGetRegisters(params)(dispatch),
+        delete: (item:string,sessionClassId:string )=>  deleteRegister(item,sessionClassId)(dispatch),
     };
 }
 

@@ -6,6 +6,7 @@ import { FETCH_NO_INTERNET_ACCESS } from "../../Utils/constants";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/attendance-actions-types";
+import { setSuccessToast } from "./app-state-actions";
 
 export const getRegisters = (sessionClassId: any, pageNumber: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
@@ -123,4 +124,42 @@ export const changeStudentAvailabilityStatus = (classRegisterId: string, session
             const error: any = JSON.stringify(err.response);
             ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
         });
+}
+
+export const renameRegister = (values: any,openModal:any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.post(`/smp/server/attendance/api/v1/update/class-register?ClassRegisterId=${values.classRegisterId}&RegisterLabel=${values.classRegisterLabel}`)
+                .then((res) => {
+                    openModal(false)
+                    getRegisters(values.sessionClass, 1)(dispatch);
+                    dispatch({ type: actions.RENAME_ATTENDANCE });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
+
+export const deleteRegister = (item: string, sessionClassId: string) => (dispatch: any) => {
+    console.log("item delete",item);
+    
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.post(`/smp/server/attendance/api/v1/delete/class-register?item=${item}`)
+                .then((res) => {
+                    getRegisters(sessionClassId, 1)(dispatch);
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    setSuccessToast('Successfully deleted assessment')(dispatch)
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                });
+        }
+    })
 }
