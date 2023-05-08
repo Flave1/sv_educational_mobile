@@ -32,8 +32,8 @@ const StudentNoteIndex = (props: any) => {
 
 
     useEffect(() => {
-        sessionClass?.value && props.getAll(sessionClass?.value, sessionClassSubject.value, selectedStatus.value, pageNumber)
-    }, [sessionClass?.value, sessionClassSubject.value, selectedStatus.value])
+        sessionClass?.value && props.getAll(sessionClass?.value, sessionClassSubject.lookUpId, selectedStatus.value, pageNumber)
+    }, [sessionClass?.value, sessionClassSubject.lookUpId, selectedStatus.value])
 
 
     const status = [
@@ -70,7 +70,7 @@ const StudentNoteIndex = (props: any) => {
                         totalPages={props.totalPages}
                         pageNumber={props.pageNumber}
                         getAction={props.__getAll}
-                        params={{ 'sessionClassId': sessionClass?.value, 'subjectId': sessionClassSubject.value, 'status': selectedStatus.value, pageNumber: 0 }}>
+                        params={{ 'sessionClassId': sessionClass?.value, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <Box w={184}  >
 
