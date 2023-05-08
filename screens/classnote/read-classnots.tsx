@@ -16,7 +16,6 @@ function ReadClassnote(props: any) {
         });
     });
 
-    console.log('classNote', classNote);
 
 
     return (

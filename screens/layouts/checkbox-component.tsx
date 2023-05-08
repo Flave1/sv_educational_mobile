@@ -16,6 +16,7 @@ const CustomCheckBoxWithBorder = ({ text, onValueChange, isSelected = false }: a
                 borderColor: validationColor,
                 borderWidth: StyleSheet.hairlineWidth,
                 padding: 2,
+                
             }}
         >
             <HStack spacing={7} style={{ margin: 10 }}>

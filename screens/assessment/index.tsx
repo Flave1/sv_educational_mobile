@@ -177,11 +177,7 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
 
                                     navigation.navigate({
                                         name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                        params: {
-                                            sessionClass: { name: sessionClass },
-                                            sessionClassSubject: { name: sessionClassSubject },
-                                            group: { name: group }
-                                        }
+                                        params: params
                                     });
                                 }}>
                                 <CustomText title={<Ionicons size={30} name="md-add-circle" />} />

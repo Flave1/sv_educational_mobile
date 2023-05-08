@@ -11,4 +11,8 @@ export class ClassNote {
     classNoteId: string = "";
     teacherClassNoteId: string = "";
     noteContent: string = "";
+    noteTitle: string = "";
+    subject :string = "";
+    subjectName:string = "";
+    classes:string[] = [""];
 }

@@ -21,7 +21,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
-import { displayFullScreen } from "../../store/actions/app-state-actions";
+import { displayFullScreen, setErrorToastState } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AppLightBlue } from "../../tools/color";
 
@@ -105,9 +105,6 @@ const ClassnoteIndex = (props: any) => {
         }
     };
 
-    useEffect(() => {
-        !readNoteModalActionState ? props.displayFullScreen(false) : props.displayFullScreen(true);
-    }, [readNoteModalActionState])
 
     const styles = StyleSheet.create({
         addButtonContainer: {
@@ -129,15 +126,19 @@ const ClassnoteIndex = (props: any) => {
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
+           { !modalActionState && !readNoteModalActionState &&
                 <View style={styles.addButtonContainer} >
                     <Pressable
                  onPress={() => {
+                    if (!sessionClassSubject.value) {
+                       props.setErrorToastState('Subject must be selected');
+                        return;
+                    }
                     props.navigation.navigate({
-                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
+                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
                          params: {
                            sessionClass: { name: sessionClass },
-                        //     sessionClassSubject: { name: sessionClassSubject },
-                        //     group: { name: group }
+                          sessionClassSubject: { name: sessionClassSubject },
                          }
                     });
                 }}>
@@ -148,6 +149,8 @@ const ClassnoteIndex = (props: any) => {
                     />
                     </Pressable>
                 </View>
+
+                 }
                 <Stack spacing={10} style={{ flex: 1 }} >
                     <CustomScrollview
                         totalPages={props.totalPages}
@@ -230,9 +233,11 @@ const ClassnoteIndex = (props: any) => {
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
                             openOrCloseModal(false)
                             props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                                name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
+                                 params: {
+                                   sessionClass: { name: sessionClass },
+                                 }
+                            });
                         }} />
                         <ListComponent text={'Share'} icon={<Fontisto name="share" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -284,10 +289,8 @@ function mapDispatchToProps(dispatch: any) {
         getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
-        __getAll: (params: any) =>
-            _paginationGetClassnotes(params)(dispatch),
-
-        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
+        __getAll: (params: any) => _paginationGetClassnotes(params)(dispatch),
+        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
     };
 }
 

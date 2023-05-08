@@ -20,12 +20,20 @@ import { getSingleHomeAssessment, createHomeAssessment, updateHomeAssessment } f
 import ProtectedTeacher from "../authentication/protected-teacher";
 import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
-import { createClassNote } from "../../store/actions/classnote-actions";
+import { createClassNote, sendForApproval } from "../../store/actions/classnote-actions";
+import { ClassService } from "../../services/Class-service";
+import { ClassNote } from "../../models/class-properties/Tutor-class";
 
-const ClassNoteCreate = (props: any) => {
-    const [type] = useState<string>('home-assessment');
+const ClassNoteUpdate = (props: any) => {
+    const [classNote, setClassNote] = useState<ClassNote>(new ClassNote());
+    useEffect(() => {
+        ClassService.getSingleClassNote(props.teacherClassNoteId, props.classnotes).then(result => {
+            setClassNote(result);
+        });
+    });
+
+    console.log('classNote', classNote);
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass.name);
-    const [sessionClassSubject] = useState<SelectItem>(props.route.params.sessionClassSubject.name);
     const { assessment } = props.state.assessmentState;
     const [fileContent, setFileContent] = useState({});
     const [ass, setAssessment] = useState<ClassAssessment>(assessment);
@@ -49,17 +57,16 @@ const ClassNoteCreate = (props: any) => {
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }:any = useFormik({
         initialValues: {
-            noteTitle: "",
-            noteContent: "",
+            noteTitle: classNote?.noteTitle,
+            noteContent: classNote?.noteContent,
             shouldSendForApproval: false,
-            subjectId:"",
-            classes:[""],
+            subjectId:classNote?.subject,
+            classId:classNote?.classes,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            values.subjectId = sessionClassSubject.value;
-            values.classes = [sessionClass.value];
+            values.shouldSendForApproval && props.sendForApproval(classNote?.classNoteId);
             props.create(values, props.navigation)
         }
     });
@@ -71,12 +78,12 @@ const ClassNoteCreate = (props: any) => {
     }, [touched, errors])
 
     return (
-        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="ClassNoteCreate">
+        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="ClassNoteUpdate">
             <ScrollView>
                 <Stack spacing={10} style={{ flex: 1, margin: 30, }}>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'CREATE CLASS NOTE FOR ' + sessionClass.text} />
+                            <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'UPDATE CLASS NOTE FOR ' + sessionClass.text} />
                         </HStack>
                     </Stack>
 
@@ -146,7 +153,7 @@ const ClassNoteCreate = (props: any) => {
                         </View>
 
 
-
+                        {classNote?.approvalStatus === 2 && (
                         <HStack spacing={10} style={{ width: '100%', marginTop:'10%'}}>
                             <View style={{ width: '48.5%'}}>
                                 <CustomCheckBoxWithBorder
@@ -158,12 +165,8 @@ const ClassNoteCreate = (props: any) => {
                                     }}
                                 />
                             </View>
-
-
-
-
                         </HStack>
-
+                        )}
 
                         <HStack spacing={3} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
                             <View>
@@ -200,8 +203,8 @@ function mapDispatchToProps(dispatch: any) {
     return {
         create:(values : any, navigation : any) => createClassNote(values, navigation)(dispatch),
         setErrorToastState:(error: any) => setErrorToastState(error)(dispatch),
+        sendForApproval:(classNoteId:any) => sendForApproval(classNoteId)(dispatch),
     }
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClassNoteCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(ClassNoteUpdate);
