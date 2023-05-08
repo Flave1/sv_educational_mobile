@@ -135,10 +135,10 @@ const ClassnoteIndex = (props: any) => {
                         return;
                     }
                     props.navigation.navigate({
-                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
+                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
                          params: {
-                           sessionClass: { name: sessionClass },
-                          sessionClassSubject: { name: sessionClassSubject },
+                           sessionClass:  sessionClass,
+                          sessionClassSubject:  sessionClassSubject ,
                          }
                     });
                 }}>
@@ -235,7 +235,9 @@ const ClassnoteIndex = (props: any) => {
                             props.navigation.navigate({
                                 name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
                                  params: {
-                                   sessionClass: { name: sessionClass },
+                                    teacherClassNoteId: selectItemId,
+                                   sessionClass:  sessionClass ,
+                                   
                                  }
                             });
                         }} />

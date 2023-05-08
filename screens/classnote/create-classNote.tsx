@@ -24,8 +24,8 @@ import { createClassNote } from "../../store/actions/classnote-actions";
 
 const ClassNoteCreate = (props: any) => {
     const [type] = useState<string>('home-assessment');
-    const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass.name);
-    const [sessionClassSubject] = useState<SelectItem>(props.route.params.sessionClassSubject.name);
+    const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
+    const [sessionClassSubject] = useState<SelectItem>(props.route.params.sessionClassSubject);
     const { assessment } = props.state.assessmentState;
     const [fileContent, setFileContent] = useState({});
     const [ass, setAssessment] = useState<ClassAssessment>(assessment);
@@ -199,7 +199,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         create:(values : any, navigation : any) => createClassNote(values, navigation)(dispatch),
-        setErrorToastState:(error: any) => setErrorToastState(error)(dispatch),
+        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
     }
 }
 
