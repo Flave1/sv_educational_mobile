@@ -57,6 +57,8 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
 }
 
 export const displayFullScreen = (display: boolean) => {
+    console.log('some one clicked it');
+    
     return {
         type: actions.DISPLAY_FULL_SCREEN,
         payload: display

@@ -34,7 +34,7 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
         case actions.SET_ERROR_TOAST:
             return {
                 ...state,
-                fullScreen: payload,
+                error: payload,
             }
         case actions.SET_SUCCESS_TOAST:
             return {
