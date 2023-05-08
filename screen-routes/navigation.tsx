@@ -95,6 +95,15 @@ export const screens = {
                                     name: 't-classnote-update',
                                 }
                             }
+                        },  studentnote: {
+                            title: 't-studentnote',
+                            name: 't-studentnote',
+                            screens: {
+                                studentnoteDetails: {
+                                    title: 't-studentnote-details',
+                                    name: 't-studentnote-details',
+                                }
+                            }
                         },
                         classStudents: {
                             title: 't-classstudents',

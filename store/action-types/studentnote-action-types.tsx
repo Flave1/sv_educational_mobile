@@ -1,0 +1,4 @@
+export const actions = {
+    GET_STUDENT_NOTES: 'GET_STUDENT_NOTES',
+    __GET_STUDENT_NOTES: '__GET_STUDENT_NOTES',
+}

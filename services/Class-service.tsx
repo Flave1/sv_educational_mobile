@@ -1,4 +1,4 @@
-import { ClassNote } from "../models/class-properties/Tutor-class";
+import { ClassNote, StudentNote } from "../models/class-properties/Tutor-class";
 import { ClassStudent } from "../models/class-properties/students";
 
 export class ClassService {
@@ -21,6 +21,10 @@ export class ClassService {
 
     static getSingleClassNote = async (teacherClassNoteId: string, notes: ClassNote[]): Promise<ClassNote> => {
         return notes.find(d => d.teacherClassNoteId == teacherClassNoteId) as ClassNote;
+    }
+
+    static getSingleStudentNote = async (studentNoteId: string, notes: StudentNote[]): Promise<StudentNote> => {
+        return notes.find(d => d.studentNoteId == studentNoteId) as StudentNote;
     }
 
 }

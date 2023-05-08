@@ -31,6 +31,8 @@ import ClassNoteUpdate from './classnote/update-classNote';
 import ClassStudents from './session-class/class-students';
 import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
+import StudentnoteDetails from './studentnote/note-details';
+import StudentNoteIndex from './studentnote';
 
 
 
@@ -133,7 +135,12 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classSubjects.name}>
                     {props => <ClassSubjects {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.studentnote.name}>
+                    {props => <StudentNoteIndex {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.studentnote.screens.studentnoteDetails.name}>
+                    {props => <StudentnoteDetails {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
             </Stack.Navigator>
         </>
 

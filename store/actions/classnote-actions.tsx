@@ -47,12 +47,12 @@ export const createClassNote = (values: any, navigation: any) => (dispatch: any)
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            console.log("values222",values);
             axiosInstance.post('/smp/server/classnotes/api/v1/create/classnote', values)
                 .then((res) => {
                     navigation.goBack();
                     dispatch({ type: actions.CREATE_CLASS_NOTE });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
+                    getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
@@ -65,11 +65,13 @@ export const updateClassNote = (values: any, navigation: any) => (dispatch: any)
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
+            
             axiosInstance.post('/smp/server/classnotes/api/v1/update/classnote', values)
                 .then((res) => {
                     navigation.goBack();
                     dispatch({ type: actions.UPDATE_CLASS_NOTE });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
+                    getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;

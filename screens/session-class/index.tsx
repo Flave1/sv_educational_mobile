@@ -60,7 +60,14 @@ const SessionClassIndex = (props: any) => {
                                         params: { sessionClass: sessionClass }
                                     })
                                 }} icon={<MaterialIcons name="app-registration" color="white" size={30} />} text={<CustomText title={'Attendance'} />} />
-                            <CircleBox icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
+                            <CircleBox 
+                             onPress={() => {
+                                props.navigation.navigate({
+                                    name: screens.scenes.mainapp.scenes.tutor.screens.studentnote.name,
+                                    params: { sessionClass: sessionClass }
+                                })
+                            }}
+                            icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} text={<CustomText title={'Student Notes'} />} />
                             <CircleBox
                                 onPress={() => {
                                     props.navigation.navigate({

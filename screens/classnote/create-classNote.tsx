@@ -13,24 +13,19 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import CustomTextArea from "../layouts/CustomTextArea";
 import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
-import { ClassAssessment } from "../../models/class-properties/assessment";
 import { SelectItem } from "../../models/select-item";
 import { displayFullScreen, setErrorToastState } from "../../store/actions/app-state-actions";
-import { getSingleHomeAssessment, createHomeAssessment, updateHomeAssessment } from "../../store/actions/assessment-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
 import { createClassNote } from "../../store/actions/classnote-actions";
 
 const ClassNoteCreate = (props: any) => {
-    const [type] = useState<string>('home-assessment');
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [sessionClassSubject] = useState<SelectItem>(props.route.params.sessionClassSubject);
-    const { assessment } = props.state.assessmentState;
     const [fileContent, setFileContent] = useState({});
-    const [ass, setAssessment] = useState<ClassAssessment>(assessment);
     const screenLocalColor = "#868C8E";
-    
+  
 
     const handleFileSelect = (selectedFile: any) => {
         // do something with the selected file here
@@ -39,9 +34,9 @@ const ClassNoteCreate = (props: any) => {
 
     const validation = Yup.object().shape({
         noteTitle: Yup.string()
-            .min(2, 'Assessment Title Too Short!')
-            .max(200, 'Assessment Title Too Long!')
-            .required('Assessment Title Required'),
+            .min(2, 'Title Too Short!')
+            .max(200, 'Title Too Long!')
+            .required('Title Required'),
         noteContent: Yup.string()
             .min(2, 'Content Too Short!')
             .required('Content Required'),
@@ -54,12 +49,14 @@ const ClassNoteCreate = (props: any) => {
             shouldSendForApproval: false,
             subjectId:"",
             classes:[""],
+            sessionClass: props.route.params.sessionClass,
+            sessionClassSubject:props.route.params.sessionClassSubject,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            values.subjectId = sessionClassSubject.value;
-            values.classes = [sessionClass.value];
+            values.subjectId = sessionClassSubject.lookUpId;
+            values.classes = [sessionClass.lookUpId];
             props.create(values, props.navigation)
         }
     });
