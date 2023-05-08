@@ -5,20 +5,18 @@ import {
     AppBar,
     IconButton,
     Stack,
-    Pressable,
     HStack,
 } from "@react-native-material/core";
 
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { AppDark, AppLight } from "../../tools/color";
+import { AppLight } from "../../tools/color";
 import { useNavigation } from "@react-navigation/native";
 import { screens } from "../../screen-routes/navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { AuhtService } from "../../services/AuthService";
 import { connect } from "react-redux";
-import CustomText from "../layouts/CustomText";
 import SessionClassProperties from "../session-class/session-class-properties";
 import { displayFullScreen } from "../../store/actions/app-state-actions";
 import ListComponent from "../layouts/list-component";
