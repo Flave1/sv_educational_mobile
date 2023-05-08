@@ -69,9 +69,22 @@ const SessionClassIndex = (props: any) => {
                                     })
                                 }}
                                 icon={<MaterialIcons name="library-books" color="white" size={30} />} text={<CustomText title={'Class Notes'} />} />
-                            <CircleBox icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />
+                            <CircleBox
+                                onPress={() => {
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.classStudents.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
+                                }}
+                                icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />
                             <CircleBox icon={<FontAwesome5 name="user-friends" color="white" size={30} />} text={<CustomText title={'Groups'} />} />
-                            <CircleBox icon={<MaterialIcons name="subject" color="white" size={30} />} text={<CustomText title={'Subjects'} />} />
+                            <CircleBox
+                                onPress={() => {
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.classSubjects.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
+                                }} icon={<MaterialIcons name="subject" color="white" size={30} />} text={<CustomText title={'Subjects'} />} />
                             <CircleBox icon={<Ionicons name="information-circle-outline" color="white" size={30} />} text={<CustomText title={'Class Info'} />} />
                         </ScrollView>
                     </View>

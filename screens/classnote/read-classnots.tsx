@@ -15,10 +15,6 @@ function ReadClassnote(props: any) {
             setClassNote(result);
         });
     });
-
-    console.log('classNote', classNote);
-
-
     return (
         <>
             <View style={{ flexDirection: 'row', position: 'absolute' }}>
@@ -27,7 +23,7 @@ function ReadClassnote(props: any) {
             </View>
             <View style={styles.divider} />
             <ScrollView style={{ padding: 5 }}>
-                <Text style={styles.title}>{classNote?.classNoteId}</Text>
+                <Text style={styles.title}>{"What to discuss"}</Text>
                 <RenderHtml
                     source={{ html: classNote?.noteContent }}
                     contentWidth={200}

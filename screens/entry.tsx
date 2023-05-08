@@ -26,6 +26,9 @@ import AttendanceIndex from './attendance/index';
 import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
 import ClassnoteIndex from './classnote/index';
+import ClassStudents from './session-class/class-students';
+import ClassStudentInfo from './session-class/class-student-info';
+import ClassSubjects from './session-class/class-subjects';
 
 
 
@@ -113,11 +116,20 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classnote.name}>
                     {props => <ClassnoteIndex {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classStudents.name}>
+                    {props => <ClassStudents {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classStudents.screens.info.name}>
+                    {props => <ClassStudentInfo {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classSubjects.name}>
+                    {props => <ClassSubjects {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
 
             </Stack.Navigator>
         </>
 
-    )
+    )   
 }
 
 
