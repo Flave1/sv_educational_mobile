@@ -9,6 +9,13 @@ import { ClassNote } from "../../models/class-properties/Tutor-class";
 
 function ReadClassnote(props: any) {
 
+    
+    useEffect(() => {
+        props.displayFullScreen(true);
+        return () => {
+            props.displayFullScreen(false);
+        }
+    }, []);
     const [classNote, setClassNote] = useState<ClassNote>(new ClassNote());
     useEffect(() => {
         ClassService.getSingleClassNote(props.teacherClassNoteId, props.classnotes).then(result => {

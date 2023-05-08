@@ -21,7 +21,6 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
-import { displayFullScreen } from "../../store/actions/app-state-actions";
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -102,9 +101,6 @@ const ClassnoteIndex = (props: any) => {
         }
     };
 
-    useEffect(() => {
-        !readNoteModalActionState ? props.displayFullScreen(false) : props.displayFullScreen(true);
-    }, [readNoteModalActionState])
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
@@ -244,9 +240,7 @@ function mapDispatchToProps(dispatch: any) {
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
         __getAll: (params: any) =>
-            _paginationGetClassnotes(params)(dispatch),
-
-        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
+            _paginationGetClassnotes(params)(dispatch)
     };
 }
 
