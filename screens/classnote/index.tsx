@@ -126,31 +126,31 @@ const ClassnoteIndex = (props: any) => {
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
-           { !modalActionState && !readNoteModalActionState &&
-                <View style={styles.addButtonContainer} >
-                    <Pressable
-                 onPress={() => {
-                    if (!sessionClassSubject.value) {
-                       props.setErrorToastState('Subject must be selected');
-                        return;
-                    }
-                    props.navigation.navigate({
-                        name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
-                         params: {
-                           sessionClass:  sessionClass,
-                          sessionClassSubject:  sessionClassSubject ,
-                         }
-                    });
-                }}>
-                    <MaterialCommunityIcons
-                        name="plus"
-                        size={50}
-                        color={'white'}
-                    />
-                    </Pressable>
-                </View>
+                {!modalActionState && !readNoteModalActionState &&
+                    <View style={styles.addButtonContainer} >
+                        <Pressable
+                            onPress={() => {
+                                if (!sessionClassSubject.value) {
+                                    props.setErrorToastState('Subject must be selected');
+                                    return;
+                                }
+                                props.navigation.navigate({
+                                    name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
+                                    params: {
+                                        sessionClass: sessionClass,
+                                        sessionClassSubject: sessionClassSubject,
+                                    }
+                                });
+                            }}>
+                            <MaterialCommunityIcons
+                                name="plus"
+                                size={50}
+                                color={'white'}
+                            />
+                        </Pressable>
+                    </View>
 
-                 }
+                }
                 <Stack spacing={10} style={{ flex: 1 }} >
                     <CustomScrollview
                         totalPages={props.totalPages}
@@ -234,11 +234,10 @@ const ClassnoteIndex = (props: any) => {
                             openOrCloseModal(false)
                             props.navigation.navigate({
                                 name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
-                                 params: {
+                                params: {
                                     teacherClassNoteId: selectItemId,
-                                   sessionClass:  sessionClass ,
-                                   
-                                 }
+                                    sessionClass: sessionClass,
+                                }
                             });
                         }} />
                         <ListComponent text={'Share'} icon={<Fontisto name="share" size={20} />} onPress={() => {
@@ -292,7 +291,7 @@ function mapDispatchToProps(dispatch: any) {
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
         __getAll: (params: any) => _paginationGetClassnotes(params)(dispatch),
-        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
     };
 }
 

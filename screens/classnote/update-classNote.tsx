@@ -2,21 +2,17 @@ import React, { useState, useEffect } from "react";
 import { HStack, Stack, Text } from "@react-native-material/core";
 import ScreenTitle from "../layouts/screen-title";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { ScrollView, View } from "react-native";
-import Entypo from "react-native-vector-icons/Entypo";
 import CustomTextInput from "../layouts/CustomTextInput";
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import CustomButton from "../layouts/CustomButton";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import CustomTextArea from "../layouts/CustomTextArea";
 import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
 import { ClassAssessment } from "../../models/class-properties/assessment";
 import { SelectItem } from "../../models/select-item";
-import { displayFullScreen, setErrorToastState } from "../../store/actions/app-state-actions";
-import { getSingleHomeAssessment, createHomeAssessment, updateHomeAssessment } from "../../store/actions/assessment-actions";
+import { setErrorToastState } from "../../store/actions/app-state-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
@@ -25,20 +21,22 @@ import { ClassService } from "../../services/Class-service";
 import { ClassNote } from "../../models/class-properties/Tutor-class";
 
 const ClassNoteUpdate = (props: any) => {
+    
+    const [teacherClassNoteId] = useState<string>(props.route.params.teacherClassNoteId);
     const [classNote, setClassNote] = useState<ClassNote>(new ClassNote());
+    
     useEffect(() => {
-        ClassService.getSingleClassNote(props.teacherClassNoteId, props.classnotes).then(result => {
+        ClassService.getSingleClassNote(teacherClassNoteId, props.classnotes).then(result => {
             setClassNote(result);
         });
-    });
+    }, [props.teacherClassNoteId]);
 
-    console.log('classNote', classNote);
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const { assessment } = props.state.assessmentState;
     const [fileContent, setFileContent] = useState({});
     const [ass, setAssessment] = useState<ClassAssessment>(assessment);
     const screenLocalColor = "#868C8E";
-    
+
 
     const handleFileSelect = (selectedFile: any) => {
         // do something with the selected file here
@@ -55,13 +53,13 @@ const ClassNoteUpdate = (props: any) => {
             .required('Content Required'),
     });
 
-    const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }:any = useFormik({
+    const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             noteTitle: classNote?.noteTitle,
             noteContent: classNote?.noteContent,
             shouldSendForApproval: false,
-            subjectId:classNote?.subject,
-            classId:classNote?.classes,
+            subjectId: classNote?.subject,
+            classId: classNote?.classes,
         },
         enableReinitialize: true,
         validationSchema: validation,
@@ -90,7 +88,7 @@ const ClassNoteUpdate = (props: any) => {
                     <Stack spacing={10} style={{ height: '60%' }}>
                         <View style={{ width: '100%' }}>
                             <CustomTextInput
-                                icon={<MaterialIcons name={'noteTitle'} size={16} />}
+                                icon={<MaterialIcons name={'note'} size={16} />}
                                 placeholder='Title'
                                 autoCapitalize='none'
                                 autoCompleteType='text'
@@ -154,18 +152,18 @@ const ClassNoteUpdate = (props: any) => {
 
 
                         {classNote?.approvalStatus === 2 && (
-                        <HStack spacing={10} style={{ width: '100%', marginTop:'10%'}}>
-                            <View style={{ width: '48.5%'}}>
-                                <CustomCheckBoxWithBorder
-                                    text="Submit for review"
-                                    isSelected={values.shouldSendForApproval}
-                                    onValueChange={() => {
-                                        handleChange('shouldSendForApproval');
-                                        setFieldValue('shouldSendForApproval', !values.shouldSendForApproval)
-                                    }}
-                                />
-                            </View>
-                        </HStack>
+                            <HStack spacing={10} style={{ width: '100%', marginTop: '10%' }}>
+                                <View style={{ width: '48.5%' }}>
+                                    <CustomCheckBoxWithBorder
+                                        text="Submit for review"
+                                        isSelected={values.shouldSendForApproval}
+                                        onValueChange={() => {
+                                            handleChange('shouldSendForApproval');
+                                            setFieldValue('shouldSendForApproval', !values.shouldSendForApproval)
+                                        }}
+                                    />
+                                </View>
+                            </HStack>
                         )}
 
                         <HStack spacing={3} style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
@@ -201,9 +199,9 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        create:(values : any, navigation : any) => createClassNote(values, navigation)(dispatch),
-        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
-        sendForApproval:(classNoteId:string) => sendForApproval(classNoteId)(dispatch),
+        create: (values: any, navigation: any) => createClassNote(values, navigation)(dispatch),
+        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        sendForApproval: (classNoteId: string) => sendForApproval(classNoteId)(dispatch),
     }
 }
 
