@@ -180,9 +180,9 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const style = StyleSheet.create({
     transitionDelaycss: {
-        // transitionProperty:'',
-        transitionDuration: '5s',
-        transitionDelay: '2s',
+        // // transitionProperty:'',
+        // transitionDuration: '5s',
+        // transitionDelay: '2s',
     }
 })
 

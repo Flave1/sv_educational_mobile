@@ -96,6 +96,20 @@ export const screens = {
                                 }
                             }
                         },
+                        classStudents: {
+                            title: 't-classstudents',
+                            name: 't-classstudents',
+                            screens: {
+                                info: {
+                                    title: 't-classstudent-info',
+                                    name: 't-classstudent-info',
+                                }
+                            }
+                        },
+                        classSubjects: {
+                            title: 't-classsubject',
+                            name: 't-classsubject'
+                        },
                         sessionClass: {
                             title: '',
                             name: 't-session-class',

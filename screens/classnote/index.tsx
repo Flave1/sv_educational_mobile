@@ -21,7 +21,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
-import { displayFullScreen, setErrorToastState } from "../../store/actions/app-state-actions";
+import { setErrorToastState } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AppLightBlue } from "../../tools/color";
 

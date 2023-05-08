@@ -1,6 +1,6 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { ClassStudent } from "../../models/class-properties/students";
-import { ClassService } from "../../services/Class-service";
+import { ClassSubjects } from "../../models/class-properties/class-subjects";
+import { ClassStudentInfo } from "../../models/class-properties/students";
 import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
@@ -37,6 +37,24 @@ export const GetClassSubjects = (sessionClassId: any) => (dispatch: any) => {
         }
     })
 }
+export const GetClassSubjects2 = (sessionClassId: any) => (dispatch: any): Promise<ClassSubjects> => {
+    return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            return axiosInstance.get(`smp/server/subject/api/v1/getall/subject-by-class?sessionClassId=${sessionClassId}`)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    return res.data.result as ClassSubjects;
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    return new ClassSubjects();
+                })
+        } else {
+            return new ClassSubjects();
+        }
+    })
+}
 export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
@@ -67,6 +85,26 @@ export const GetClassStudents = (sessionClassId: any) => (dispatch: any) => {
                 })
         } else {
             dispatch({ type: app_state_actions.REQUEST_FAILED, payload: 'Seems internet is not accessible ' });
+        }
+    })
+}
+
+export const GetSingleStudent = (studentContactId: any) => (dispatch: any): Promise<ClassStudentInfo> => {
+    return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            return axiosInstance.get(`smp/server/student/api/v1/get-single/${studentContactId}`)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    return res.data.result as ClassStudentInfo;
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    return new ClassStudentInfo();
+                })
+        } else {
+            dispatch({ type: app_state_actions.REQUEST_FAILED, payload: 'Seems internet is not accessible ' });
+            return new ClassStudentInfo();
         }
     })
 }
