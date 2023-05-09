@@ -6,7 +6,7 @@ export const studentnotesReducer = (state = initialState, { type, payload }: any
         case actions.GET_STUDENT_NOTES:
             return {
                 ...state,
-                studentnotes: payload,
+                studentnotes: payload.data,
                 totalPages: payload.totalPages,
                 pageNumber: payload.pageNumber,
                 unsynchronized: []

@@ -134,8 +134,8 @@ export const renameRegister = (values: any,openModal:any) => (dispatch: any) => 
                 .then((res) => {
                     openModal(false)
                     getRegisters(values.sessionClass, 1)(dispatch);
-                    dispatch({ type: actions.RENAME_ATTENDANCE });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
+                    setSuccessToast('Successfully renamed register')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
@@ -145,7 +145,6 @@ export const renameRegister = (values: any,openModal:any) => (dispatch: any) => 
 }
 
 export const deleteRegister = (item: string, sessionClassId: string) => (dispatch: any) => {
-    console.log("item delete",item);
     
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
@@ -155,7 +154,7 @@ export const deleteRegister = (item: string, sessionClassId: string) => (dispatc
                 .then((res) => {
                     getRegisters(sessionClassId, 1)(dispatch);
                     dispatch({ type: app_state_actions.HIDE_LOADING });
-                    setSuccessToast('Successfully deleted assessment')(dispatch)
+                    setSuccessToast('Successfully deleted register')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);

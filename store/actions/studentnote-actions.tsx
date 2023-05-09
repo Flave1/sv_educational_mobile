@@ -15,7 +15,7 @@ export const getStudentnotes = (classId: string, subjectId: string, status: numb
             
             
             
-            axiosInstance.get(`/smp/server/smp/studentnotes/api/v1/get/studentnotes/by-teacher?classId=${classId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
+            axiosInstance.get(`/smp/studentnotes/api/v1/get/studentnotes/by-teacher/mobile?classId=${classId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
                 .then((res) => {
                     
                     dispatch({ type: actions.GET_STUDENT_NOTES, payload: res.data.result });
@@ -35,7 +35,7 @@ export const _paginationGetStudentnotes = (params: any) => (dispatch: any) => {
         let pageNumber = params.pageNumber || '';
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.get(`/smp/server/smp/studentnotes/api/v1/get/studentnotes/by-teacher?classId=${classId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
+            axiosInstance.get(`/smp/studentnotes/api/v1/get/studentnotes/by-teacher/mobile?classId=${classId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
                 .then((res) => {
                     dispatch({ type: actions.__GET_STUDENT_NOTES, payload: res.data.result });
                     dispatch({ type: app_state_actions.HIDE_LOADING });

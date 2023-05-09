@@ -92,7 +92,14 @@ const SessionClassIndex = (props: any) => {
                                         params: { sessionClass: sessionClass }
                                     })
                                 }} icon={<MaterialIcons name="subject" color="white" size={30} />} text={<CustomText title={'Subjects'} />} />
-                            <CircleBox icon={<Ionicons name="information-circle-outline" color="white" size={30} />} text={<CustomText title={'Class Info'} />} />
+                            <CircleBox 
+                               onPress={() => {
+                                props.navigation.navigate({
+                                    name: screens.scenes.mainapp.scenes.tutor.screens.classInfo.name,
+                                    params: { sessionClass: sessionClass }
+                                })
+                            }}
+                            icon={<Ionicons name="information-circle-outline" color="white" size={30} />} text={<CustomText title={'Class Info'} />} />
                         </ScrollView>
                     </View>
                 </Stack>

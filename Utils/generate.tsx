@@ -20,3 +20,4 @@ export function dateNow() {
     hour12: true
   });
 }
+
