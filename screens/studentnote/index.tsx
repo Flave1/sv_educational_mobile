@@ -46,8 +46,8 @@ const StudentNoteIndex = (props: any) => {
 
     const params = {
         HomeAssessmentId: selectItemId,
-        sessionClass: { name: sessionClass },
-        sessionClassSubject: { name: sessionClassSubject }
+        sessionClass:  sessionClass ,
+        sessionClassSubject: sessionClassSubject 
     }
 
     const snapPoints = useMemo(() => ["90%"], []);

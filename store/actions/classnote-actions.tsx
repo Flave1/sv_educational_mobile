@@ -50,7 +50,6 @@ export const createClassNote = (values: any, navigation: any) => (dispatch: any)
             axiosInstance.post('/smp/server/classnotes/api/v1/create/classnote', values)
                 .then((res) => {
                     navigation.goBack();
-                    dispatch({ type: actions.CREATE_CLASS_NOTE });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
                 }).catch((err) => {
@@ -69,7 +68,6 @@ export const updateClassNote = (values: any, navigation: any) => (dispatch: any)
             axiosInstance.post('/smp/server/classnotes/api/v1/update/classnote', values)
                 .then((res) => {
                     navigation.goBack();
-                    dispatch({ type: actions.UPDATE_CLASS_NOTE });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
                 }).catch((err) => {
@@ -86,7 +84,6 @@ export const sendForApproval = (values: any) => (dispatch: any) => {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post('/smp/server/classnotes/api/v1/send/classnotes/for-approval', values)
                 .then((res) => {
-                    dispatch({ type: actions.SEND_FOR_APPROVAL });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
