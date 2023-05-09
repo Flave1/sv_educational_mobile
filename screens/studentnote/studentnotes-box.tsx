@@ -9,9 +9,9 @@ function StudentNotesBox(props: any) {
             onPress={props.onPress}
             key={props.idx} style={styles.pressable}>
             <HStack style={styles.badgebar}>
-                {/* <View style={styles.shortdate}>
-                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>{props.item.dateCreated}</Text>
-                </View> */}
+                <View style={styles.shortdate}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>{props.item.studentName}</Text>
+                </View>
                 <View style={styles.ellipsis}>
                     <FontAwesome5 style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }} name="ellipsis-h" size={25} />
                 </View>

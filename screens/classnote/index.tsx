@@ -24,6 +24,8 @@ import ReadClassnote from "./read-classnots";
 import { setErrorToastState } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AppLightBlue } from "../../tools/color";
+import SendClassnote from "./send-classnote";
+import ShareClassnote from "./share-classnote";
 
 const ClassnoteIndex = (props: any) => {
 
@@ -32,6 +34,7 @@ const ClassnoteIndex = (props: any) => {
     const [selectedStatus, setStatus] = useState<SelectItem>({ value: '-1', text: 'All', lookUpId: '' });
     const [pageNumber] = useState<number>(1);
     const [selectItemId, setSelectedItem] = useState<string>('');
+    const [classNoteId, setClassNoteId] = useState<string>('');
 
     useEffect(() => {
         sessionClass?.value && props.getSubjects(sessionClass?.value)
@@ -105,6 +108,33 @@ const ClassnoteIndex = (props: any) => {
         }
     };
 
+    
+    const sendClassnoteSnapPoints = useMemo(() => ["50%"], []);
+    const sendClassnoteBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [sendClassnoteModalActionState, setSendClassnoteModalActionState] = useState(false);
+    const openOrCloseSendClassnoteModal = (shouldOpenModal: boolean) => {
+        setSendClassnoteModalActionState(shouldOpenModal)
+        if (shouldOpenModal && sendClassnoteBottomSheetModalRef.current) {
+            sendClassnoteBottomSheetModalRef.current.present();
+        } else if (sendClassnoteBottomSheetModalRef.current) {
+            sendClassnoteBottomSheetModalRef.current.close();
+        }
+    };
+
+    
+    const shareClassNoteSnapPoints = useMemo(() => ["100%"], []);
+    const shareClassNoteBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
+    const [shareClassNoteModalActionState, setShareClassNoteModalActionState] = useState(false);
+    const openOrCloseShareClassNoteModal = (shouldOpenModal: boolean) => {
+        setShareClassNoteModalActionState(shouldOpenModal)
+        if (shouldOpenModal && shareClassNoteBottomSheetModalRef.current) {
+            shareClassNoteBottomSheetModalRef.current.present();
+        } else if (shareClassNoteBottomSheetModalRef.current) {
+            shareClassNoteBottomSheetModalRef.current.close();
+        }
+    };
+
+
 
     const styles = StyleSheet.create({
         addButtonContainer: {
@@ -126,7 +156,7 @@ const ClassnoteIndex = (props: any) => {
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
-                {!modalActionState && !readNoteModalActionState &&
+                {!modalActionState && !readNoteModalActionState && !shareClassNoteModalActionState && !sendClassnoteModalActionState &&
                     <View style={styles.addButtonContainer} >
                         <Pressable
                             onPress={() => {
@@ -212,6 +242,7 @@ const ClassnoteIndex = (props: any) => {
                                             item={item} key={idx}
                                             onPress={() => {
                                                 setSelectedItem(item.teacherClassNoteId)
+                                                setClassNoteId(item.classNoteId)
                                                 openOrCloseModal(!modalActionState)
                                             }}
                                         />
@@ -228,6 +259,8 @@ const ClassnoteIndex = (props: any) => {
                     <Stack>
                         <ListComponent text={'Open'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
                             openOrCloseModal(false);
+                            openOrCloseSendClassnoteModal(false);
+                            openOrCloseShareClassNoteModal(false);
                             openOrCloseReadNoteModal(true);
                         }} />
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
@@ -241,18 +274,18 @@ const ClassnoteIndex = (props: any) => {
                             });
                         }} />
                         <ListComponent text={'Share'} icon={<Fontisto name="share" size={20} />} onPress={() => {
-                            openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                            openOrCloseModal(false);
+                            openOrCloseReadNoteModal(false);
+                            openOrCloseSendClassnoteModal(false);
+                            openOrCloseShareClassNoteModal(true);
+                           
                         }} />
                         <ListComponent text={'Send'} icon={<FontAwesome name="send" size={20} />} onPress={() => {
-                            openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                            openOrCloseModal(false);
+                            openOrCloseReadNoteModal(false);
+                            openOrCloseShareClassNoteModal(false);
+                            openOrCloseSendClassnoteModal(true);
+                           
                         }} />
                         <ListComponent text={'Download'} icon={<Entypo name="download" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -266,6 +299,12 @@ const ClassnoteIndex = (props: any) => {
 
                 <BottomUpComponent bottomSheetModalRef={readNoteBottomSheetModalRef} snapPoints={readNoteSnapPoints} openOrCloseModal={openOrCloseReadNoteModal}>
                     <ReadClassnote teacherClassNoteId={selectItemId} />
+                </BottomUpComponent>
+                <BottomUpComponent bottomSheetModalRef={sendClassnoteBottomSheetModalRef} snapPoints={sendClassnoteSnapPoints} openOrCloseModal={openOrCloseSendClassnoteModal}>
+                    <SendClassnote teacherClassNoteId={selectItemId}  sendClassnoteModal={sendClassnoteModalActionState} openOrCloseSendClassnoteModal={openOrCloseSendClassnoteModal}/>
+                </BottomUpComponent>
+                <BottomUpComponent bottomSheetModalRef={shareClassNoteBottomSheetModalRef} snapPoints={shareClassNoteSnapPoints} openOrCloseModal={openOrCloseShareClassNoteModal}>
+                    <ShareClassnote classNoteId={classNoteId}shareClassnoteModal={shareClassNoteModalActionState} openOrCloseShareClassNoteModal={openOrCloseShareClassNoteModal}/>
                 </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>

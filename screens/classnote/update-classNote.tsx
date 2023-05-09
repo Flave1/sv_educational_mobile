@@ -64,7 +64,6 @@ const ClassNoteUpdate = (props: any) => {
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            console.log("shouldSendForApproval",values.shouldSendForApproval);
             
             values.shouldSendForApproval && props.sendForApproval(classNote?.classNoteId);
             props.update(values, props.navigation)
@@ -80,7 +79,7 @@ const ClassNoteUpdate = (props: any) => {
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="ClassNoteUpdate">
             <ScrollView>
-                <Stack spacing={10} style={{ flex: 1, margin: 30, }}>
+                <Stack spacing={10} style={{ flex: 1, marginHorizontal: 30, }}>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
                             <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'UPDATE CLASS NOTE FOR ' + sessionClass.text} />
@@ -155,7 +154,7 @@ const ClassNoteUpdate = (props: any) => {
 
                         {classNote?.approvalStatus === 2 && (
                             <HStack spacing={10} style={{ width: '100%', marginTop: '10%' }}>
-                                <View style={{ width: '48.5%' }}>
+                                <View style={{ width: '100%' }}>
                                     <CustomCheckBoxWithBorder
                                         text="Submit for review"
                                         isSelected={values.shouldSendForApproval}

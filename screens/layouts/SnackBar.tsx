@@ -37,8 +37,9 @@ const AppToast = ({ state, dispatch }: any) => {
             {
                 <Snackbar
                     message={success}
-                    style={{ position: "absolute", start: 16, end: 16, bottom: 16, display: showSuccessToast ? 'flex' : 'none', backgroundColor: "#017C09" }}
-                />
+                    style={{ position: "absolute", start: 16, end: 16, bottom: 100, display: showSuccessToast ? 'flex' : 'none', backgroundColor: "#017C09" }}
+                >
+                    </Snackbar>
             }
             {/*   {
                  information && <Snackbar
