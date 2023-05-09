@@ -9,6 +9,11 @@ export const getStudentnotes = (classId: string, subjectId: string, status: numb
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
+            console.log('classId', classId);
+            console.log('subjectId', subjectId);
+            console.log('status', status);
+            
+            
             
             axiosInstance.get(`/smp/server/smp/studentnotes/api/v1/get/studentnotes/by-teacher?classId=${classId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
                 .then((res) => {

@@ -35,11 +35,12 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
     }
 
 
+
     return (
         <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Dashboard" params={params}>
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ padding: 10, paddingRight: 0 }}>
-                    <TeacherAnnouncementBox navigation={navigation} />
+                    <TeacherAnnouncementBox  navigation={navigation} />
                 </View>
 
                 <Stack>
@@ -66,13 +67,14 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
                                         </Pressable>
                                     )
                                 })
+
                             }
                         </HStack>
                     }
                 </Stack>
 
             </ScrollView>
-        </ProtectedTeacher>
+        </ProtectedTeacher >
 
     );
 };
