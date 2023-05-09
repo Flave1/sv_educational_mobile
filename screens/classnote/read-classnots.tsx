@@ -22,6 +22,7 @@ function ReadClassnote(props: any) {
             setClassNote(result);
         });
     });
+    
     return (
         <>
             <View style={{ flexDirection: 'row', position: 'absolute' }}>

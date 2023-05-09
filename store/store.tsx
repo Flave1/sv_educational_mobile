@@ -9,6 +9,7 @@ import { classPropertiesReducer } from './reducers/class-properties-reducer';
 import { assessmentReducer } from './reducers/assessment-reducer';
 import { attendanceReducer } from './reducers/attendance-reducer';
 import { classnotesReducer } from './reducers/classnote-reducer';
+import { studentnotesReducer } from './reducers/studentnote-reducer';
 
 
 const rootReducer = combineReducers({
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     classPropsState: classPropertiesReducer,
     assessmentState: assessmentReducer,
     attendanceState: attendanceReducer,
-    classnotesState: classnotesReducer
+    classnotesState: classnotesReducer,
+    studentnotesState: studentnotesReducer
 })
 
 

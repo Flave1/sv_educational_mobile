@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, HStack, Stack } from "@react-native-material/core";
+import { Box, HStack, Pressable, Stack } from "@react-native-material/core";
 import CustomDropdownInput from "../layouts/CustomDropdownInput";
-import { View, Alert } from "react-native";
+import { View, Alert, StyleSheet } from "react-native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { ClassSubjects } from "../../models/class-properties/class-subjects";
 import { SelectItem } from "../../models/select-item";
@@ -21,6 +21,10 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
+import { setErrorToastState } from "../../store/actions/app-state-actions";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { AppLightBlue } from "../../tools/color";
+
 const ClassnoteIndex = (props: any) => {
 
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -102,9 +106,51 @@ const ClassnoteIndex = (props: any) => {
     };
 
 
+    const styles = StyleSheet.create({
+        addButtonContainer: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'flex-end',
+            position: 'absolute',
+            top: '85%',
+            left: '83%',
+            width: 50,
+            height: 50,
+            zIndex: 999,
+            backgroundColor: AppLightBlue,
+            borderRadius: 25,
+        },
+
+    });
+
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
+                {!modalActionState && !readNoteModalActionState &&
+                    <View style={styles.addButtonContainer} >
+                        <Pressable
+                            onPress={() => {
+                                if (!sessionClassSubject.value) {
+                                    props.setErrorToastState('Subject must be selected');
+                                    return;
+                                }
+                                props.navigation.navigate({
+                                    name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
+                                    params: {
+                                        sessionClass: sessionClass,
+                                        sessionClassSubject: sessionClassSubject,
+                                    }
+                                });
+                            }}>
+                            <MaterialCommunityIcons
+                                name="plus"
+                                size={50}
+                                color={'white'}
+                            />
+                        </Pressable>
+                    </View>
+
+                }
                 <Stack spacing={10} style={{ flex: 1 }} >
                     <CustomScrollview
                         totalPages={props.totalPages}
@@ -113,7 +159,9 @@ const ClassnoteIndex = (props: any) => {
                         params={{ 'sessionClassId': sessionClass?.lookUpId, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <Box w={184}  >
+
                                 <View >
+
                                     <CustomDropdownInput data={props.classSubjects}
                                         searchPlaceHolder="Search"
                                         height={40}
@@ -185,9 +233,12 @@ const ClassnoteIndex = (props: any) => {
                         <ListComponent text={'Edit'} icon={<AntDesign name="edit" size={20} />} onPress={() => {
                             openOrCloseModal(false)
                             props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
-                            })
+                                name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.updateClassnote.name,
+                                params: {
+                                    teacherClassNoteId: selectItemId,
+                                    sessionClass: sessionClass,
+                                }
+                            });
                         }} />
                         <ListComponent text={'Share'} icon={<Fontisto name="share" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -239,8 +290,8 @@ function mapDispatchToProps(dispatch: any) {
         getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
-        __getAll: (params: any) =>
-            _paginationGetClassnotes(params)(dispatch)
+        __getAll: (params: any) => _paginationGetClassnotes(params)(dispatch),
+        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
     };
 }
 

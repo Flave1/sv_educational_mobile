@@ -11,4 +11,22 @@ export class ClassNote {
     classNoteId: string = "";
     teacherClassNoteId: string = "";
     noteContent: string = "";
+    noteTitle: string = "";
+    subject :string = "";
+    subjectName:string = "";
+    classes:string[] = [""];
+}
+
+export class StudentNote {
+    approvalStatus: number = -3;
+    approvalStatusName: string = "";
+    studentNoteId: string = "";
+    studentName: string = "";
+    teacherId: string = "";
+    noteContent: string = "";
+    noteTitle: string = "";
+    subject :string = "";
+    subjectName:string = "";
+    sessionClassId:string = "";
+    dateSubmitted:string = "";
 }

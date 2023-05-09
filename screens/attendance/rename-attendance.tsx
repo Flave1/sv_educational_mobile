@@ -94,7 +94,6 @@ function mapStateToProps(state: any) {
 }
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display)),
        renameRegister:(values:any, openOrCloseRenameAttendanceModal:any) => renameRegister(values,openOrCloseRenameAttendanceModal)(dispatch)
 
     }

@@ -42,3 +42,53 @@ export const _paginationGetClassnotes = (params: any) => (dispatch: any) => {
     })
 }
 
+
+export const createClassNote = (values: any, navigation: any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.post('/smp/server/classnotes/api/v1/create/classnote', values)
+                .then((res) => {
+                    navigation.goBack();
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
+
+export const updateClassNote = (values: any, navigation: any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            
+            axiosInstance.post('/smp/server/classnotes/api/v1/update/classnote', values)
+                .then((res) => {
+                    navigation.goBack();
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    getClassnotes(values.sessionClass, values.sessionClassSubject, -2,  1)(dispatch);
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
+
+export const sendForApproval = (values: any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.post('/smp/server/classnotes/api/v1/send/classnotes/for-approval', values)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
