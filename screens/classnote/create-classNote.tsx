@@ -70,7 +70,7 @@ const ClassNoteCreate = (props: any) => {
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="ClassNoteCreate">
             <ScrollView>
-                <Stack spacing={10} style={{ flex: 1, margin: 30, }}>
+                <Stack spacing={10} style={{ flex: 1,marginHorizontal:30 }}>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
                             <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'CREATE CLASS NOTE FOR ' + sessionClass.text} />
@@ -145,7 +145,7 @@ const ClassNoteCreate = (props: any) => {
 
 
                         <HStack spacing={10} style={{ width: '100%', marginTop:'10%'}}>
-                            <View style={{ width: '48.5%'}}>
+                            <View style={{ width: '100%'}}>
                                 <CustomCheckBoxWithBorder
                                     text="Submit for review"
                                     isSelected={values.shouldSendForApproval}

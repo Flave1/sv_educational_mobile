@@ -3,5 +3,7 @@ export default {
     totalPages:0,
     pageNumber: 0,
     unsynchronized:[],
-    classnote: null
+    classnote: null,
+    staffClasses: [],
+    otherStaffList:[],
 }

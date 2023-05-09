@@ -4,6 +4,7 @@ import { FETCH_NO_INTERNET_ACCESS } from "../../Utils/constants";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/classnote-actions-types";
+import { setSuccessToast } from "./app-state-actions";
 
 export const getClassnotes = (sessionClassId: string, subjectId: string, status: number = -2, pageNumber: number = 1) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
@@ -90,5 +91,81 @@ export const sendForApproval = (values: any) => (dispatch: any) => {
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
                 });
         }
+    })
+}
+
+export const getSharedNoteClasses = (teacherClassNoteId:string) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.get(`/smp/server/classnotes/api/v1/get-note/shared-class?teacherClassNoteId=${teacherClassNoteId}`)
+                .then((res) => {
+                    dispatch({ type: actions.GET_SHARED_CLASS_NOTES_CLASSES, payload: res.data.result });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                })
+        } 
+    })
+}
+
+export const sendClassNotes = (teacherClassNoteId: string, classes:string[], openOrCloseSendClassnoteModal:any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            const payload = {
+                teacherClassNoteId,
+                classes,
+            }
+            
+            axiosInstance.post('/smp/server/classnotes/api/v1/send/classnotes/to-students', payload)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    openOrCloseSendClassnoteModal(false)
+                    setSuccessToast("class note sent to class(es)")(dispatch);
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
+
+export const shareClassNotesToStaff = (classNoteId: string, teacherId:string[], openOrCloseShareClassNoteModal:any) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            const payload = {
+                classNoteId,
+                teacherId,
+            }
+            
+            axiosInstance.post('/smp/server/classnotes/api/v1/share/classnote', payload)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    openOrCloseShareClassNoteModal(false)
+                    setSuccessToast("class note shared to staff(s)")(dispatch);
+                }).catch((err) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                });
+        }
+    })
+}
+
+export const getAllOtherStaff = (classNoteId:string) => (dispatch: any) => {
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.get(`/smp/server/classnotes/api/v1/get-note/other-teachers?classNoteId=${classNoteId}`)
+                .then((res) => {
+                    dispatch({ type: actions.GET_OTHER_STAFF, payload: res.data.result });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                })
+        } 
     })
 }

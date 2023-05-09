@@ -95,13 +95,24 @@ export const screens = {
                                     name: 't-classnote-update',
                                 }
                             }
-                        },  studentnote: {
+                        }, 
+                         studentnote: {
                             title: 't-studentnote',
                             name: 't-studentnote',
                             screens: {
                                 studentnoteDetails: {
                                     title: 't-studentnote-details',
                                     name: 't-studentnote-details',
+                                }
+                            }
+                        }, 
+                         classInfo: {
+                            title: 't-classInfo',
+                            name: 't-classInfo',
+                            screens: {
+                                classInfoDetails: {
+                                    title: 't-classInfo-details',
+                                    name: 't-classInfo-details',
                                 }
                             }
                         },
