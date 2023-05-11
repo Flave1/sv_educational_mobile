@@ -60,9 +60,6 @@ const ContinueAttendanceRecord = (props: any) => {
     const params = {
         sessionClass: sessionClass,
     }
-
-    console.log('sessionClass', sessionClass);
-
     const handleSave = () => {
         props.getAll(classRegisterId);
         props.navigation.goBack();

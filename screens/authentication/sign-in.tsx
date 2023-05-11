@@ -1,12 +1,11 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, {  } from 'react';
 import * as Yup from 'yup';
-import { OffboardUser } from '../../store/actions/app-state-actions';
-import { SignInUser } from '../../store/actions/auth-actions';
+import { offboard } from '../../store/actions/app-state-actions';
+import { signIn } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
-import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AppPurple } from '../../tools/color';
@@ -14,27 +13,24 @@ import { AuhtService } from '../../services/AuthService';
 import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
-const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }: any) => {
-
-    const [onboardedUser, setUser] = useState<OnboardedUser>();
-
+import { connect } from 'react-redux';
+const SignIn = (props: any) => {
+    // useEffect(() => {
+    //     props.signin(null);
+    // },[])
     React.useEffect(() => {
-        setUser(persistedUser)
-    }, [persistedUser])
-
-    React.useEffect(() =>{
-        if (onboardedUser) {
+        if (props.onboardedUser) {
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
+                console.log('loggedIn', loggedIn);
+                console.log('props.onboardedUser', props.onboardedUser);
+                
                 if (loggedIn)
-                    navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
+                    props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
             })
         } else {
-            navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
+            props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
         }
-    })
-
-
-
+    }, [props.onboardedUser])
 
     const validation = Yup.object().shape({
         userName: Yup.string()
@@ -47,28 +43,31 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched } = useFormik({
         initialValues: {
-            userName: onboardedUser?.userName || "",
             password: "",
-            schoolUrl: onboardedUser?.baseUrlSuffix
+            schoolUrl: props.onboardedUser?.baseUrlSuffix,
+            userName: props.onboardedUser?.userName ? props.onboardedUser?.userName : "",
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            SignInUser(values)(dispatch)
+            props.signin(values)
         }
     });
 
     return (
         <>
-            <Stack style={{ backgroundColor: backgroundColor }}>
+            <Stack style={{ backgroundColor: props.backgroundColor }}>
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
                     <View style={{ borderColor: AppPurple, borderWidth: 6, borderRadius: 100 }}>
-                        <Avatar size={150} image={{ uri: persistedUser.schoolLogo ? persistedUser.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png' }} />
+                        <Avatar size={150} image={{
+                            uri: props.onboardedUser?.schoolLogo ? props?.onboardedUser?.schoolLogo
+                                : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
+                        }} />
                     </View>
                 </Stack>
                 <Stack center>
-                    {((touched.userName && errors.userName)) && <Text color='red' >{errors.userName}</Text>}
                     {((touched.password && errors.password)) && <Text color='red' >{errors.password}</Text>}
+                    {((touched.userName && errors.userName)) && <Text color='red' >{errors.userName}</Text>}
                 </Stack>
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
                     <View style={{ width: '100%' }}>
@@ -111,20 +110,21 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
                             }}
                         />
                     </View>
-                    <Stack style={{ marginHorizontal: 50, marginTop: 10 }}>
+                    <Stack style={{ marginHorizontal: 50, marginTop: 10, alignItems: 'center' }}>
                         <CustomButton
+                            width={200}
                             title={'LOGIN'}
                             onPress={handleSubmit} />
                     </Stack>
                     <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-                        <Pressable  onPress={() => {
-                            OffboardUser()(dispatch);
-                            navigation.navigate(screens.scenes.onBoarding.screens.viewpagers)
+                        <Pressable onPress={() => {
+                            props.offboard().then((res: any) => {
+                                props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
+                            })
                         }}>
                             <CustomText style={{ fontWeight: 'bold' }} title="Off Board Account" />
                         </Pressable>
                         <Pressable >
-
                             <CustomText style={{ fontWeight: 'bold' }} title="Forgot Password" />
                         </Pressable>
                     </Stack>
@@ -134,4 +134,25 @@ const SignIn = ({ dispatch, state, backgroundColor, persistedUser, navigation }:
     )
 }
 
-export default SignIn;
+function mapStateToProps(state: any) {
+    return {
+        onboardedUser: get(state.appState.onboardedUser)
+    }
+}
+
+function mapDispatchToProps(dispatch: any) {
+    return {
+        offboard: () => offboard()(dispatch),
+        signin: (values: any) => signIn(values)(dispatch)
+    };
+}
+
+function get(onboardedUser: any){
+    try {
+        return JSON.parse(onboardedUser)
+    } catch (error) {
+        return JSON.parse(JSON.stringify(onboardedUser))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

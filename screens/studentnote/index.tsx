@@ -26,6 +26,7 @@ const StudentNoteIndex = (props: any) => {
     const [pageNumber] = useState<number>(1);
     const [selectItemId, setSelectedItem] = useState<string>('');
 
+    
     useEffect(() => {
         sessionClass?.value && props.getSubjects(sessionClass?.value)
     }, [sessionClass?.value])
@@ -46,8 +47,8 @@ const StudentNoteIndex = (props: any) => {
 
     const params = {
         HomeAssessmentId: selectItemId,
-        sessionClass:  sessionClass ,
-        sessionClassSubject: sessionClassSubject 
+        sessionClass: sessionClass,
+        sessionClassSubject: sessionClassSubject
     }
 
     const snapPoints = useMemo(() => ["90%"], []);
@@ -144,10 +145,10 @@ const StudentNoteIndex = (props: any) => {
                                 name: screens.scenes.mainapp.scenes.tutor.screens.studentnote.screens.studentnoteDetails.name,
                                 params: {
                                     studentNoteId: selectItemId,
-                                 }
+                                }
                             })
                         }} />
-                     
+
                     </Stack>
                 </BottomUpComponent>
 
@@ -159,7 +160,7 @@ const StudentNoteIndex = (props: any) => {
 
 
 function mapStateToProps(state: any) {
-    
+
     return {
         classSubjects: state.classPropsState.classSubjects,
         totalPages: state.studentnotesState.totalPages,
@@ -173,10 +174,10 @@ function mapDispatchToProps(dispatch: any) {
         getSubjects: (sessionClassId: string) => GetClassSubjects(sessionClassId)(dispatch),
 
         getAll: (sessionClassId: string, subjectId: string, status: number, pageNumber: number) =>
-           getStudentnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
+            getStudentnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
         __getAll: (params: any) => _paginationGetStudentnotes(params)(dispatch),
-        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
     };
 }
 

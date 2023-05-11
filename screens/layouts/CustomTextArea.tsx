@@ -19,15 +19,14 @@ export default function CustomTextArea({ icon, height, ...otherProps }: any) {
         borderColor: validationColor,
         borderWidth: StyleSheet.hairlineWidth,
         padding: 2,
+        backgroundColor: 'white'
       }}
     >
-      {/* <View style={{ padding: 8, }}>
-        <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
-      </View> */}
       <Stack style={{ flex: 1 }}>
 
         <TextInput
-          style={{ fontWeight: 'bold', fontSize: 20 }}
+          multiline={true}
+          style={{ fontWeight: 'bold', fontSize: 20, color: 'black' }}
           underlineColorAndroid='transparent'
           placeholderTextColor={'grey'}
           {...otherProps}

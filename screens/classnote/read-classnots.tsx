@@ -9,7 +9,7 @@ import { ClassNote } from "../../models/class-properties/Tutor-class";
 
 function ReadClassnote(props: any) {
 
-    
+
     useEffect(() => {
         props.displayFullScreen(true);
         return () => {
@@ -22,7 +22,7 @@ function ReadClassnote(props: any) {
             setClassNote(result);
         });
     });
-    
+    console.log('result', classNote.noteContent);
     return (
         <>
             <View style={{ flexDirection: 'row', position: 'absolute' }}>
@@ -31,8 +31,9 @@ function ReadClassnote(props: any) {
             </View>
             <View style={styles.divider} />
             <ScrollView style={{ padding: 5 }}>
-                <Text style={styles.title}>{"What to discuss"}</Text>
+                <Text style={styles.title}>{classNote.noteTitle}</Text>
                 <RenderHtml
+
                     source={{ html: classNote?.noteContent }}
                     contentWidth={200}
                 />

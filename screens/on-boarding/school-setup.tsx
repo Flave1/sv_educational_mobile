@@ -6,30 +6,31 @@ import {
     HStack,
 } from "@react-native-material/core";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { SafeAreaView, ScrollView, View, Linking } from "react-native";
-import { IAppState } from "../../interfaces/app-state/state";
+import { SafeAreaView, ScrollView, View, Linking, StyleSheet, Dimensions } from "react-native";
 import { School } from "../../models/on-boarding/all-schools";
 import { getAllSchools, ValidateMobileUser } from "../../store/actions/app-state-actions";
 import { useFormik } from "formik";
 import { screens } from "../../screen-routes/navigation";
 import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { AppDark } from "../../tools/color";
+import { AppButtonColorDark, AppDark, AppLightBlue } from "../../tools/color";
 import * as Yup from 'yup';
 import Feather from "react-native-vector-icons/Feather";
 import CustomButton from "../layouts/CustomButton";
 import CustomDropdownInput from "../layouts/CustomDropdownInput";
 import CustomTextInput from "../layouts/CustomTextInput";
 import Section from "../layouts/Section";
+import { connect } from "react-redux";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import BottomUpComponent from "../layouts/bottom-up-component";
+import { Search } from "../../Utils/generate";
+import CustomSearchInput from "../layouts/CustomSearchInput";
 
-
-
-
-const SchoolSetup = ({ backgroundColor, dispatch, state, navigation }: any) => {
+const SchoolSetup = (props: any) => {
     const [selectedSchool, setSelectedSchool] = useState<School>(new School());
-    const { allSchools, onboardedUser }: IAppState = state?.appState;
-
-
+    const [allSchools, setAllschools] = useState<Array<School>>(new Array<School>());
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filtered, setFilteredSubjects] = useState<School[]>([]);
     // ref
     const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
     const snapPoints = useMemo(() => ["90%"], []);
@@ -46,28 +47,58 @@ const SchoolSetup = ({ backgroundColor, dispatch, state, navigation }: any) => {
     };
 
     useEffect(() => {
-        getAllSchools()(dispatch);
-    }, [dispatch]);
+        props.getSchools().then((res: any) => {
+            setAllschools([...res]);
+        }).catch((log: any) => console.log('log', log))
+    }, []);
 
     useEffect(() => {
-        onboardedUser && navigation.navigate(screens.scenes.auth.screens.signin.name);
-    }, [onboardedUser])
+        allSchools && setFilteredSubjects(allSchools);
+    }, [allSchools]);
+    
+    useEffect(() => {
+        props.onboardedUser.doneWithOnBoarding && props.navigation.navigate(screens.scenes.auth.screens.signin.name);
+    }, [props.onboardedUser])
+
+    const handleSearch = (text: any) => {
+
+        // Search({ allSchools, text, columns: ["schoolName", "address"] })
+        //     .then((res: any) => {
+        //         setFilteredSubjects(res);
+        //     }).catch((err: any) => {
+        //         console.log(err);
+        //     })
+    };
 
 
     return (
 
         <BottomSheetModalProvider>
             <SafeAreaView
-                style={{ flex: 1, backgroundColor: backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+                style={{ flex: 1, backgroundColor: props.backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.searchContainer}>
+                    <CustomSearchInput
+                        icon={<MaterialIcons name={'search'} size={16} />}
+                        placeholder='Search .....'
+                        autoCapitalize='none'
+                        autoCompleteType='text'
+                        keyboardType='text'
+                        keyboardAppearance='dark'
+                        onChangeText={handleSearch}
+                        setSearchQuery={setSearchQuery}
+                        value={searchQuery}
+                    />
+                </View>
                 <Stack>
+
                     <ScrollView
                         style={{
-                            backgroundColor: backgroundColor
+                            backgroundColor: props.backgroundColor
                         }}
                         contentInsetAdjustmentBehavior="automatic">
                         <View style={{ justifyContent: 'center', alignItems: 'center', margin: 10 }}>
                             {
-                                allSchools.map((school: School, idx) => {
+                                filtered.length > 0 && filtered.map((school: School, idx) => {
                                     return (
                                         <Section school={school} setSelectedSchool={setSelectedSchool} key={idx} onPress={() => openOrCloseModal(!modalActionState, school)}>
                                             <>{school}</>
@@ -80,26 +111,26 @@ const SchoolSetup = ({ backgroundColor, dispatch, state, navigation }: any) => {
                     </ScrollView>
                 </Stack>
             </SafeAreaView>
-            <BottomSheetModal
-                enableOverDrag={true}
-                enableContentPanningGesture={true}
-                enableDismissOnClose={true}
-                enableHandlePanningGesture={true}
-                enablePanDownToClose={true}
-                ref={bottomSheetModalRef}
-                backgroundStyle={{ backgroundColor: AppDark }}
-                index={0}
-                snapPoints={snapPoints}
-                style={{ backgroundColor: "#868C8E" }}>
-                <View>
-                    <UserValidationForm selectedSchool={selectedSchool} dispatch={dispatch} backgroundColor={backgroundColor} openOrCloseModal={openOrCloseModal} />
-                </View>
-            </BottomSheetModal>
+            <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
+                <UserValidationForm selectedSchool={selectedSchool} dispatch={props.dispatch} backgroundColor={props.backgroundColor} openOrCloseModal={openOrCloseModal} />
+            </BottomUpComponent>
         </BottomSheetModalProvider>
     )
 }
 
-export default SchoolSetup;
+function mapStateToProps(state: any) {
+    return {
+        onboardedUser: state.appState
+    }
+}
+
+
+function mapDispatchToProps(dispatch: any) {
+    return {
+        getSchools: async () => (await getAllSchools())(dispatch)
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SchoolSetup);
 
 
 const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any) => {
@@ -158,7 +189,6 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                         <CustomDropdownInput data={userTypes}
                             searchPlaceHolder="Search"
                             defaultButtonText="Select User Type"
-                            backgroundColor={'#7c68ee'}
                             buttonTextAfterSelection={(selectedItem: string, index: any) => {
                                 return selectedItem
                             }}
@@ -212,7 +242,7 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                         <CustomButton
                             title="Cancel"
                             compact
-                            backgroundColor={screenLocalColor}
+                            backgroundColor={AppButtonColorDark}
                             onPress={() => {
                                 openOrCloseModal(false, null)
                             }}
@@ -233,3 +263,14 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
         </ScrollView>
     )
 }
+
+
+const styles = StyleSheet.create({
+    searchContainer: {
+        width: '90%',
+        borderRadius: 20,
+        justifyContent: 'center',
+        padding: 5,
+        marginTop: 50
+    }
+})

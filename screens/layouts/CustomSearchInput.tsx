@@ -1,9 +1,9 @@
 import { Text } from '@react-native-material/core';
 import React, { useState } from 'react';
-import { TextInput as RNTextInput, View, StyleSheet, useColorScheme } from 'react-native';
-import { AppLight, TextLight, TextDark, AppButtonColorDark } from '../../tools/color';
+import { TextInput, View, StyleSheet, useColorScheme } from 'react-native';
+import { AppLight, AppDark, TextLight, TextDark, AppButtonColorDark } from '../../tools/color';
 
-export default function CustomTextInput({ icon, borderColor, textColor, backgroundColor, ...otherProps }: any) {
+export default function CustomSearchInput({ icon, borderColor, textColor, backgroundColor, setSearchQuery, ...otherProps }: any) {
   const isDarkMode = useColorScheme() === 'dark';
   const bdColor = borderColor ? borderColor : isDarkMode ? AppLight : AppLight;
   const txColor = textColor ? textColor : isDarkMode ? AppLight : AppLight;
@@ -27,15 +27,9 @@ export default function CustomTextInput({ icon, borderColor, textColor, backgrou
         <Text style={{ color: isDarkMode ? TextLight : TextDark }}>  {icon}</Text>
       </View>
       <View style={[{ flex: 1, borderRadius: 5 }]}>
-        <RNTextInput
-          onFocus={() => {
-            setFocusStyles(true);
-          }}
-          onBlur={() => {
-            setFocusStyles(false)
-          }}
+        <TextInput
+          onChange={(e) => setSearchQuery(e.nativeEvent.text)}
           style={{ fontWeight: 'bold', fontSize: 20, color: !textColor ? 'white' : 'black' }}
-          underlineColorAndroid='transparent'
           placeholderTextColor={'grey'}
           {...otherProps}
         />

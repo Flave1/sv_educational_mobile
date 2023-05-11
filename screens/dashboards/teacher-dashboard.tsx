@@ -11,16 +11,17 @@ import { AuhtService } from "../../services/AuthService";
 import SquareBox from "../layouts/sqaure-box";
 import TeacherAnnouncementBox from "../layouts/teacher-announcement-box";
 import { HStack, Stack } from "@react-native-material/core";
-const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any) => {
+import { connect } from "react-redux";
+const TeacherDashboard = (props: any) => {
 
-    const { dashboard } = state.dasboardState;
+
     React.useEffect(() => {
         AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
             if (!loggedIn) {
-                navigation.navigate(screens.scenes.auth.screens.signin.name);
+                props.navigation.navigate(screens.scenes.auth.screens.signin.name);
                 return
             } else
-                GetDashboardData()(dispatch)
+                props.get()
         })
     }, []);
     const [params, setParams] = useState({});
@@ -31,23 +32,23 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
             params: item
         }
         setParams(param);
-        navigation.navigate(param);
+        props.navigation.navigate(param);
     }
 
 
 
     return (
-        <ProtectedTeacher backgroundColor={backgroundColor} currentScreen="Dashboard" params={params}>
+        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Dashboard" params={params}>
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ padding: 10, paddingRight: 0 }}>
-                    <TeacherAnnouncementBox  navigation={navigation} />
+                    <TeacherAnnouncementBox navigation={props.navigation} />
                 </View>
 
                 <Stack>
                     {
                         <HStack style={{ padding: 5, justifyContent: 'center', overflow: 'hidden', flexWrap: 'wrap', alignItems: 'center' }}>
                             {
-                                dashboard?.length > 0 && dashboard.map((item: any, idx: any) => {
+                                props.dashboard?.length > 0 && props.dashboard.map((item: any, idx: any) => {
                                     return (
                                         <Pressable
                                             key={idx}
@@ -79,4 +80,16 @@ const TeacherDashboard = ({ dispatch, state, backgroundColor, navigation }: any)
     );
 };
 
-export default TeacherDashboard;
+function mapStateToProps(state: any) {
+    return {
+        dashboard: state.dasboardState.dashboard
+    }
+}
+
+function mapDispatchToProps(dispatch: any) {
+    return {
+        get: () => GetDashboardData()(dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherDashboard);

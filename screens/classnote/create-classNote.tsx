@@ -73,14 +73,14 @@ const ClassNoteCreate = (props: any) => {
                 <Stack spacing={10} style={{ flex: 1,marginHorizontal:30 }}>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'CREATE CLASS NOTE FOR ' + sessionClass.text} />
+                            <ScreenTitle icon={<MaterialIcons name="library-books" color="white" size={20} />} title={' CREATE CLASS NOTE FOR ' + sessionClass.text} />
                         </HStack>
                     </Stack>
 
                     <Stack spacing={10} style={{ height: '60%' }}>
                         <View style={{ width: '100%' }}>
                             <CustomTextInput
-                                icon={<MaterialIcons name={'noteTitle'} size={16} />}
+                                icon={<MaterialIcons name={'title'} size={16} />}
                                 placeholder='Title'
                                 autoCapitalize='none'
                                 autoCompleteType='text'
@@ -121,7 +121,7 @@ const ClassNoteCreate = (props: any) => {
                             />
                         </View>
 
-                        <View style={{ width: '100%' }}>
+                        <View style={{ width: '100%'}}>
                             <CustomTextArea
                                 placeholder='Class Note'
                                 autoCapitalize='none'

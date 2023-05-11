@@ -4,22 +4,21 @@ import ViewPager from '@react-native-community/viewpager';
 import Page from './Page';
 import { AppDark, AppLight } from '../../tools/color';
 import { screens } from '../../screen-routes/navigation';
-import { useNavigation } from '@react-navigation/native';
 import Footer from '../layouts/Footer';
 
 import GlobalStyles from '../layouts/GlobalStyle'
+import { connect } from 'react-redux';
 
 
 const Onboarding = (props: any) => {
-
-  const navigation = useNavigation();
   React.useEffect(() => {
 
-    if (props.persistedUser) {
-     
-      navigation.navigate(screens.scenes.auth.screens.signin.name)
+    if(props.persistedUser){
+      if (props?.persistedUser?.doneWithOnBoarding == true) {
+        props.navigation.navigate(screens.scenes.auth.screens.signin.name)
+      }
     }
-  }, [props.persistedUser])
+  }, [props.onboardedUser])
 
 
   const pagerRef: any = useRef(null);
@@ -27,7 +26,6 @@ const Onboarding = (props: any) => {
   const [LastPageRefNumber] = useState(3);
 
   const handlePageChange = (pageNumber: any) => {
-
     if (pageNumber > LastPageRefNumber) {
       pagerRef.current.setPage(pageNumber);
     } else {
@@ -37,7 +35,7 @@ const Onboarding = (props: any) => {
 
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? AppLight : AppLight,
+    backgroundColor: isDarkMode ? AppDark : AppDark,
   };
   return (
     <View style={[GlobalStyles.darkTheme, { flex: 1 }]}>
@@ -95,26 +93,20 @@ const Onboarding = (props: any) => {
             }}
             rightButtonLabel="Get Started"
             rightButtonPress={() => {
-              navigation.navigate(screens.scenes.onBoarding.screens.setup.name);
+              props.navigation.navigate(screens.scenes.onBoarding.screens.setup.name);
             }}
           />
         </View>
-        {/* <View key="4">
-          <SchoolSetup backgroundColor={backgroundStyle.backgroundColor} dispatch={props.dispatch} state={props.state} navigation={navigation} />
-          {
-            <Footer
-                  backgroundColor={backgroundStyle.backgroundColor}
-                  leftButtonLabel="Back"
-                  leftButtonPress={() => {
-                    setPageNumber(pageNumber - 1)
-                    handlePageChange(pageNumber - 1);
-                  }}
-            /> 
-          }
-        </View> */}
       </ViewPager>
     </View>
   );
 };
 
-export default Onboarding;
+function mapStateToProps(state: any) {
+  return {
+      onboardedUser: state.appState
+  }
+}
+
+
+export default connect(mapStateToProps, null)(Onboarding);

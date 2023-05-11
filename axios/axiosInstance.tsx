@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Alert } from 'react-native';
 const axiosInstance = axios.create({
     baseURL: 'http://flavetechs.com/',
     // baseURL:'https://localhost:44357/',
     headers: {
         Authorization: '',
     },
+    // timeout: 3000,
+    // timeoutErrorMessage:'Request Timed out'
 });
 
 axiosInstance.interceptors.response.use((response: any) => response, (error: any) => { 

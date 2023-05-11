@@ -12,9 +12,9 @@ export class ClassNote {
     teacherClassNoteId: string = "";
     noteContent: string = "";
     noteTitle: string = "";
-    subject :string = "";
-    subjectName:string = "";
-    classes:string[] = [""];
+    subject: string = "";
+    subjectName: string = "";
+    classes: string[] = [""];
 }
 
 export class StudentNote {
@@ -25,8 +25,19 @@ export class StudentNote {
     teacherId: string = "";
     noteContent: string = "";
     noteTitle: string = "";
-    subject :string = "";
-    subjectName:string = "";
-    sessionClassId:string = "";
-    dateSubmitted:string = "";
+    subject: string = "";
+    subjectName: string = "";
+    sessionClassId: string = "";
+    dateSubmitted: string = "";
+}
+
+
+export class Teacher {
+    firstName: string = "";
+    fullNam: string = "";
+    isShared: boolean = false;
+    lastName: string = "";
+    middleName: string = "";
+    teacherAccountId: string = "";
+    teacherUserAccountId: string = "";
 }

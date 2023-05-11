@@ -4,7 +4,7 @@ import { actions as app_state_actions } from "../action-types/app-state-action-t
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { Device } from "../../tools/device-properties";
 
-export const GetDashboardData = () => (dispatch: any) => {
+export const GetDashboardData = () => (dispatch: any) => { 
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         
         if (hasInternetAccess) {

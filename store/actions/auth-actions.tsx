@@ -5,7 +5,7 @@ import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { Device } from "../../tools/device-properties";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-export const SignInUser = (payload: any) => (dispatch: any) => {
+export const signIn = (payload: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
@@ -19,6 +19,8 @@ export const SignInUser = (payload: any) => (dispatch: any) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
                 })
+        } else {            
+            dispatch({ type: app_state_actions.HIDE_LOADING });
         }
     })
 }

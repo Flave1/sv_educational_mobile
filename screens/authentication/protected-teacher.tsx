@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, useColorScheme, View } from "react-native";
+import { Alert, StyleSheet, useColorScheme, View } from "react-native";
 import {
     Backdrop,
     AppBar,
@@ -30,8 +30,29 @@ const ProtectedTeacher = (props: any) => {
     const transitionRef = useRef<any>(null);
     const isDarkMode = useColorScheme() === 'dark';
     const navigation = useNavigation();
-    const fadeAnim = useRef(new Animated.Value(0)).current; 
-    
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+
+    const logoutDialog = () => {
+        Alert.alert(
+            'Logout',
+            'Do you really want to log out ?',
+            [
+                {
+                    text: 'CANCEL',
+                    onPress: () => { '' },
+                },
+                {
+                    text: 'YES',
+                    onPress: () => {
+                        props.logout();
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
     const transition = (
         <Transition.Sequence>
             <Transition.In type="slide-left" durationMs={500} delayMs={1000} />
@@ -86,10 +107,10 @@ const ProtectedTeacher = (props: any) => {
             style={{ backgroundColor: props.backgroundColor }}
             revealed={revealed}
             header={
-                <Transitioning.View 
-                transition={transition} 
-                ref={transitionRef}
-                style={{ justifyContent: 'center', display: isFullScreen ? 'none' : 'flex', flexDirection:'row'}}>
+                <Transitioning.View
+                    transition={transition}
+                    ref={transitionRef}
+                    style={{ justifyContent: 'center', display: isFullScreen ? 'none' : 'flex', flexDirection: 'row' }}>
 
                     <HStack style={{ justifyContent: 'flex-start', width: '80%' }}>
                         <View>
@@ -123,7 +144,7 @@ const ProtectedTeacher = (props: any) => {
                             transparent
                             leading={smd => (
                                 <IconButton
-                                    onPress={props.logout}
+                                    onPress={logoutDialog}
                                     icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
@@ -144,7 +165,7 @@ const ProtectedTeacher = (props: any) => {
         >
             <Stack>
                 <Transitioning.View
-                    transition={transition} 
+                    transition={transition}
                     // ref={transitionRef}
                     style={{ height: mainDisplayHeight, backgroundColor: props.backgroundColor, borderColor: 'lightgrey', borderBottomWidth: .5 }}>
                     {props.children}

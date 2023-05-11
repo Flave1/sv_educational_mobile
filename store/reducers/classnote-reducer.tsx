@@ -9,7 +9,6 @@ export const classnotesReducer = (state = initialState, { type, payload }: any) 
                 classnotes: payload.data,
                 totalPages: payload.totalPages,
                 pageNumber: payload.pageNumber,
-                unsynchronized: []
             }
         case actions.__GET_CLASS_NOTES:
             return {
@@ -18,17 +17,6 @@ export const classnotesReducer = (state = initialState, { type, payload }: any) 
                 totalPages: payload.totalPages,
                 pageNumber: payload.pageNumber
             }
-
-            case actions.GET_SHARED_CLASS_NOTES_CLASSES:
-            return {
-                ...state,
-                staffClasses: payload,
-            }
-            case actions.GET_OTHER_STAFF:
-                return {
-                    ...state,
-                    otherStaffList: payload,
-                }
 
         default:
             return state

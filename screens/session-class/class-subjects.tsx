@@ -21,17 +21,12 @@ function ClassSubjects(props: any) {
     useEffect(() => {
         sessionClass.value && props.getAll(sessionClass.value).then((result: any) => {
             setSubjects(result);
-            console.log('subjects', subjects);
         });
     }, [sessionClass.value]);
 
     useEffect(() => {
         subjects && setFilteredSubjects(subjects);
     }, [subjects]);
-
-    console.log('sessionClass', sessionClass);
-
-
     const handleSearch = (text: any) => {
         setQuery(text);
         const filteredData = subjects.filter(item => {

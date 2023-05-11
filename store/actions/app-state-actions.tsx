@@ -3,11 +3,13 @@ import axiosInstance from "../../axios/axiosInstance";
 import { ErrorHandler } from '../../Utils/ErrorHandler';
 import { actions } from "../action-types/app-state-action-types";
 import { Device } from '../../tools/device-properties';
+import { ONBOARDEDUSER } from '../../Utils/constants';
+import { School } from '../../models/on-boarding/all-schools';
 
 export const onboardUser = () => ({ type: actions.ON_BOARD });
 
-export const GetAppState = () => (dispatch: any) => {
-    AsyncStorage.getItem('onboardedUser').then((res: any) => {
+export const getAppState = () => (dispatch: any): Promise<any> => {
+    return AsyncStorage.getItem(ONBOARDEDUSER).then((res: any) => {
         dispatch({ type: actions.GET_APP_STATE, payload: res });
         return res || null;
     })
@@ -17,26 +19,29 @@ export const setErrorToastState = (message: string = "") => (dispatch: any) => d
 export const resetSuccessToastState = () => (dispatch: any) => dispatch({ type: actions.RESET_SUCCESS_TOAST });
 export const setSuccessToast = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_SUCCESS_TOAST, payload: message });
 
-export const OffboardUser = () => (dispatch: any) => {
-    AsyncStorage.removeItem('onboardedUser').then(() => {
-        getAllSchools()(dispatch);
+export const offboard = () => (dispatch: any): Promise<boolean> => {
+    return AsyncStorage.removeItem(ONBOARDEDUSER).then(() => {
         dispatch({ type: actions.OFF_BOARD });
+        return true;
     });
 
 }
-export const getAllSchools = () => (dispatch: any) => {
-    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+export const getAllSchools = async () => (dispatch: any): Promise<Array<School>> => {
+    console.log('comes here one');
+    return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: actions.SHOW_LOADING });
-            axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
+           return axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
                 .then((res) => {
-                    dispatch({ type: actions.HIDE_LOADING });
-                    dispatch({ type: actions.GET_ALL_SCHOOLS_SUCCESS, payload: res.data.result });
+                    dispatch({ type: actions.HIDE_LOADING });                                        
+                    return res.data.result as Array<School>;
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
-                    ErrorHandler.HandleUnexpectedError(error, actions.REQUEST_FAILED, dispatch);;
+                    ErrorHandler.HandleUnexpectedError(error, actions.REQUEST_FAILED, dispatch);
+                    return new Array<School>();
                 })
         }
+        return new Array<School>();
     })
 }
 
@@ -58,7 +63,7 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
 
 export const displayFullScreen = (display: boolean) => {
     console.log('some one clicked it');
-    
+
     return {
         type: actions.DISPLAY_FULL_SCREEN,
         payload: display

@@ -21,3 +21,19 @@ export function dateNow() {
   });
 }
 
+
+export const Search = ({ arrayofObjects, searchQuery, columns }: any): Promise<any[]> => {
+  return arrayofObjects && arrayofObjects?.filter((item: any) => {
+    if (searchQuery === "") {
+      console.log('arrayofObjects', arrayofObjects);
+      
+      return item;
+    }
+    for (let i = 0; i < columns.length; i++) {
+      if (item[columns[i]]?.toLowerCase()?.includes(searchQuery?.toLowerCase()))
+        return item;
+    }
+  });
+
+
+}

@@ -23,9 +23,10 @@ import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
 import { setErrorToastState } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { AppLightBlue } from "../../tools/color";
+import { AppButtonColorDark, AppLightBlue } from "../../tools/color";
 import SendClassnote from "./send-classnote";
 import ShareClassnote from "./share-classnote";
+import { FloatingButton } from "../layouts/floating-button";
 
 const ClassnoteIndex = (props: any) => {
 
@@ -66,15 +67,13 @@ const ClassnoteIndex = (props: any) => {
                 {
                     text: 'YES',
                     onPress: () => {
-                        // deleteHomeAssessment(selectItemId, sessionClass.value, sessionClassSubject.value, group.value)(dispatch);
+
                     },
                 },
             ],
             { cancelable: false }
         );
     };
-
-    // console.log('classnotes', props.classnotes);
 
 
     const params = {
@@ -108,7 +107,7 @@ const ClassnoteIndex = (props: any) => {
         }
     };
 
-    
+
     const sendClassnoteSnapPoints = useMemo(() => ["50%"], []);
     const sendClassnoteBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
     const [sendClassnoteModalActionState, setSendClassnoteModalActionState] = useState(false);
@@ -121,7 +120,7 @@ const ClassnoteIndex = (props: any) => {
         }
     };
 
-    
+
     const shareClassNoteSnapPoints = useMemo(() => ["100%"], []);
     const shareClassNoteBottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
     const [shareClassNoteModalActionState, setShareClassNoteModalActionState] = useState(false);
@@ -136,52 +135,33 @@ const ClassnoteIndex = (props: any) => {
 
 
 
-    const styles = StyleSheet.create({
-        addButtonContainer: {
-            flex: 1,
-            justifyContent: 'flex-end',
-            alignItems: 'flex-end',
-            position: 'absolute',
-            top: '85%',
-            left: '83%',
-            width: 50,
-            height: 50,
-            zIndex: 999,
-            backgroundColor: AppLightBlue,
-            borderRadius: 25,
-        },
-
-    });
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Note">
             <BottomSheetModalProvider>
-                {!modalActionState && !readNoteModalActionState && !shareClassNoteModalActionState && !sendClassnoteModalActionState &&
-                    <View style={styles.addButtonContainer} >
-                        <Pressable
-                            onPress={() => {
-                                if (!sessionClassSubject.value) {
-                                    props.setErrorToastState('Subject must be selected');
-                                    return;
+                <FloatingButton>
+                    <Pressable
+                        onPress={() => {
+                            if (!sessionClassSubject.value) {
+                                props.setErrorToastState('Subject must be selected');
+                                return;
+                            }
+                            props.navigation.navigate({
+                                name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
+                                params: {
+                                    sessionClass: sessionClass,
+                                    sessionClassSubject: sessionClassSubject,
                                 }
-                                props.navigation.navigate({
-                                    name: screens.scenes.mainapp.scenes.tutor.screens.classnote.screens.createClassnote.name,
-                                    params: {
-                                        sessionClass: sessionClass,
-                                        sessionClassSubject: sessionClassSubject,
-                                    }
-                                });
-                            }}>
-                            <MaterialCommunityIcons
-                                name="plus"
-                                size={50}
-                                color={'white'}
-                            />
-                        </Pressable>
-                    </View>
-
-                }
-                <Stack spacing={10} style={{ flex: 1 }} >
+                            });
+                        }}>
+                        <MaterialCommunityIcons
+                            name="plus"
+                            size={50}
+                            color={AppButtonColorDark}
+                        />
+                    </Pressable>
+                </FloatingButton>
+                <Stack spacing={10} style={{ flex: 1, zIndex: -2 }} >
                     <CustomScrollview
                         totalPages={props.totalPages}
                         pageNumber={props.pageNumber}
@@ -278,14 +258,14 @@ const ClassnoteIndex = (props: any) => {
                             openOrCloseReadNoteModal(false);
                             openOrCloseSendClassnoteModal(false);
                             openOrCloseShareClassNoteModal(true);
-                           
+
                         }} />
                         <ListComponent text={'Send'} icon={<FontAwesome name="send" size={20} />} onPress={() => {
                             openOrCloseModal(false);
                             openOrCloseReadNoteModal(false);
                             openOrCloseShareClassNoteModal(false);
                             openOrCloseSendClassnoteModal(true);
-                           
+
                         }} />
                         <ListComponent text={'Download'} icon={<Entypo name="download" size={20} />} onPress={() => {
                             openOrCloseModal(false)
@@ -301,10 +281,10 @@ const ClassnoteIndex = (props: any) => {
                     <ReadClassnote teacherClassNoteId={selectItemId} />
                 </BottomUpComponent>
                 <BottomUpComponent bottomSheetModalRef={sendClassnoteBottomSheetModalRef} snapPoints={sendClassnoteSnapPoints} openOrCloseModal={openOrCloseSendClassnoteModal}>
-                    <SendClassnote teacherClassNoteId={selectItemId}  sendClassnoteModal={sendClassnoteModalActionState} openOrCloseSendClassnoteModal={openOrCloseSendClassnoteModal}/>
+                    <SendClassnote teacherClassNoteId={selectItemId} sendClassnoteModal={sendClassnoteModalActionState} openOrCloseSendClassnoteModal={openOrCloseSendClassnoteModal} />
                 </BottomUpComponent>
                 <BottomUpComponent bottomSheetModalRef={shareClassNoteBottomSheetModalRef} snapPoints={shareClassNoteSnapPoints} openOrCloseModal={openOrCloseShareClassNoteModal}>
-                    <ShareClassnote classNoteId={classNoteId}shareClassnoteModal={shareClassNoteModalActionState} openOrCloseShareClassNoteModal={openOrCloseShareClassNoteModal}/>
+                    <ShareClassnote classNoteId={classNoteId} shareClassnoteModal={shareClassNoteModalActionState} openOrCloseShareClassNoteModal={openOrCloseShareClassNoteModal} />
                 </BottomUpComponent>
             </BottomSheetModalProvider>
         </ProtectedTeacher>

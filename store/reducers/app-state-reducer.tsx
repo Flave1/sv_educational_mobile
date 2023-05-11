@@ -20,9 +20,9 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
             return {
                 ...state,
                 loading: true,
-                error: "",
-                success: "",
-                information: ""
+                // error: "",
+                // success: "",
+                // information: ""
             }
 
         case actions.HIDE_LOADING:
@@ -60,20 +60,10 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
                 error: payload
             }
 
-        case actions.GET_ALL_SCHOOLS_SUCCESS: {
-            const mySate = {
-                ...state,
-                allSchools: payload,
-                success: "",
-                error: ""
-            }
-            return mySate;
-        }
         case actions.VALIDATE_MOBILE_USER_SUCCESS: {
             AsyncStorage.setItem('onboardedUser', JSON.stringify(payload));
             return {
                 ...state,
-                allSchools: [],
                 doneWithOnBoarding: true,
                 onboardedUser: payload,
                 success: "Successfully onboarded!! Please provide your password to login",
