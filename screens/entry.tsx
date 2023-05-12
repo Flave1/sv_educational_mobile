@@ -27,13 +27,13 @@ import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
 import ClassnoteIndex from './classnote/index';
 import ClassNoteCreate from './classnote/create-classNote';
-import ClassNoteUpdate from './classnote/update-classnote';
+import ClassNoteUpdate from './classnote/update-classNote';
 import ClassStudents from './session-class/class-students';
 import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
 import StudentnoteDetails from './studentnote/note-details';
 import StudentNoteIndex from './studentnote';
-import ClassInfoDetails from './class-info/classinfo-details';
+import ClassInfoDetails from './class-info/classStudentsInfo';
 import ClassInfoIndex from './class-info';
 import { connect } from 'react-redux';
 
@@ -154,9 +154,7 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classInfo.name}>
                     {props => <ClassInfoIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classInfo.screens.classInfoDetails.name}>
-                    {props => <ClassInfoDetails {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
+               
 
             </Stack.Navigator>
         </>

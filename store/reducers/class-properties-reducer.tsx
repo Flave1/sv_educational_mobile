@@ -26,6 +26,13 @@ export const classPropertiesReducer = (state = classPropertiesState, { type, pay
                 ...state,
                 classStudents: payload
             }
+
+            case actions.GET_CLASS_INFO_WITHOUT_SUBJ:
+            return {
+                ...state,
+                classInfoWithoutSubj: payload
+            }
+
         default:
             return state
     }

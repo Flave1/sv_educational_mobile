@@ -108,3 +108,20 @@ export const GetSingleStudent = (studentContactId: any) => (dispatch: any): Prom
         }
     })
 }
+
+export const getClassInfoWithoutSubj = (sessionClassId: string) => (dispatch: any) => {
+
+    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            axiosInstance.get(`/smp/server/class/api/v1/get-single/session-classes/without-subs-students/${sessionClassId}`)
+                .then((res) => {
+                    dispatch({ type: actions.GET_CLASS_INFO_WITHOUT_SUBJ, payload: res.data.result });
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                })
+        }
+    })
+}

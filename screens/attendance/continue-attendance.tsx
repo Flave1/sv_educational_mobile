@@ -13,6 +13,7 @@ import { ClassRegister } from "../../models/class-properties/attendance";
 import { Device } from "../../tools/device-properties";
 import CustomButton from "../layouts/CustomButton";
 import { screens } from "../../screen-routes/navigation";
+import sessionClass from "../session-class";
 const ContinueAttendanceRecord = (props: any) => {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [classRegisterId] = useState<string>(props.route.params.classRegisterId);
@@ -29,19 +30,21 @@ const ContinueAttendanceRecord = (props: any) => {
     }, [classRegisterId]);
 
     useEffect(() => {
-        for (let i = 0; i < props.register.attendanceList.length; i++) {
-            records.push(props.register.attendanceList[i])
-        }
+        // for (let i = 0; i < props.register.attendanceList.length; i++) {
+        //     records.push(props.register.attendanceList[i])
+        // }
+        setRecords(props.register.attendanceList)
     }, [props.register]);
 
     const handleCheck = async (item: any, isSelected: Boolean) => {
-        const updatedStudentsArray = props.register.attendanceList.map((obj: any) => {
+        const updatedStudentsArray = records.map((obj: any) => {
             if (obj.studentContactId === item.studentContactId) {
                 return { ...obj, isPresent: isSelected };
             }
             return obj;
         });
         setRecords(updatedStudentsArray);
+       
 
         Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
             if (hasInternetAccess) {
@@ -61,12 +64,9 @@ const ContinueAttendanceRecord = (props: any) => {
         sessionClass: sessionClass,
     }
     const handleSave = () => {
-        props.getAll(classRegisterId);
+        props.getAll(sessionClass.value,1);
         props.navigation.goBack();
-        // props.navigation.navigate({
-        //     name: screens.scenes.mainapp.scenes.tutor.screens.attendance.name,
-        //     params: sessionClass
-        // });
+       
     };
 
 
@@ -86,7 +86,7 @@ const ContinueAttendanceRecord = (props: any) => {
                                 <Text style={[styles.headerItem, { width: 300 }]}>Name</Text>
                                 <Text style={[styles.headerItem, { width: 100 }]}>Is Present</Text>
                             </View>
-                            {records.map((item: any, idx: number) => {
+                            {records?.map((item: any, idx: number) => {
                                 return (
                                     <View key={idx} style={[styles.tableRow]}>
                                         <Text style={[styles.tableItem, { width: 300 }]}>{item.studentName}</Text>
@@ -134,7 +134,7 @@ function mapDispatchToProps(dispatch: any) {
         changeStatus: (classRegisterId: string, sessionClassId: string, studentContactId: string, isPresent: false, label: string) =>
             changeStudentAvailabilityStatus(classRegisterId, sessionClassId, studentContactId, isPresent, label)(dispatch),
 
-        getAll: (classId: string) => getRegisters(classId, 1)(dispatch),
+        getAll: (sessionClassId: string,pageNumber:number) => getRegisters(sessionClassId, pageNumber)(dispatch),
     };
 }
 

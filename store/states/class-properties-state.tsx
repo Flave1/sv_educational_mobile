@@ -2,5 +2,6 @@ export default {
     tutorClasses: [],
     classSubjects: [],
     classGroup: [],
-    classStudents: []
+    classStudents: [],
+    classInfoWithoutSubj:{}
 }

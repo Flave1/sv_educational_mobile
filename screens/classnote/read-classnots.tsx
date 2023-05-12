@@ -22,11 +22,10 @@ function ReadClassnote(props: any) {
             setClassNote(result);
         });
     });
-    console.log('result', classNote.noteContent);
     return (
         <>
             <View style={{ flexDirection: 'row', position: 'absolute' }}>
-                <MaterialCommunityIcons onPress={() => console.log('ok')} name="cellphone-dock" size={30} color={'black'} style={styles.docks} />
+                <MaterialCommunityIcons onPress={() => {}} name="cellphone-dock" size={30} color={'black'} style={styles.docks} />
                 <MaterialCommunityIcons name="dock-right" size={30} color={'black'} style={styles.docks} />
             </View>
             <View style={styles.divider} />

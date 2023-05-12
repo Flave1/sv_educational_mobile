@@ -32,16 +32,16 @@ function ShareClassnote(props: any) {
         <>
             <Stack style={{ flex: 0 }}>
                 <HStack style={{ alignItems: 'center' }}>
-                    <Text style={{ color: 'black', fontWeight: 'bold', paddingHorizontal: 10 }}>Shere class to : </Text>
+                    <Text style={{ color: 'black', fontWeight: 'bold', paddingHorizontal: 10 }}>Share class to : </Text>
                 </HStack>
             </Stack>
             <ScrollView style={{ padding: 5 }}>
                 {staffArray?.map((staff: Teacher, idx: number) => {
                     return (
-                        <View key={idx} style={{ padding: 10, display: "flex", flexDirection: 'row' }}>
-                            <Text style={[styles.tableItem, { width: 250 }]}> {staff.firstName} {staff.middleName} {staff.lastName}</Text>
+                        <View key={idx} style={[styles.tableRow]}>
+                            <Text style={[styles.tableItem, { width: 300 }]}> {staff.firstName} {staff.middleName} {staff.lastName}</Text>
                             <CustomCheckBox
-                                style={{ width: 200 }}
+                                style={{ width: 100 }}
                                 isSelected={staff.isShared}
                                 onValueChange={() => {
                                     handleCheck(staff, !staff.isShared);
@@ -78,6 +78,13 @@ const styles = StyleSheet.create({
     tableItem: {
         color: 'black',
         alignSelf: 'center'
+    },
+    tableRow: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        padding: 10
+
     },
 })
 

@@ -1,5 +1,5 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { Teacher } from "../../models/class-properties/Tutor-class";
+import { Teacher, SendToClasses } from "../../models/class-properties/Tutor-class";
 import { Device } from "../../tools/device-properties";
 import { FETCH_NO_INTERNET_ACCESS } from "../../Utils/constants";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
@@ -24,6 +24,7 @@ export const getClassnotes = (sessionClassId: string, subjectId: string, status:
         }
     })
 }
+
 export const _paginationGetClassnotes = (params: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         let sessionClassId = params.sessionClassId || '';
@@ -97,18 +98,21 @@ export const sendForApproval = (values: any) => (dispatch: any) => {
     })
 }
 
-export const getSharedNoteClasses = (teacherClassNoteId: string) => (dispatch: any) => {
-    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+export const getSharedNoteClasses = (teacherClassNoteId: string) => (dispatch: any): Promise<SendToClasses[]>=> {
+   return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.get(`/smp/server/classnotes/api/v1/get-note/shared-class?teacherClassNoteId=${teacherClassNoteId}`)
+          return axiosInstance.get(`/smp/server/classnotes/api/v1/get-note/shared-class?teacherClassNoteId=${teacherClassNoteId}`)
                 .then((res) => {
                     dispatch({ type: app_state_actions.HIDE_LOADING });
+                    return res.data.result as SendToClasses[]
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                    return new Array<SendToClasses>()
                 })
         }
+        return new Array<SendToClasses>()
     })
 }
 
@@ -125,7 +129,7 @@ export const sendClassNotes = (teacherClassNoteId: string, classes: string[], op
                 .then((res) => {
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     openOrCloseSendClassnoteModal(false)
-                    setSuccessToast("class note sent to class(es)")(dispatch);
+                    dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: "Class note sent to class(es)" })
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
@@ -147,7 +151,6 @@ export const shareClassNotesToStaff = (classNoteId: string, teacherId: string[],
                 .then((res) => {
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     openOrCloseShareClassNoteModal(false)
-                    setSuccessToast("")(dispatch);
                     dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: "Class note shared to staff(s)" })
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
@@ -172,5 +175,23 @@ export const getAllOtherStaff = (classNoteId: string) => (dispatch: any): Promis
                 })
         }
         return new Array<Teacher>()
+    })
+}
+
+export const downloadClassNote = (classNoteId: string) => (dispatch: any): Promise<string>=> {
+    return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        if (hasInternetAccess) {
+            dispatch({ type: app_state_actions.SHOW_LOADING });
+            return axiosInstance.get(`/smp/server/classnotes/api/v1/download/${classNoteId}`)
+                .then((res) => {
+                    dispatch({ type: app_state_actions.HIDE_LOADING });
+                    return res.data.result
+                }).catch((err: any) => {
+                    const error: any = JSON.stringify(err.response);
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    return err
+                })
+        }
+        
     })
 }
