@@ -41,3 +41,34 @@ export class ClassStudentInfo {
     bestSubjectNames: any = null;
     bestSubjectIds: any[] = []
 }
+
+export class SessionClassInfo {
+    assessment:number = 0;
+    examSCore:number = 0;
+    subjectId:string = "";
+    subjectName : string = "";
+    subjectTeacherId:string = "";
+    subjectTeacherName:string = "";
+}
+
+export class SessionClassSubj {
+    assessmentCount:number = 0;
+    assessmentScore:number = 0;
+    attendanceCount:number = 0;
+    class:string = "";
+    classCaptain:string = "";
+    classCaptainId:string = "";
+    classId:string = "";
+    classSubjects:any[]= []
+    examScorenumber = 0;
+    formTeacher:string = "";
+    formTeacherId:string = "";
+    inSession : boolean=false;
+    passMark:number = 0;
+    session:string = "";
+    sessionClassId:string = "";
+    sessionId:string = "";
+    studentCount:number = 0;
+    subjectCount:number = 0;
+   
+}

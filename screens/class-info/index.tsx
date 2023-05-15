@@ -11,13 +11,18 @@ import { screens } from "../../screen-routes/navigation";
 const ClassInfoIndex = (props: any) => {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [navToStudents, setnavToStudents] = useState<Boolean>(false);
+    const [classInfoWithoutSubj, setClassInfoWithoutSubj] = useState<any>({})
+    const [sessionClassSubj, setSessionClassSubj] = useState<any[]>([])
 
     useEffect(() => {
-        props.getClassInfo(sessionClass.value);
-        props.getClassSubjects(sessionClass.value);
+        props.getClassInfo(sessionClass.value).then((result:any) => {
+            setClassInfoWithoutSubj(result);
+        });
+        props.getClassSubjects(sessionClass.value).then((result:any[]) => {
+            setSessionClassSubj(result);
+        });
         props.getClassStudents(sessionClass.value);
     }, []);
-    console.log("props", props.sessionClassSubj);
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="ClassInfo">
@@ -29,15 +34,15 @@ const ClassInfoIndex = (props: any) => {
                     <View >
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Class</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}>{props.classInfoWithoutSubj?.class}</Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}>{classInfoWithoutSubj?.class}</Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Form Teacher</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}>{props.classInfoWithoutSubj?.formTeacher}</Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}>{classInfoWithoutSubj?.formTeacher}</Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>No of Subjects</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.sessionClassSubj?.length} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={sessionClassSubj?.length} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>No of Students</Text>
@@ -45,15 +50,15 @@ const ClassInfoIndex = (props: any) => {
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Assessment Score</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.classInfoWithoutSubj?.assessmentScore} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.assessmentScore} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Exam Score</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.classInfoWithoutSubj?.examScore} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.examScore} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Pass Mark</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.classInfoWithoutSubj?.passMark} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color="blue" labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.passMark} /></Text>
                         </View>
 
                     </View>
@@ -77,7 +82,7 @@ const ClassInfoIndex = (props: any) => {
                                         </View>
 
                                         <FlatList
-                                            data={props.sessionClassSubj}
+                                            data={sessionClassSubj}
                                             keyExtractor={item => item.subjectName}
                                             renderItem={({ item }) => (
                                                 <View style={[styles.tableRow]}>
@@ -167,8 +172,6 @@ const styles = StyleSheet.create({
 })
 function mapStateToProps(state: any) {
     return {
-        classInfoWithoutSubj: state.classPropsState.classInfoWithoutSubj,
-        sessionClassSubj: state.classPropsState.sessionClassSubj,
         classStudents: state.classPropsState.classStudents,
 
     };

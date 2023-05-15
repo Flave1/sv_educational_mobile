@@ -1,6 +1,6 @@
 import axiosInstance from "../../axios/axiosInstance";
 import { ClassSubjects } from "../../models/class-properties/class-subjects";
-import { ClassStudentInfo } from "../../models/class-properties/students";
+import { ClassStudentInfo, SessionClassInfo, SessionClassSubj } from "../../models/class-properties/students";
 import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
@@ -109,35 +109,39 @@ export const GetSingleStudent = (studentContactId: any) => (dispatch: any): Prom
     })
 }
 
-export const getSessionClassWithoutSubj = (sessionClassId: string) => (dispatch: any) => {
+export const getSessionClassWithoutSubj = (sessionClassId: string) => (dispatch:any): Promise<SessionClassInfo[]> => {
+        return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                return  axiosInstance.get(`/smp/server/class/api/v1/get-single/session-classes/without-subs-students/${sessionClassId}`)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        return res.data.result as SessionClassInfo[]
+                    }).catch((err: any) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                        return new Array<SessionClassInfo>()
+                    })
+            }
+            return new Array<SessionClassInfo>()
+        })
+    }
 
-    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+export const getSessionClassSubjects = (sessionClassId: string) => (dispatch: any): Promise<SessionClassSubj[]>=> {
+    return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.get(`/smp/server/class/api/v1/get-single/session-classes/without-subs-students/${sessionClassId}`)
+            return  axiosInstance.get(`/smp/server/class/api/v1/session-classes/subjetcs/${sessionClassId}`)
                 .then((res) => {
-                    dispatch({ type: actions.GET_SESSION_CLASS_WITHOUT_SUBJ, payload: res.data.result });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
+                    return res.data.result as SessionClassSubj[]
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
-                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
+                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    return new Array<SessionClassSubj>()
                 })
         }
+        return new Array<SessionClassSubj>()
     })
-}
-export const getSessionClassSubjects = (sessionClassId: string) => (dispatch: any) => {
 
-    Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
-        if (hasInternetAccess) {
-            dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.get(`/smp/server/class/api/v1/session-classes/subjetcs/${sessionClassId}`)
-                .then((res) => {
-                    dispatch({ type: actions.GET_SESSION_CLASS_SUBJECT, payload: res.data.result });
-                    dispatch({ type: app_state_actions.HIDE_LOADING });
-                }).catch((err: any) => {
-                    const error: any = JSON.stringify(err.response);
-                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
-                })
-        }
-    })
 }

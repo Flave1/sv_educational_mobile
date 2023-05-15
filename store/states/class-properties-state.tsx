@@ -5,6 +5,4 @@ export default {
     classSubjects: [],
     classGroup: [],
     classStudents: [],
-    classInfoWithoutSubj:{},
-    sessionClassSubj:[],
 }

@@ -37,7 +37,6 @@ const ClassnoteIndex = (props: any) => {
     const [selectItemId, setSelectedItem] = useState<string>('');
     const [classNoteId, setClassNoteId] = useState<string>('');
     const [downloadValue, setDownloadValue] = useState<string>('');
-    console.log("down",downloadValue);
 
     useEffect(() => {
         downloadValue && saveAsFile("class-note.pdf", downloadValue)
