@@ -26,6 +26,10 @@ export const classPropertiesReducer = (state = classPropertiesState, { type, pay
                 ...state,
                 classStudents: payload
             }
+
+           
+            
+
         default:
             return state
     }

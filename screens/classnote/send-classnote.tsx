@@ -7,19 +7,19 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import ScreenTitle from "../layouts/screen-title";
 import CustomButton from "../layouts/CustomButton";
 import { CustomCheckBox } from "../layouts/checkbox-component";
+import { SendToClasses } from "../../models/class-properties/Tutor-class";
 
 function SendClassnote(props: any) {
-    const [classArray, setClassArray] = useState<any>([]);
+    const [classArray, setClassArray] = useState<SendToClasses[]>([]);
     const screenLocalColor = "#868C8E";
 
     useEffect(() => {
-        props.getSharedNoteClasses(props.teacherClassNoteId);
+        props.teacherClassNoteId &&
+        props.getSharedNoteClasses(props.teacherClassNoteId).then((result: SendToClasses[]) => {
+                setClassArray(result);
+            });
     }, [props.teacherClassNoteId]);
 
-    useEffect(() => {
-        props.sendClassnoteModal &&
-            setClassArray(props.staffClasses?.filter((c: any) => c.isSent === true).map((c: any) => c.classId));
-    }, [props.staffClasses]);
 
     useEffect(() => {
         if (props.sendClassnoteModal == false) {
@@ -27,36 +27,34 @@ function SendClassnote(props: any) {
         }
     }, [props.sendClassnoteModal]);
 
-
-    const handleCheck = (item: any, isSelected: Boolean) => {
-        const classArrayValues = classArray.filter((obj: any) => obj !== item.classId);
-
-        if (isSelected === false) {
-            return [...classArrayValues];
-        } else {
-            return [...classArrayValues, item.classId];
-        }
+    const handleCheck = (item: SendToClasses, isSelected: Boolean) => {
+        const updatedClassArray = classArray.map((obj: any) => {
+            if (obj.classId === item.classId) {
+                return { ...obj, isSent: isSelected };
+            }
+            return obj;
+        });
+        setClassArray(updatedClassArray);
     }
-
+   
 
     return (
         <>
             <Stack style={{ flex: 0 }}>
-                <HStack style={{ alignItems: 'center' }}>
-                    <ScreenTitle icon={<MaterialIcons name="note" color="white" size={20} />} title={'Class List'} />
+            <HStack style={{ alignItems: 'center' }}>
+                    <Text style={{ color: 'black', fontWeight: 'bold', paddingHorizontal: 10 }}>Send class to : </Text>
                 </HStack>
             </Stack>
             <ScrollView style={{ padding: 5 }}>
-                {props.staffClasses?.map((item: any, idx: number) => {
+                {classArray?.map((item: SendToClasses, idx: number) => {
                     return (
-                        <View key={idx} style={{ padding: 10, display: "flex", flexDirection: 'row' }}>
-                            <Text style={[styles.tableItem, { width: 200 }]}>{item.sessionClass}</Text>
+                        <View key={idx} style={[styles.tableRow]}>
+                            <Text style={[styles.tableItem, { width: 300 }]}>{item.sessionClass}</Text>
                             <CustomCheckBox
-                                style={{ width: 200 }}
-                                isSelected={classArray?.find((i: any) => i === item.classId) ? true : false}
+                                style={{ width: 100 }}
+                                isSelected={item.isSent}
                                 onValueChange={() => {
-                                    const classArrayValues = handleCheck(item, !item.isSent)
-                                    setClassArray(classArrayValues);
+                                    handleCheck(item, !item.isSent);
                                 }} />
                         </View>
                     )
@@ -74,7 +72,11 @@ function SendClassnote(props: any) {
                     />
                 </View>
                 <View>
-                    <CustomButton title="SUBMIT" onPress={() => { props.sendClassNotes(props.teacherClassNoteId, classArray, props.openOrCloseSendClassnoteModal) }} />
+                    <CustomButton title="SUBMIT" onPress={() => {
+                         props.sendClassNotes(
+                            props.teacherClassNoteId,
+                            classArray.filter(d => d.isSent == true).map(d => d.classId), 
+                              props.openOrCloseSendClassnoteModal) }} />
                 </View>
             </HStack>
         </>
@@ -85,12 +87,14 @@ const styles = StyleSheet.create({
         color: 'black',
         alignSelf: 'center'
     },
+    tableRow: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        padding: 10
+
+    },
 })
-function mapStateToProps(state: any) {
-    return {
-        staffClasses: state.classnotesState.staffClasses
-    };
-}
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
@@ -103,4 +107,4 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SendClassnote)
+export default connect(null, mapDispatchToProps)(SendClassnote)

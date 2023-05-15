@@ -41,3 +41,11 @@ export class Teacher {
     teacherAccountId: string = "";
     teacherUserAccountId: string = "";
 }
+
+export class SendToClasses {
+    sessionClass: string = "";
+    sessionClassId: string = "";
+    classId: string = "";
+    isSent : Boolean = false;
+}
+

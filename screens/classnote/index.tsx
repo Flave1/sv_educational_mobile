@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { GetClassSubjects } from "../../store/actions/class-properties-actions";
 import CustomScrollview from "../layouts/CustomScrollView";
 import ClassnotesBox from "./classnotes-box";
-import { _paginationGetClassnotes, getClassnotes } from "../../store/actions/classnote-actions";
+import { _paginationGetClassnotes, downloadClassNote, getClassnotes } from "../../store/actions/classnote-actions";
 import BottomUpComponent from "../layouts/bottom-up-component";
 import ListComponent from "../layouts/list-component";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
@@ -27,15 +27,21 @@ import { AppButtonColorDark, AppLightBlue } from "../../tools/color";
 import SendClassnote from "./send-classnote";
 import ShareClassnote from "./share-classnote";
 import { FloatingButton } from "../layouts/floating-button";
+import { saveAsFile } from "../../Utils/downloaded-files";
 
 const ClassnoteIndex = (props: any) => {
-
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [sessionClassSubject, setSubject] = useState<SelectItem>({ value: '', text: '', lookUpId: '' });
     const [selectedStatus, setStatus] = useState<SelectItem>({ value: '-1', text: 'All', lookUpId: '' });
     const [pageNumber] = useState<number>(1);
     const [selectItemId, setSelectedItem] = useState<string>('');
     const [classNoteId, setClassNoteId] = useState<string>('');
+    const [downloadValue, setDownloadValue] = useState<string>('');
+
+    useEffect(() => {
+        downloadValue && saveAsFile("class-note.pdf", downloadValue)
+     }, [downloadValue]);
+    
 
     useEffect(() => {
         sessionClass?.value && props.getSubjects(sessionClass?.value)
@@ -269,9 +275,8 @@ const ClassnoteIndex = (props: any) => {
                         }} />
                         <ListComponent text={'Download'} icon={<Entypo name="download" size={20} />} onPress={() => {
                             openOrCloseModal(false)
-                            props.navigation.navigate({
-                                name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.screen.assessment.screen.create.name,
-                                params: params
+                            props.download(classNoteId).then((result:string) => {
+                                setDownloadValue(result);
                             })
                         }} />
                     </Stack>
@@ -311,6 +316,7 @@ function mapDispatchToProps(dispatch: any) {
 
         __getAll: (params: any) => _paginationGetClassnotes(params)(dispatch),
         setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        download:(classNoteId:string) => downloadClassNote(classNoteId)(dispatch),
     };
 }
 
