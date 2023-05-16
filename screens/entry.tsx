@@ -33,9 +33,13 @@ import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
 import StudentnoteDetails from './studentnote/note-details';
 import StudentNoteIndex from './studentnote';
-import ClassInfoDetails from './class-info/classStudentsInfo';
 import ClassInfoIndex from './class-info';
 import { connect } from 'react-redux';
+import Profile from './authentication/profile';
+import ForgotPassword from './authentication/forgot-password';
+import ResetPassword from './authentication/reset-password';
+import ForgotPasswordOtp from './authentication/forgot-password-otp';
+import ChangePassword from './authentication/change-password';
 
 
 
@@ -93,6 +97,21 @@ const StackNavigator = (parentProps: any) => {
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
                     {props => <SignIn {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.resetpassword.name}>
+                    {props => <ResetPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpassword.name}>
+                    {props => <ForgotPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpasswordotp.name}>
+                    {props => <ForgotPasswordOtp {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.changepassword.name}>
+                    {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
+                    {props => <Profile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                     {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}

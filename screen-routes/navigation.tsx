@@ -30,6 +30,26 @@ export const screens = {
                     title: '',
                     name: 'sign-in-school',
                 },
+                forgotpassword: {
+                    title: '',
+                    name: 'forgot-password',
+                  },
+                  forgotpasswordotp: {
+                    title: '',
+                    name: 'forgot-password-otp',
+                  },
+                  changepassword: {
+                    title: '',
+                    name: 'change-password',
+                  },
+                    resetpassword:{
+                        title: '',
+                        name: 'reset-password',
+                    },
+                    profile:{
+                        title: '',
+                        name: 'profile',  
+                    }
             }
         },
         mainapp: {
