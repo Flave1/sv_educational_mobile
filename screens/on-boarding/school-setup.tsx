@@ -69,11 +69,6 @@ const SchoolSetup = (props: any) => {
         //         console.log(err);
         //     })
     };
-
-    console.log('allSchools', allSchools);
-    
-
-
     return (
 
         <BottomSheetModalProvider>

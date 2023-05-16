@@ -7,4 +7,5 @@ export class OnboardedUser {
     baseUrlSuffix = "";
     userType = -2;
     clientId = "";
+    id = "";
 }

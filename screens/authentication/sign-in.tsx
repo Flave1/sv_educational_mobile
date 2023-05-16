@@ -1,6 +1,6 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, {  } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { offboard } from '../../store/actions/app-state-actions';
 import { signIn } from '../../store/actions/auth-actions';
@@ -18,19 +18,23 @@ const SignIn = (props: any) => {
     // useEffect(() => {
     //     props.signin(null);
     // },[])
+
+    const [clicked, setClicked] = useState(false)
+
+
     React.useEffect(() => {
         if (props.onboardedUser) {
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
                 console.log('loggedIn', loggedIn);
                 console.log('props.onboardedUser', props.onboardedUser);
-                
+
                 if (loggedIn)
                     props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
             })
         } else {
             props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
         }
-    }, [props.onboardedUser])
+    }, [clicked])
 
     const validation = Yup.object().shape({
         userName: Yup.string()
@@ -50,7 +54,9 @@ const SignIn = (props: any) => {
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.signin(values)
+            props.signin(values).then((resp: any) => {
+                setClicked(!clicked)
+            });
         }
     });
 
@@ -136,7 +142,7 @@ const SignIn = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        onboardedUser: get(state.appState.onboardedUser)
+        onboardedUser: state.appState.onboardedUser
     }
 }
 
@@ -147,7 +153,7 @@ function mapDispatchToProps(dispatch: any) {
     };
 }
 
-function get(onboardedUser: any){
+function get(onboardedUser: any) {
     try {
         return JSON.parse(onboardedUser)
     } catch (error) {
