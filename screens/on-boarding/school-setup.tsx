@@ -70,6 +70,9 @@ const SchoolSetup = (props: any) => {
         //     })
     };
 
+    console.log('allSchools', allSchools);
+    
+
 
     return (
 

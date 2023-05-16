@@ -35,7 +35,7 @@ const TeacherDashboard = (props: any) => {
         props.navigation.navigate(param);
     }
 
-
+    
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Dashboard" params={params}>
@@ -82,7 +82,8 @@ const TeacherDashboard = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        dashboard: state.dasboardState.dashboard
+        dashboard: state.dasboardState.dashboard,
+        onboardedUser: state.appState.onboardedUser
     }
 }
 
