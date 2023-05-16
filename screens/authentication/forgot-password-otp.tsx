@@ -23,14 +23,15 @@ const ForgotPasswordOtp = (props: any) => {
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             otp: '',
-            clientId:'',
+            clientId:props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.forgotPassword(values,props.navigation)
+            props.forgotPasswordOTP(values,props.navigation)
         }
     });
+    
 
     return (
         <>
@@ -74,7 +75,7 @@ const ForgotPasswordOtp = (props: any) => {
                             title={'Send'}
                             onPress={handleSubmit} />
                     </Stack>
-                    <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
+                    <Stack center style={{ flexDirection: 'row', justifyContent: 'flex-end', marginVertical: 10 }}>
                         <Pressable onPress={() => {
                             props.navigation.navigate({
                                 name: screens.scenes.auth.screens.forgotpassword.name,

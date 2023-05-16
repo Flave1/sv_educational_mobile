@@ -25,12 +25,14 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import BottomUpComponent from "../layouts/bottom-up-component";
 import { Search } from "../../Utils/generate";
 import CustomSearchInput from "../layouts/CustomSearchInput";
+import { useNavigation } from "@react-navigation/native";
 
 const SchoolSetup = (props: any) => {
     const [selectedSchool, setSelectedSchool] = useState<School>(new School());
     const [allSchools, setAllschools] = useState<Array<School>>(new Array<School>());
     const [searchQuery, setSearchQuery] = useState('');
     const [filtered, setFilteredSubjects] = useState<School[]>([]);
+    const navigation = useNavigation();
     // ref
     const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
     const snapPoints = useMemo(() => ["90%"], []);

@@ -1,10 +1,17 @@
-import React from 'react'
-import { View } from 'react-native';
 
-const Profile = (props:any) => {
+import React from 'react'
+import { View,Text } from 'react-native';
+import ProtectedTeacher from './protected-teacher';
+import ForgotPassword from './forgot-password';
+
+const TeacherProfile = (props:any) => {
   return (
-    <View></View>
+    <>
+        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Attendance" params={props.params}>
+            <ForgotPassword />
+            </ProtectedTeacher>
+        </>
   )
 }
 
-export default Profile
+export default TeacherProfile

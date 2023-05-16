@@ -22,7 +22,6 @@ const SignIn = (props: any) => {
         if (props.onboardedUser) {
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
                 console.log('loggedIn', loggedIn);
-                console.log('props.onboardedUser', props.onboardedUser);
 
                 if (loggedIn)
                     props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
@@ -42,7 +41,7 @@ const SignIn = (props: any) => {
         confirmNewPassword: Yup.string()
         .required("Confirm Password Required")
         .min(4, "Password must be a minimum of 4 characters")
-        .when("newPassword", {
+        .when("password", {
           is: (val:any) => (val && val.length > 0 ? true : false),
           then: Yup.string().oneOf(
             [Yup.ref("password")],
@@ -56,12 +55,16 @@ const SignIn = (props: any) => {
             confirmNewPassword:"",
             password: "",
             email:"",
-            clientId:"",
+            clientId:props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.changePassword(values)
+            props.changePassword(
+                {email:values.email,
+                password:values.password,
+                 clientId:values.clientId}
+            )
         }
     });
 

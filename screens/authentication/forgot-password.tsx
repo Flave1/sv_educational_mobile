@@ -1,8 +1,8 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { } from 'react';
+import React, { useState} from 'react';
 import * as Yup from 'yup';
-import { offboard } from '../../store/actions/app-state-actions';
+import { getAppState, offboard } from '../../store/actions/app-state-actions';
 import { forgotPassword, signIn } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
@@ -14,9 +14,9 @@ import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
+import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 const ForgotPassword = (props: any) => {
- console.log("oneboard",props.onboardedUser.schoolLogo);
- 
+
     const validation = Yup.object().shape({
         email: Yup.string().required("User Email is Required")
         .email("Must be a valid email"),
@@ -25,7 +25,7 @@ const ForgotPassword = (props: any) => {
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             email: '',
-            clientId:'',
+            clientId:props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
@@ -40,7 +40,8 @@ const ForgotPassword = (props: any) => {
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
                     <View style={{ borderColor: AppPurple, borderWidth: 6, borderRadius: 100 }}>
                         <Avatar size={150} image={{
-                            uri: props.onboardedUser?.schoolLogo 
+                            uri: props.onboardedUser?.schoolLogo? props.onboardedUser?.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
+                     
                         }} />
                     </View>
                 </Stack>
@@ -92,15 +93,22 @@ const ForgotPassword = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        onboardedUser: state.appState.onboardedUser
+        onboardedUser: get(state.appState.onboardedUser)
     }
 }
 
 function mapDispatchToProps(dispatch: any) {
     return {
+        getState:() => getAppState()(dispatch),
         forgotPassword: (values: any,navigation:any) => forgotPassword(values,navigation)(dispatch)
     };
 }
-
+function get(onboardedUser: any) {
+    try {
+        return JSON.parse(onboardedUser)
+    } catch (error) {
+        return JSON.parse(JSON.stringify(onboardedUser))
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);

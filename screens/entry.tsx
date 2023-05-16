@@ -35,7 +35,7 @@ import StudentnoteDetails from './studentnote/note-details';
 import StudentNoteIndex from './studentnote';
 import ClassInfoIndex from './class-info';
 import { connect } from 'react-redux';
-import Profile from './authentication/profile';
+import TeacherProfile from './authentication/profile';
 import ForgotPassword from './authentication/forgot-password';
 import ResetPassword from './authentication/reset-password';
 import ForgotPasswordOtp from './authentication/forgot-password-otp';
@@ -87,8 +87,9 @@ const StackNavigator = (parentProps: any) => {
     const navigation = useNavigation();
 
     return (//screens.scenes.onBoarding.screens.setup.name
+    
         <>
-            <Stack.Navigator initialRouteName={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
+            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.screens.setup.name}>
                 <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
                     {props => <Onboarding {...props} navigation={navigation} />}
                 </Stack.Screen>
@@ -111,7 +112,7 @@ const StackNavigator = (parentProps: any) => {
                     {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
-                    {props => <Profile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <TeacherProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                     {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
