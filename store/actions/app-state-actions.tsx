@@ -5,6 +5,7 @@ import { actions } from "../action-types/app-state-action-types";
 import { Device } from '../../tools/device-properties';
 import { ONBOARDEDUSER } from '../../Utils/constants';
 import { School } from '../../models/on-boarding/all-schools';
+import { AuhtService } from '../../services/AuthService';
 
 export const onboardUser = () => ({ type: actions.ON_BOARD });
 
@@ -21,19 +22,19 @@ export const setSuccessToast = (message: string = "") => (dispatch: any) => disp
 
 export const offboard = () => (dispatch: any): Promise<boolean> => {
     return AsyncStorage.removeItem(ONBOARDEDUSER).then(() => {
+        dispatch(AuhtService.SignOutUser())
         dispatch({ type: actions.OFF_BOARD });
         return true;
     });
 
 }
 export const getAllSchools = async () => (dispatch: any): Promise<Array<School>> => {
-    console.log('comes here one');
     return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: actions.SHOW_LOADING });
-           return axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
+            return axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
                 .then((res) => {
-                    dispatch({ type: actions.HIDE_LOADING });                                        
+                    dispatch({ type: actions.HIDE_LOADING });
                     return res.data.result as Array<School>;
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
