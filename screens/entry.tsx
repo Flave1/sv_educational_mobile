@@ -48,7 +48,7 @@ const Entry = (props: any) => {
     const backgroundStyle = { backgroundColor: isDarkMode ? AppDark : AppDark };
     const statusBar = <StatusBar barStyle={isDarkMode ? 'light-content' : 'light-content'} backgroundColor={backgroundStyle.backgroundColor} />
     const [persistedUser, setPersistedUser] = useState<OnboardedUser>();
-    
+
     useEffect(() => {
         props.getState().then((res: any) => {
             try {
@@ -86,7 +86,7 @@ const StackNavigator = (parentProps: any) => {
     const Stack = createNativeStackNavigator();
     const navigation = useNavigation();
 
-    return (
+    return (//screens.scenes.onBoarding.screens.setup.name
         <>
             <Stack.Navigator initialRouteName={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                 <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
@@ -96,7 +96,7 @@ const StackNavigator = (parentProps: any) => {
                     {props => <SchoolSetup {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
-                    {props => <SignIn {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <SignIn {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.resetpassword.name}>
                     {props => <ResetPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
@@ -173,7 +173,7 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classInfo.name}>
                     {props => <ClassInfoIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-               
+
 
             </Stack.Navigator>
         </>

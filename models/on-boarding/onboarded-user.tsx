@@ -6,4 +6,5 @@ export class OnboardedUser {
     schoolLogo = "";
     baseUrlSuffix = "";
     userType = -2;
+    clientId = "";
 }

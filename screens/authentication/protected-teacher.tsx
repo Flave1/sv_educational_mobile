@@ -67,7 +67,7 @@ const ProtectedTeacher = (props: any) => {
                 navigation.navigate(screens.scenes.auth.screens.signin.name);
             }
         })
-    })
+    }, [])
 
     useEffect(() => {
         transitionRef.current.animateNextTransition()
