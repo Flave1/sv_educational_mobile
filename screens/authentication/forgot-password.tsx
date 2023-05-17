@@ -16,6 +16,7 @@ import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
 import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 const ForgotPassword = (props: any) => {
+    const [isProtected, setisProtected] = useState(false)
 
     const validation = Yup.object().shape({
         email: Yup.string().required("User Email is Required")
@@ -30,7 +31,7 @@ const ForgotPassword = (props: any) => {
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.forgotPassword(values,props.navigation)
+            props.forgotPassword(values,props.navigation,isProtected)
         }
     });
 
@@ -100,7 +101,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         getState:() => getAppState()(dispatch),
-        forgotPassword: (values: any,navigation:any) => forgotPassword(values,navigation)(dispatch)
+        forgotPassword: (values: any,navigation:any,isProtected:boolean) => forgotPassword(values,navigation,isProtected)(dispatch)
     };
 }
 function get(onboardedUser: any) {

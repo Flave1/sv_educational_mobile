@@ -38,9 +38,17 @@ export const screens = {
                     title: '',
                     name: 'forgot-password-otp',
                   },
+                  forgotpasswordotpprotected: {
+                    title: '',
+                    name: 'forgot-password-otp-protected',
+                  },
                   changepassword: {
                     title: '',
                     name: 'change-password',
+                  },
+                  changepasswordprotected: {
+                    title: '',
+                    name: 'change-password-protected',
                   },
                     resetpassword:{
                         title: '',
@@ -48,7 +56,13 @@ export const screens = {
                     },
                     profile:{
                         title: '',
-                        name: 'profile',  
+                        name: 'profile', 
+                        screens: {
+                            profileedit: {
+                                title: 'profile-edit',
+                                name: 'profile-edit',
+                            },
+                            }, 
                     }
             }
         },

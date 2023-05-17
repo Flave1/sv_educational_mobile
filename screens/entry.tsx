@@ -35,11 +35,11 @@ import StudentnoteDetails from './studentnote/note-details';
 import StudentNoteIndex from './studentnote';
 import ClassInfoIndex from './class-info';
 import { connect } from 'react-redux';
-import TeacherProfile from './authentication/profile';
+import TeacherProfile from './profile';
 import ForgotPassword from './authentication/forgot-password';
-import ResetPassword from './authentication/reset-password';
 import ForgotPasswordOtp from './authentication/forgot-password-otp';
 import ChangePassword from './authentication/change-password';
+import EditProfile from './profile/edit-teacher-profile';
 
 
 
@@ -89,7 +89,7 @@ const StackNavigator = (parentProps: any) => {
     return (//screens.scenes.onBoarding.screens.setup.name
     
         <>
-            <Stack.Navigator initialRouteName={screens.scenes.onBoarding.screens.setup.name}>
+            <Stack.Navigator initialRouteName={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                 <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
                     {props => <Onboarding {...props} navigation={navigation} />}
                 </Stack.Screen>
@@ -99,9 +99,6 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
                     {props => <SignIn {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.resetpassword.name}>
-                    {props => <ResetPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpassword.name}>
                     {props => <ForgotPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
@@ -109,10 +106,13 @@ const StackNavigator = (parentProps: any) => {
                     {props => <ForgotPasswordOtp {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.changepassword.name}>
-                    {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <ChangePassword{...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
                     {props => <TeacherProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={ screens.scenes.auth.screens.profile.screens.profileedit.name}>
+                    {props => <EditProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                     {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}

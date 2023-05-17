@@ -14,22 +14,7 @@ import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
-const SignIn = (props: any) => {
-    // useEffect(() => {
-    //     props.signin(null);
-    // },[])
-    React.useEffect(() => {
-        if (props.onboardedUser) {
-            AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
-                console.log('loggedIn', loggedIn);
-
-                if (loggedIn)
-                    props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
-            })
-        } else {
-            props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
-        }
-    }, [props.onboardedUser])
+const ChangePassword = (props: any) => {
 
     const validation = Yup.object().shape({
         email: Yup.string()
@@ -60,11 +45,7 @@ const SignIn = (props: any) => {
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.changePassword(
-                {email:values.email,
-                password:values.password,
-                 clientId:values.clientId}
-            )
+            props.changePassword(values,props.navigation)
         }
     });
 
@@ -173,7 +154,7 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        changePassword: (values: any) => changePassword(values)(dispatch)
+        changePassword: (values: any,navigation:any) => changePassword(values,navigation)(dispatch)
     };
 }
 
@@ -185,4 +166,4 @@ function get(onboardedUser: any) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

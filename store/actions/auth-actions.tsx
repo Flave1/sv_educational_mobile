@@ -29,7 +29,7 @@ export const signIn = (payload: any) => (dispatch: any): Promise<any> => {
 }
 
 
-export const forgotPassword = (values: any,navigation:any) => (dispatch: any) => {
+export const forgotPassword = (values: any,navigation:any,isProtected:boolean) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
@@ -38,7 +38,7 @@ export const forgotPassword = (values: any,navigation:any) => (dispatch: any) =>
         .then((res) => {
             dispatch({ type: app_state_actions.HIDE_LOADING });
             dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: "An OTP has been sent" })
-            navigation.navigate(screens.scenes.auth.screens.forgotpasswordotp.name);
+            navigation.navigate(screens.scenes.auth.screens.forgotpasswordotp.name)
            
             
         }).catch((err) => {
@@ -58,7 +58,7 @@ export const forgotPasswordOTP = (values: any,navigation:any) => (dispatch: any)
     axiosInstance.post('/user/api/v1/validate-otp-mobile', values)
         .then((res) => {
             dispatch({ type: app_state_actions.HIDE_LOADING });
-            dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: "OTP verified" })
+            dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: res.data.message.friendlyMessage })
             navigation.navigate(screens.scenes.auth.screens.changepassword.name)
         }).catch((err) => {
             const error: any = JSON.stringify(err.response);
@@ -69,25 +69,22 @@ export const forgotPasswordOTP = (values: any,navigation:any) => (dispatch: any)
 })
 }
 
-export const changePassword = (values: any) => (dispatch: any) => {
-    console.log("values",values);
+export const changePassword = (values: any,navigation:any) => (dispatch: any) => {
     
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post('user/api/v1/reset-password-mobile', values)
-                .then((res) => {
-                    AsyncStorage.setItem('token', res.data.result.authResult.token).then(() => {
-                        dispatch({ type: actions.SIGN_IN_USER, payload: res.data.result.authResult });
-                        dispatch({ type: app_state_actions.HIDE_LOADING });
-                    });
-                }).catch((err: any) => {
-                    const error: any = JSON.stringify(err.response);
-                    ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
-                })
-        } else {
-            dispatch({ type: app_state_actions.HIDE_LOADING });
+            .then((res) => {
+                dispatch({ type: app_state_actions.HIDE_LOADING });
+                dispatch({ type: app_state_actions.SET_SUCCESS_TOAST, payload: res.data.message.friendlyMessage })
+                navigation.navigate(screens.scenes.auth.screens.signin.name)
+            }).catch((err) => {
+                const error: any = JSON.stringify(err.response);
+                dispatch({ type: app_state_actions.SET_ERROR_TOAST, payload: "An error occured while resetting password" })
+                ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+            });
         }
-})
+        })
 }
 

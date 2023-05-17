@@ -40,7 +40,7 @@ export const updateStaffDetails = (values: any, teacherAccountId: any,navigation
     })
 }
 
-export const getTeacherClassAndSubject = (teacherAccountId: any, sessionClassId: any) => (dispatch: any) => {
+export const getTeacherClassAndSubject = (teacherAccountId: any, ) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
