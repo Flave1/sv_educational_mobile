@@ -27,7 +27,7 @@ import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
 import ClassnoteIndex from './classnote/index';
 import ClassNoteCreate from './classnote/create-classNote';
-import ClassNoteUpdate from './classnote/update-classNote';
+import ClassNoteUpdate from './classnote/update-classnote';
 import ClassStudents from './session-class/class-students';
 import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
@@ -106,7 +106,7 @@ const StackNavigator = (parentProps: any) => {
                     {props => <ForgotPasswordOtp {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.changepassword.name}>
-                    {props => <ChangePassword{...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
                     {props => <TeacherProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}

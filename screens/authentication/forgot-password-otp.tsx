@@ -1,37 +1,42 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { offboard } from '../../store/actions/app-state-actions';
-import { forgotPassword, forgotPasswordOTP, signIn } from '../../store/actions/auth-actions';
+import { validateOtp } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AppPurple } from '../../tools/color';
-import { AuhtService } from '../../services/AuthService';
 import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const ForgotPasswordOtp = (props: any) => {
- 
+
+    const [email, setEmail] = useState(props.route.params.email);
     const validation = Yup.object().shape({
         otp: Yup.number().required("OTP is required")
     });
 
+    console.log('props.route.params', props.route.params);
+
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             otp: '',
-            clientId:props.onboardedUser?.clientId,
+            email: email,
+            clientId: props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.forgotPasswordOTP(values,props.navigation)
+            props.forgotPasswordOTP(values, props.navigation)
         }
     });
-    
+
+    useEffect(() => {
+        setEmail(props.route.params.email)
+    }, [props.route.params.email])
 
     return (
         <>
@@ -48,9 +53,18 @@ const ForgotPasswordOtp = (props: any) => {
                     {((touched.otp && errors.otp)) && <Text color='red' >{errors.otp}</Text>}
                 </Stack>
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
+
                     <View style={{ width: '100%' }}>
                         <CustomTextInput
-                            icon={<Feather name={'user-check'} size={16} />}
+                            icon={<FontAwesome name={'user'} size={16} />}
+                            value={values.email}
+                            editable={false}
+                        />
+                    </View>
+
+                    <View style={{ width: '100%' }}>
+                        <CustomTextInput
+                            icon={<Ionicons name={'md-code-working-outline'} size={16} />}
                             placeholder='Enter OTP'
                             autoCapitalize='none'
                             autoCompleteType='number'
@@ -98,7 +112,7 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        forgotPasswordOTP: (values: any,navigation:any) => forgotPasswordOTP(values,navigation)(dispatch)
+        forgotPasswordOTP: (values: any, navigation: any) => validateOtp(values, navigation)(dispatch)
     };
 }
 

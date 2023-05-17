@@ -1,5 +1,5 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
@@ -8,115 +8,143 @@ import { GetTeacherDetails, getTeacherClassAndSubject } from "../../store/action
 import { Avatar, Stack } from "@react-native-material/core";
 import CustomButton from "../layouts/CustomButton";
 import { screens } from "../../screen-routes/navigation";
+import Feather from "react-native-vector-icons/Feather";
+import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 
 
-const TeacherProfile = (props:any) => {
+const TeacherProfile = (props: any) => {
 
     useEffect(() => {
         props.getDetails(props?.onboardedUser.id);
         props.getClassAndSubject(props?.onboardedUser.id);
     }, [])
-    console.log("props",props.teacherDetail);
-    
-        return (
-            <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Profile">
-                <BottomSheetModalProvider>
-                    <ScrollView style={{ padding: 0 }}>
-                        <View style={styles.topSection}>
-    
-                            <View style={styles.avata}>
-                            <Avatar size={150} image={{
+    // console.log("props", props.teacherDetail);
+
+    return (
+        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Profile">
+            <BottomSheetModalProvider>
+                <ScrollView style={{ padding: 0 }}>
+                    <View style={styles.topSection}>
+
+                        {/* <View style={styles.avata}>
+                            
+                        </View> */}
+                        <Avatar size={150} image={{
                             uri: props.teacherDetail?.photo ? props.teacherDetail?.photo
                                 : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
                         }} />
-                            </View>
-    
-                            <View style={{ flexDirection:'row', alignItems:'stretch'}}>
-                                <Text style={styles.fullname}>{props.teacherDetail?.fullName}</Text>
-                            </View>
+
+                        <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+                            <Text style={styles.fullname}>{props.teacherDetail?.fullName}</Text>
                         </View>
-                        <View style={styles.bottomSection}>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}> First Name</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.firstName}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}> Last Name</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.lastName}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}> Middle Name</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.middleName}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Marital Status</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.email}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Gender</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.gender}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Date Of Birth</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.dob}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Phone</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.phone}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Address</Text>
-                                <Text style={styles.item}>{props.teacherDetail?.address}</Text>
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Classes As Form Teacher</Text>
-                                { props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: string, idx: number) => {
-                                            return (
-                                                <Text key={idx} style={styles.item}>{item}</Text>
-                                            )
-                                        })}
-                            </View>
-                            <View style={styles.sectionStyle}>
-                                <Text style={styles.label}>Subjects As Subject Teacher</Text>
-                               { props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: string, idx: number) => {
-                                            return (
-                                                <Text key={idx} style={styles.item}>{subj}</Text>
-                                            )
-                                        })}
-                              
-                            </View>
-                            <Stack style={{ marginHorizontal: 50, marginTop: 10, alignItems: 'center' }}>
-                        <CustomButton
-                            width={200}
-                            title={'EDIT'}
-                            onPress={() => {
-                                props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
-                            }}
-                            />
-                    </Stack>
-                           
-    
+                    </View>
+                    <View style={styles.bottomSection}>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}> First Name</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.firstName}</Text>
                         </View>
-                    </ScrollView>
-                </BottomSheetModalProvider>
-            </ProtectedTeacher>
-    
-    
-    
-   
-  )
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}> Last Name</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.lastName}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}> Middle Name</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.middleName}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Marital Status</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.email}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Gender</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.gender}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Date Of Birth</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.dob}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Phone</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.phone}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Address</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.address}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Classes As Form Teacher</Text>
+                            {props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: string, idx: number) => {
+                                return (
+                                    <Text key={idx} style={styles.item}>{item}</Text>
+                                )
+                            })}
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Subjects As Subject Teacher</Text>
+                            {props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: string, idx: number) => {
+                                return (
+                                    <Text key={idx} style={styles.item}>{subj}</Text>
+                                )
+                            })}
+
+                        </View>
+                        <Stack style={{ paddingHorizontal: 20, alignItems: 'center', justifyContent:'space-evenly', flexDirection: 'row' }}>
+                            <View
+                                style={styles.bottomBtns}>
+                                <Pressable>
+                                    <Feather name="edit" size={30} />
+                                </Pressable>
+                                {/* <CustomButton
+                                    width={50}
+                                    height={30}
+                                    title={}
+                                    onPress={() => {
+                                        // props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
+                                    }}
+                                /> */}
+                            </View>
+                            <View
+                                style={styles.bottomBtns}>
+                                <Pressable>
+                                    <SimpleLineIcons name="logout" size={30} />
+                                </Pressable>
+                            </View>
+                            <View
+                                // style={}
+                                >
+                                <CustomButton
+                                    width={180}
+                                    height={30}
+                                    title={'Edit Password'}
+                                    onPress={() => {
+                                        props.navigation.navigate(screens.scenes.auth.screens.forgotpassword.name)
+                                    }}
+                                />
+                            </View>
+                        </Stack>
+
+
+                    </View>
+                </ScrollView>
+            </BottomSheetModalProvider>
+        </ProtectedTeacher>
+
+
+
+
+    )
 }
 function mapStateToProps(state: any) {
     return {
         onboardedUser: get(state.appState.onboardedUser),
         teacherDetail: state.profileState.teacherDetail,
-        teacherClassAndSubject:state.profileState.teacherClassAndSubject,
+        teacherClassAndSubject: state.profileState.teacherClassAndSubject,
     }
 }
 function mapDispatchToProps(dispatch: any) {
     return {
         getDetails: (teacherAccountId: string) => GetTeacherDetails(teacherAccountId)(dispatch),
-        getClassAndSubject:(teacherAccountId: string) => getTeacherClassAndSubject(teacherAccountId)(dispatch),
+        getClassAndSubject: (teacherAccountId: string) => getTeacherClassAndSubject(teacherAccountId)(dispatch),
     };
 }
 function get(onboardedUser: any) {
@@ -193,6 +221,10 @@ const styles = StyleSheet.create({
 
         borderColor: 'grey',
         borderWidth: .5,
+    },
+    bottomBtns: {
+        margin: 5,
+        width:'20%'
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TeacherProfile);

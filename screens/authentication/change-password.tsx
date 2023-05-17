@@ -1,51 +1,55 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { offboard } from '../../store/actions/app-state-actions';
-import { changePassword, signIn } from '../../store/actions/auth-actions';
+import { changePassword } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AppPurple } from '../../tools/color';
-import { AuhtService } from '../../services/AuthService';
 import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
 const ChangePassword = (props: any) => {
 
+    const [email, setEmail] = useState(props.route.params.email);
+
+    useEffect(() => {
+        setEmail(props.route.params.email)
+    }, [props.route.params.email])
+
     const validation = Yup.object().shape({
         email: Yup.string()
-        .required("Email is Required")
-        .email("Must be a valid email"),
+            .required("Email is Required")
+            .email("Must be a valid email"),
         password: Yup.string()
-        .required("Password is Required")
-        .min(4, "Password must be a minimum of 4 characters"),
+            .required("Password is Required")
+            .min(4, "Password must be a minimum of 4 characters"),
         confirmNewPassword: Yup.string()
-        .required("Confirm Password Required")
-        .min(4, "Password must be a minimum of 4 characters")
-        .when("password", {
-          is: (val:any) => (val && val.length > 0 ? true : false),
-          then: Yup.string().oneOf(
-            [Yup.ref("password")],
-            "Confirm password need to be the same with new password"
-          ), 
-        })
+            .required("Confirm Password Required")
+            .min(4, "Password must be a minimum of 4 characters")
+            .when("password", {
+                is: (val: any) => (val && val.length > 0 ? true : false),
+                then: Yup.string().oneOf(
+                    [Yup.ref("password")],
+                    "Confirm password need to be the same with new password"
+                ),
+            })
     });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
-            confirmNewPassword:"",
+            confirmNewPassword: "",
             password: "",
-            email:"",
-            clientId:props.onboardedUser?.clientId,
+            email: email,
+            clientId: props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.changePassword(values,props.navigation)
+            props.changePassword(values, props.navigation)
         }
     });
 
@@ -61,29 +65,17 @@ const ChangePassword = (props: any) => {
                     </View>
                 </Stack>
                 <Stack center>
-                {((touched.email && errors.email)) && <Text color='red' >{errors.email}</Text>}
-                {((touched.password && errors.password)) && <Text color='red' >{errors.password}</Text>}
-                {((touched.confirmNewPassword && errors.confirmNewPassword)) && <Text color='red' >{errors.confirmNewPassword}</Text>}
+                    {((touched.email && errors.email)) && <Text color='red' >{errors.email}</Text>}
+                    {((touched.password && errors.password)) && <Text color='red' >{errors.password}</Text>}
+                    {((touched.confirmNewPassword && errors.confirmNewPassword)) && <Text color='red' >{errors.confirmNewPassword}</Text>}
                 </Stack>
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
+
                     <View style={{ width: '100%' }}>
                         <CustomTextInput
-                            icon={<Feather name={'user-check'} size={16} />}
-                            placeholder='Enter Email'
-                            autoCapitalize='none'
-                            autoCompleteType='email'
-                            keyboardType='email-address'
-                            keyboardAppearance='dark'
-                            returnKeyType='next'
-                            returnKeyLabel='next'
-                            onBlur={handleBlur('email')}
+                            icon={<FontAwesome name={'user'} size={16} />}
                             value={values.email}
-                            error={errors.email}
-                            touched={touched.email}
-                            onChange={(e: any) => {
-                                handleChange('email');
-                                setFieldValue('email', e.nativeEvent.text)
-                            }}
+                            editable={false}
                         />
                     </View>
 
@@ -154,7 +146,7 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        changePassword: (values: any,navigation:any) => changePassword(values,navigation)(dispatch)
+        changePassword: (values: any, navigation: any) => changePassword(values, navigation)(dispatch)
     };
 }
 

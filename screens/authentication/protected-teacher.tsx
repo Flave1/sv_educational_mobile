@@ -146,7 +146,9 @@ const ProtectedTeacher = (props: any) => {
                             transparent
                             leading={smd => (
                                 <IconButton
-                                    onPress={() => setRevealUser(prevState => !prevState)}
+                                    onPress={() => {
+                                        navigation.navigate(screens.scenes.auth.screens.profile.name)
+                                    }}
                                     icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
@@ -169,10 +171,10 @@ const ProtectedTeacher = (props: any) => {
                         transition={transition}
                         style={{ display: isFullScreen ? 'none' : 'flex', height: 150, margin: 10, marginLeft: '65%', padding: 10, marginTop: 0 }}>
                         <ListComponent text={'Reset password'} icon={<Feather name="lock" size={20} />} onPress={() => {
-                            navigation.navigate(screens.scenes.auth.screens.resetpassword.name)
+                            // navigation.navigate(screens.scenes.auth.screens.resetpassword.name)
                         }} />
                         <ListComponent text={'Profile'} icon={<Feather name="user" size={20} />} onPress={() => {
-                            navigation.navigate(screens.scenes.auth.screens.profile.name)
+                            // navigation.navigate(screens.scenes.auth.screens.profile.name)
                         }} />
                         <ListComponent text={'Logout'} icon={<Feather name="log-out" size={20} />} onPress={()=>{logoutDialog()}} />
                     </Transitioning.View>

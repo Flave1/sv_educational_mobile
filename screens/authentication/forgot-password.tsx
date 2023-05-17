@@ -1,37 +1,34 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
-import { getAppState, offboard } from '../../store/actions/app-state-actions';
-import { forgotPassword, signIn } from '../../store/actions/auth-actions';
+import { getAppState } from '../../store/actions/app-state-actions';
+import { validateEmail } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
 import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AppPurple } from '../../tools/color';
-import { AuhtService } from '../../services/AuthService';
 import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
-import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 const ForgotPassword = (props: any) => {
     const [isProtected, setisProtected] = useState(false)
 
     const validation = Yup.object().shape({
         email: Yup.string().required("User Email is Required")
-        .email("Must be a valid email"),
+            .email("Must be a valid email"),
     });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             email: '',
-            clientId:props.onboardedUser?.clientId,
+            clientId: props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.forgotPassword(values,props.navigation,isProtected)
+            props.forgotPassword(values, props.navigation, isProtected)
         }
     });
 
@@ -41,8 +38,8 @@ const ForgotPassword = (props: any) => {
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
                     <View style={{ borderColor: AppPurple, borderWidth: 6, borderRadius: 100 }}>
                         <Avatar size={150} image={{
-                            uri: props.onboardedUser?.schoolLogo? props.onboardedUser?.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
-                     
+                            uri: props.onboardedUser?.schoolLogo ? props.onboardedUser?.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
+
                         }} />
                     </View>
                 </Stack>
@@ -100,8 +97,8 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        getState:() => getAppState()(dispatch),
-        forgotPassword: (values: any,navigation:any,isProtected:boolean) => forgotPassword(values,navigation,isProtected)(dispatch)
+        getState: () => getAppState()(dispatch),
+        forgotPassword: (values: any, navigation: any, isProtected: boolean) => validateEmail(values, navigation, isProtected)(dispatch)
     };
 }
 function get(onboardedUser: any) {
