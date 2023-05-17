@@ -13,7 +13,7 @@ export const profileReducer = (state = profileState, { type, payload }: any) => 
         case actions.GET_TEACHER_CLASS_AND_SUBJECT: {
             return {
                 ...state,
-                teacherClassAndSubject: null
+                teacherClassAndSubject: payload
             }
         }
 

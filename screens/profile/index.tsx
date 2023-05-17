@@ -18,7 +18,6 @@ const TeacherProfile = (props: any) => {
         props.getDetails(props?.onboardedUser.id);
         props.getClassAndSubject(props?.onboardedUser.id);
     }, [])
-    // console.log("props", props.teacherDetail);
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Profile">
@@ -52,8 +51,12 @@ const TeacherProfile = (props: any) => {
                             <Text style={styles.item}>{props.teacherDetail?.middleName}</Text>
                         </View>
                         <View style={styles.sectionStyle}>
-                            <Text style={styles.label}>Marital Status</Text>
+                            <Text style={styles.label}>Email Address</Text>
                             <Text style={styles.item}>{props.teacherDetail?.email}</Text>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Marital Status</Text>
+                            <Text style={styles.item}>{props.teacherDetail?.maritalStatus}</Text>
                         </View>
                         <View style={styles.sectionStyle}>
                             <Text style={styles.label}>Gender</Text>
@@ -72,45 +75,69 @@ const TeacherProfile = (props: any) => {
                             <Text style={styles.item}>{props.teacherDetail?.address}</Text>
                         </View>
                         <View style={styles.sectionStyle}>
-                            <Text style={styles.label}>Classes As Form Teacher</Text>
-                            {props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: string, idx: number) => {
-                                return (
-                                    <Text key={idx} style={styles.item}>{item}</Text>
-                                )
-                            })}
+                            <Text style={styles.label}>Hobbies</Text>
+                            <View style={{ minHeight: 80, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                                {
+                                    props.teacherDetail?.hobbies?.map((hobby: string, idx: number) => {
+                                        return (
+                                            <Text key={idx} style={styles.badges}>{hobby}</Text>
+                                        )
+                                    })
+                                }
+                            </View>
                         </View>
                         <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Bio</Text>
+                            <View style={{ height: 80 }}>
+                                <Text style={styles.item}>{props.teacherDetail?.shortBiography}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.sectionStyle}>
+                            <Text style={styles.label}>Classes As Form Teacher</Text>
+                            {props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: any, idx: number) => (
+                                                  <View>
+                                                  <Text style={styles.item}>{item.class}</Text>
+                                                  {item?.subjectsInClass?.map((sub: any, idx: number) => (
+                                                    <Text key={idx} style={styles.item}>{` - ${sub}`}</Text>
+                                                  ))}
+                                                </View>
+                                            ))
+                                        }
+                
+                        <View style={styles.sectionStyle}>
                             <Text style={styles.label}>Subjects As Subject Teacher</Text>
-                            {props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: string, idx: number) => {
-                                return (
-                                    <Text key={idx} style={styles.item}>{subj}</Text>
-                                )
-                            })}
+                            {props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: any, idx: number) => (
+                                <View>
+                                  <Text style={styles.item}>{subj.subject}</Text>
+                                  {subj.class?.map((subjects: any, idx: number) => (
+                                    <Text key={idx} style={styles.item}>{` - ${subjects}`}</Text>
+                                  ))}
+                                </View>
+                            ))
+                        }
 
                         </View>
+                        </View>
                         <Stack style={{ paddingHorizontal: 20, alignItems: 'center', justifyContent:'space-evenly', flexDirection: 'row' }}>
-                            <View
-                                style={styles.bottomBtns}>
-                                <Pressable>
-                                    <Feather name="edit" size={30} />
-                                </Pressable>
-                                {/* <CustomButton
-                                    width={50}
-                                    height={30}
-                                    title={}
-                                    onPress={() => {
-                                        // props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
-                                    }}
-                                /> */}
-                            </View>
-                            <View
+                        <View
                                 style={styles.bottomBtns}>
                                 <Pressable>
                                     <SimpleLineIcons name="logout" size={30} />
                                 </Pressable>
                             </View>
                             <View
-                                // style={}
+                                // style={styles.bottomBtns}>
+                                style={{backgroundColor:'red'}}>
+                                <Pressable  onPress={() => {
+                                        props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
+                                    }}>
+                                    <Feather name="edit" size={30} />
+                                </Pressable>
+                               
+                            </View>
+                           
+                            <View
+                                
                                 >
                                 <CustomButton
                                     width={180}

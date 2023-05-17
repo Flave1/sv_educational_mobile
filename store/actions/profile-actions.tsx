@@ -29,10 +29,12 @@ export const updateStaffDetails = (values: any, teacherAccountId: any,navigation
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.post('/smp/server/update/teacher', values, teacherAccountId)
                 .then((res) => {
+                    console.log("res",res);
                     navigation.goBack();
                     GetTeacherDetails(teacherAccountId)(dispatch);
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                 }).catch((err) => {
+                    console.log("err",err);
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
                 });
@@ -40,7 +42,7 @@ export const updateStaffDetails = (values: any, teacherAccountId: any,navigation
     })
 }
 
-export const getTeacherClassAndSubject = (teacherAccountId: any, ) => (dispatch: any) => {
+export const getTeacherClassAndSubject = (teacherAccountId: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
