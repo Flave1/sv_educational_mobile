@@ -126,8 +126,7 @@ const TeacherProfile = (props: any) => {
                                 </Pressable>
                             </View>
                             <View
-                                // style={styles.bottomBtns}>
-                                style={{backgroundColor:'red'}}>
+                                style={styles.bottomBtns}>
                                 <Pressable  onPress={() => {
                                         props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
                                     }}>

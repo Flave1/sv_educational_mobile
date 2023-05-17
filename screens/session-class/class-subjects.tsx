@@ -126,8 +126,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 200,
         borderColor: AppLightBlue,
+        color:'white',
     },
     detail: {
+        color:'white',
         borderRadius: 100,
         width: '90%',
         alignItems: 'flex-start',

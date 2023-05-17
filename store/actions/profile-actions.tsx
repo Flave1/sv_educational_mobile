@@ -27,7 +27,7 @@ export const updateStaffDetails = (values: any, teacherAccountId: any,navigation
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.post('/smp/server/update/teacher', values, teacherAccountId)
+            axiosInstance.post('/smp/server/update/teacher-profile/by-teacher', values)
                 .then((res) => {
                     console.log("res",res);
                     navigation.goBack();

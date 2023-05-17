@@ -101,7 +101,6 @@ const EditProfile = (props: any) => {
       params.append("ShortBiography", values.ShortBiography);
       params.append("ProfileImage", values.ProfileImage);
       console.log("values",values);
-      
       props.update(params, props?.onboardedUser.id, props.navigation);
     }
   });
