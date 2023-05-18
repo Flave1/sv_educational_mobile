@@ -1,10 +1,12 @@
 import axiosInstance from "../../axios/axiosInstance";
+import { ClassGroup } from "../../models/class-properties/class-group";
 import { ClassSubjects } from "../../models/class-properties/class-subjects";
 import { ClassStudentInfo, SessionClassInfo, SessionClassSubj } from "../../models/class-properties/students";
 import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/class-properties";
+import { setSuccessToast } from "./app-state-actions";
 
 export const GetTutorClasses = () => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
@@ -70,6 +72,115 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
         }
     })
 }
+
+    export const GetClassGroups2 = (sessionClassId: any,sessionClassSubjectId: any) => (dispatch: any): Promise<ClassGroup> => {
+        return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                return  axiosInstance.get(`smp/server/class/api/v1/getall/class-group?sessionClassId=${sessionClassId}&sessionClassSubjectId=${sessionClassSubjectId}`)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        return res.data.result 
+                    }).catch((err: any) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    
+                    })
+            }
+        })
+    }
+
+    export const GetSingleClassGroup = (sessionClassId: any,groupId: any) => (dispatch: any): Promise<ClassGroup> => {
+        return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                return  axiosInstance.get(`/smp/server/class/api/v1/getall/single/class-group?groupId=${groupId}&sessionClassId=${sessionClassId}`)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        return res.data.result 
+                    }).catch((err: any) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    
+                    })
+            }
+        })
+    }
+
+    export const deleteClassGroup = (items: string, sessionClassId: string,sessionSubjectId:string) => (dispatch: any) => {
+    
+        Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                const payload = {
+                    items
+                }
+                
+                axiosInstance.post(`/smp/server/class/api/v1/delete/class-group`, payload)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        setSuccessToast('Successfully deleted Class Group')(dispatch)
+                    }).catch((err) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    });
+            }
+        })
+    }
+    
+    export const createClassGroup = (groupName: string, sessionClassId: string,sessionClassSubjectId:string,studentContactIdArray:any[],navigation:any) => (dispatch: any) => {
+        
+        Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                const payload = {
+                    groupName,
+                    sessionClassId,
+                    sessionClassSubjectId,
+                    studentContactIds: studentContactIdArray
+                }
+                
+                axiosInstance.post('/smp/server/class/api/v1/create/class-group', payload)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        GetClassGroups2(sessionClassId,sessionClassSubjectId)(dispatch);
+                        navigation.goBack();
+                        setSuccessToast(res.data.message.friendlyMessage)(dispatch);
+                    }).catch((err) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    });
+            }
+        })
+    }
+    
+    export const updteClassGroup = (groupId:string,groupName: string, sessionClassId: string,sessionClassSubjectId:string,studentContactIdArray:string[],navigation:any) => (dispatch: any) => {
+        
+        Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+            if (hasInternetAccess) {
+                dispatch({ type: app_state_actions.SHOW_LOADING });
+                const payload = {
+                    groupId,
+                    groupName,
+                    sessionClassId,
+                    sessionClassSubjectId,
+                    isActive: true,
+                    studentContactIds: studentContactIdArray
+                }
+            
+                axiosInstance.post('/smp/server/class/api/v1/update/class-group', payload)
+                    .then((res) => {
+                        dispatch({ type: app_state_actions.HIDE_LOADING });
+                        GetClassGroups2(sessionClassId,sessionClassSubjectId)(dispatch);
+                        navigation.goBack();
+                        setSuccessToast(res.data.message.friendlyMessage)(dispatch);
+                    }).catch((err) => {
+                        const error: any = JSON.stringify(err.response);
+                        ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);
+                    });
+            }
+        })
+    }
 
 export const GetClassStudents = (sessionClassId: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {

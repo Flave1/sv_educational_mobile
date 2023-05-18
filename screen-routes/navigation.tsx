@@ -164,6 +164,20 @@ export const screens = {
                             title: 't-classsubject',
                             name: 't-classsubject'
                         },
+                        classGroup: {
+                            title: 't-classgroup',
+                            name: 't-classgroup',
+                            screen: {
+                                create: {
+                                    title: 't-classgroup-create',
+                                    name: 't-classgroup-create',
+                                },
+                                update: {
+                                    title: 't-classgroup-update',
+                                    name: 't-classgroup-update', 
+                                },
+                        },
+                    },
                         sessionClass: {
                             title: '',
                             name: 't-session-class',

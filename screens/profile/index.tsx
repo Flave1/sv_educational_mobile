@@ -12,7 +12,7 @@ import Feather from "react-native-vector-icons/Feather";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 
 
-const TeacherProfile = (props: any) => {
+const TeacherProfileIndex = (props: any) => {
 
     useEffect(() => {
         props.getDetails(props?.onboardedUser.id);
@@ -254,4 +254,4 @@ const styles = StyleSheet.create({
         width:'20%'
     }
 })
-export default connect(mapStateToProps, mapDispatchToProps)(TeacherProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherProfileIndex);

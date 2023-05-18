@@ -85,7 +85,14 @@ const SessionClassIndex = (props: any) => {
                                     })
                                 }}
                                 icon={<FontAwesome5 name="users" color="white" size={30} />} text={<CustomText title={'Students'} />} />
-                            <CircleBox icon={<FontAwesome5 name="user-friends" color="white" size={30} />} text={<CustomText title={'Groups'} />} />
+                            <CircleBox
+                             onPress={() => {
+                                    props.navigation.navigate({
+                                        name: screens.scenes.mainapp.scenes.tutor.screens.classGroup.name,
+                                        params: { sessionClass: sessionClass }
+                                    })
+                                }}
+                                 icon={<FontAwesome5 name="user-friends" color="white" size={30} />} text={<CustomText title={'Groups'} />} />
                             <CircleBox
                                 onPress={() => {
                                     props.navigation.navigate({
