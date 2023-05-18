@@ -107,7 +107,7 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
         })
     }
 
-    export const deleteClassGroup = (items: string, sessionClassId: string,sessionSubjectId:string) => (dispatch: any) => {
+    export const deleteClassGroup = (items: string, sessionClassId: string,sessionClassSubjectId:string) => (dispatch: any) => {
     
         Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
             if (hasInternetAccess) {
@@ -119,6 +119,7 @@ export const GetClassGroups = (sessionClassId: any, sessionClassSubjectId: any) 
                 axiosInstance.post(`/smp/server/class/api/v1/delete/class-group`, payload)
                     .then((res) => {
                         dispatch({ type: app_state_actions.HIDE_LOADING });
+                        GetClassGroups2(sessionClassId, sessionClassSubjectId)(dispatch);
                         setSuccessToast('Successfully deleted Class Group')(dispatch)
                     }).catch((err) => {
                         const error: any = JSON.stringify(err.response);

@@ -30,27 +30,27 @@ function EditClassGroup(props: any) {
         setStudentContactIdArray(props.classStudents)
     }, []);
 
-      useEffect(() => {
-        studentContactIdArray && setStudentContactIdArray(studentContactIdArray.map(v => ({...v, isActive: studentContactIdArray?.find(
-            (arr) => arr === v.studentAccountId
-          ) || false})))
-      }, [studentContactIdArray]);
+      // useEffect(() => {
+      //   studentContactIdArray && setStudentContactIdArray(studentContactIdArray.map(v => ({...v, isActive: studentContactIdArray?.find(
+      //       (arr) => arr === v.studentAccountId
+      //     ) || false})))
+      // }, [studentContactIdArray]);
 
-    useEffect(() => {
-        if (props.openOrCloseModal == false) {
-            setStudentContactIdArray([])
-        }
-    }, [props.openOrCloseModal]);
+    //   useEffect(() => {
+    //     if (props.modalActionState == false) {
+    //         setStudentContactIdArray([])
+    //     }
+    // }, [props.modalActionState]);
 
-    const handleCheck = (item: ClassStudent, isSelected: Boolean) => {
-        const updatedClassArray = studentContactIdArray.map((obj: any) => {
-            if (obj.studentAccountId === item.studentAccountId) {
-                return { ...obj, isActive:isSelected};
-            }
-            return obj;
-        });
-        setStudentContactIdArray(updatedClassArray);
-    }
+    // const handleCheck = (item: ClassStudent, isSelected: Boolean) => {
+    //     const updatedClassArray = studentContactIdArray.map((obj: any) => {
+    //         if (obj.studentAccountId === item.studentAccountId) {
+    //             return { ...obj, isActive:isSelected};
+    //         }
+    //         return obj;
+    //     });
+    //     setStudentContactIdArray(updatedClassArray);
+    // }
 
 
     return (
@@ -94,7 +94,7 @@ function EditClassGroup(props: any) {
                                         style={{ width: 100 }}
                                         isSelected={true}
                                         onValueChange={() => {
-                                            handleCheck(item, !true);
+                                            //handleCheck(item, !true);
                                         }} />
                                     <Text style={[{ width: 50 }]}
                                         onPress={() => {

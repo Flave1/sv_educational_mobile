@@ -44,11 +44,11 @@ function ClassGroupIndex(props: any) {
     };
 
     useEffect(() => {
-        !modalActionState && sessionClassSubject &&  props.getAll(sessionClass.value,sessionClassSubject.value).then((result: any) => {
+        sessionClassSubject &&  props.getAll(sessionClass.value,sessionClassSubject.value).then((result: any) => {
             setClassGroup(result);
         });
         props.getSubjects(sessionClass?.value);
-    }, [sessionClass.value,sessionClassSubject,!modalActionState]);
+    }, [sessionClass.value,sessionClassSubject]);
 
 
     useEffect(() => {
@@ -187,7 +187,6 @@ function ClassGroupIndex(props: any) {
                                 params: {
                                     sessionClass: sessionClass,
                                     sessionClassSubject: sessionClassSubject,
-                                     openOrCloseModal:openOrCloseModal
                                 }
                             })
                         }} />
