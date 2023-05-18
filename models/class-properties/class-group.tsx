@@ -13,3 +13,10 @@ export class ClassGroup {
     sessionClassId = "";
     sessionClassName = "";
 }
+
+export class ClassGroupStudents{
+    firstName: string = "";
+    lastName: string = "";
+    middleName: string = "";
+    StudentContactId = "";
+}

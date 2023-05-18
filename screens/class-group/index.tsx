@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useEffect, useState,useMemo,useRef } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { SelectItem } from "../../models/select-item";
 import { AppButtonColorDark, AppLightBlue } from "../../tools/color";
 import { Dimensions, Alert } from "react-native";
@@ -44,11 +44,11 @@ function ClassGroupIndex(props: any) {
     };
 
     useEffect(() => {
-        sessionClassSubject &&  props.getAll(sessionClass.value,sessionClassSubject.value).then((result: any) => {
+        sessionClassSubject && props.getAll(sessionClass.value, sessionClassSubject.value).then((result: any) => {
             setClassGroup(result);
         });
         props.getSubjects(sessionClass?.value);
-    }, [sessionClass.value,sessionClassSubject]);
+    }, [sessionClass.value, sessionClassSubject]);
 
 
     useEffect(() => {
@@ -57,13 +57,13 @@ function ClassGroupIndex(props: any) {
 
     const handleSearch = (text: any) => {
         setQuery(text);
-        const filteredData = classGroup.filter((item:any) => {
+        const filteredData = classGroup.filter((item: any) => {
             if (query === "") {
                 return classGroup;
             } else if (item.groupName.toLowerCase().includes(query.toLowerCase())) {
                 return item;
-             } else
-            classGroup
+            } else
+                classGroup
         });
         setFilteredClassGroup(filteredData);
     };
@@ -79,7 +79,7 @@ function ClassGroupIndex(props: any) {
                 {
                     text: 'YES',
                     onPress: () => {
-                   props.delete([selectedItem],sessionClass.value,sessionClassSubject.value)
+                        props.delete([selectedItem], sessionClass.value, sessionClassSubject.value)
                     },
                 },
             ],
@@ -91,29 +91,29 @@ function ClassGroupIndex(props: any) {
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Group">
             <BottomSheetModalProvider>
                 <View style={styles.container}>
-                <FloatingButton>
-                    <Pressable
-                        onPress={() => {
-                            if (!sessionClassSubject.value) {
-                                props.setErrorToastState('Subject must be selected');
-                                return;
-                            }
-                            props.navigation.navigate({
-                                name:  screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.create.name,
-                                params: {
-                                    sessionClass: sessionClass,
-                                    sessionClassSubject: sessionClassSubject,
-                                    modalActionState:modalActionState
+                    <FloatingButton>
+                        <Pressable
+                            onPress={() => {
+                                if (!sessionClassSubject.value) {
+                                    props.setErrorToastState('Subject must be selected');
+                                    return;
                                 }
-                            });
-                        }}>
-                        <MaterialCommunityIcons
-                            name="plus"
-                            size={50}
-                            color={AppButtonColorDark}
-                        />
-                    </Pressable>
-                </FloatingButton>
+                                props.navigation.navigate({
+                                    name: screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.create.name,
+                                    params: {
+                                        sessionClass: sessionClass,
+                                        sessionClassSubject: sessionClassSubject,
+                                        modalActionState: modalActionState
+                                    }
+                                });
+                            }}>
+                            <MaterialCommunityIcons
+                                name="plus"
+                                size={50}
+                                color={AppButtonColorDark}
+                            />
+                        </Pressable>
+                    </FloatingButton>
                     <Stack spacing={10} style={{ flex: 1, zIndex: -2 }} >
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                             <Box w={184}  >
@@ -136,11 +136,11 @@ function ClassGroupIndex(props: any) {
                                         }}
                                     />
                                 </View>
-                                </Box>
-                            </HStack>
-                         </Stack>
+                            </Box>
+                        </HStack>
+                    </Stack>
 
-                    <View style={styles.searchContainer}>
+                    {/* <View style={styles.searchContainer}>
                         <CustomTextInput
                             icon={<MaterialIcons name={'search'} size={16} />}
                             placeholder='Search .....'
@@ -151,17 +151,17 @@ function ClassGroupIndex(props: any) {
                             onChangeText={handleSearch}
                             value={query}
                         />
-                    </View>
+                    </View> */}
                     <View style={styles.groupContainer}>
                         <ScrollView>
                             {
                                 filtered.map((group: ClassGroup, idx: number) => {
                                     return (
                                         <Pressable
-                                        onPress={() => {
-                                            setSelectedItem(group.groupId)
-                                            openOrCloseModal(!modalActionState)
-                                        }}
+                                            onPress={() => {
+                                                setSelectedItem(group.groupId)
+                                                openOrCloseModal(!modalActionState)
+                                            }}
                                             key={idx} style={styles.student}>
                                             <View style={styles.avata}>
                                                 <Text style={styles.textStyle}>{group.groupName.charAt(0)}</Text>
@@ -190,11 +190,11 @@ function ClassGroupIndex(props: any) {
                                 }
                             })
                         }} />
-                        
+
                         <ListComponent text={'Delete'} icon={<AntDesign name="delete" size={20} />} onPress={() => {
                             openOrCloseModal(false)
                             showDialog()
-                            
+
                         }} />
                     </Stack>
                 </BottomUpComponent>
@@ -212,7 +212,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
-        delete: (item:string,sessionClassId:string,sessionClassSubjectId:string )=>  deleteClassGroup(item,sessionClassId,sessionClassSubjectId)(dispatch),
+        delete: (item: string, sessionClassId: string, sessionClassSubjectId: string) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId)(dispatch),
         getSubjects: (sessionClassId: string) => GetClassSubjects(sessionClassId)(dispatch),
         getAll: (classId: string, sessionClassSubjectId: string) => GetClassGroups2(classId, sessionClassSubjectId)(dispatch),
     };
