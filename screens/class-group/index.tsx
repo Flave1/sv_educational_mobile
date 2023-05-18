@@ -90,14 +90,19 @@ function ClassGroupIndex(props: any) {
 
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Group">
             <BottomSheetModalProvider>
+
                 <View style={styles.container}>
                     <FloatingButton>
                         <Pressable
                             onPress={() => {
+                                console.log('1');
+
                                 if (!sessionClassSubject.value) {
                                     props.setErrorToastState('Subject must be selected');
                                     return;
                                 }
+
+                                console.log('2');
                                 props.navigation.navigate({
                                     name: screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.create.name,
                                     params: {
@@ -106,6 +111,8 @@ function ClassGroupIndex(props: any) {
                                         modalActionState: modalActionState
                                     }
                                 });
+
+                                console.log('3');
                             }}>
                             <MaterialCommunityIcons
                                 name="plus"
@@ -114,12 +121,10 @@ function ClassGroupIndex(props: any) {
                             />
                         </Pressable>
                     </FloatingButton>
-                    <Stack spacing={10} style={{ flex: 1, zIndex: -2 }} >
-                        <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box w={184}  >
-
-                                <View >
-
+                    <View style={styles.groupContainer}>
+                        <Stack spacing={10} style={{ flex: 1 }} >
+                            <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                                <Box w={184}  >
                                     <CustomDropdownInput data={props.classSubjects}
                                         searchPlaceHolder="Search"
                                         height={40}
@@ -135,25 +140,10 @@ function ClassGroupIndex(props: any) {
                                             setSubject({ value: selectedItem.sessionClassSubjectId, text: selectedItem.subjectName, lookUpId: selectedItem.subjectid })
                                         }}
                                     />
-                                </View>
-                            </Box>
-                        </HStack>
-                    </Stack>
-
-                    {/* <View style={styles.searchContainer}>
-                        <CustomTextInput
-                            icon={<MaterialIcons name={'search'} size={16} />}
-                            placeholder='Search .....'
-                            autoCapitalize='none'
-                            autoCompleteType='text'
-                            keyboardType='text'
-                            keyboardAppearance='dark'
-                            onChangeText={handleSearch}
-                            value={query}
-                        />
-                    </View> */}
-                    <View style={styles.groupContainer}>
-                        <ScrollView>
+                                </Box>
+                            </HStack>
+                        </Stack>
+                        <ScrollView style={{zIndex: -2}}>
                             {
                                 filtered.map((group: ClassGroup, idx: number) => {
                                     return (
@@ -176,8 +166,10 @@ function ClassGroupIndex(props: any) {
                                 })
                             }
                         </ScrollView>
+
                     </View>
                 </View>
+
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
                     <Stack>
                         <ListComponent text={'Update'} icon={<Feather name="file-plus" size={20} />} onPress={() => {
@@ -198,7 +190,6 @@ function ClassGroupIndex(props: any) {
                         }} />
                     </Stack>
                 </BottomUpComponent>
-
             </BottomSheetModalProvider>
         </ProtectedTeacher>
     )
@@ -253,7 +244,8 @@ const styles = StyleSheet.create({
         width: '90%',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        padding: 10
+        padding: 10,
+        zIndex: -2,
     },
     textStyle: {
         color: 'white',
