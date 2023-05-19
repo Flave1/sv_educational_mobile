@@ -22,6 +22,8 @@ import Feather from "react-native-vector-icons/Feather";
 import { FloatingButton } from "../layouts/floating-button";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { setErrorToastState } from "../../store/actions/app-state-actions";
+import ScreenTitle from "../layouts/screen-title";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 function ClassGroupIndex(props: any) {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -50,23 +52,7 @@ function ClassGroupIndex(props: any) {
         props.getSubjects(sessionClass?.value);
     }, [sessionClass.value, sessionClassSubject]);
 
-
-    useEffect(() => {
-        classGroup && setFilteredClassGroup(classGroup);
-    }, [classGroup]);
-
-    const handleSearch = (text: any) => {
-        setQuery(text);
-        const filteredData = classGroup.filter((item: any) => {
-            if (query === "") {
-                return classGroup;
-            } else if (item.groupName.toLowerCase().includes(query.toLowerCase())) {
-                return item;
-            } else
-                classGroup
-        });
-        setFilteredClassGroup(filteredData);
-    };
+    
     const showDialog = () => {
         Alert.alert(
             'Delete Class Group',
@@ -90,19 +76,20 @@ function ClassGroupIndex(props: any) {
 
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Group">
             <BottomSheetModalProvider>
-
+            <Stack style={{ flex: 0, marginHorizontal: 21 }}>
+                        <HStack style={{ alignItems: 'center' }}>
+                            <ScreenTitle icon={<FontAwesome5 name="user-friends"  color="white" size={25} />} title={'-' + sessionClass.text + 'CLASS GROUP'} />
+                          
+                           </HStack>
+                           </Stack>
                 <View style={styles.container}>
                     <FloatingButton>
                         <Pressable
                             onPress={() => {
-                                console.log('1');
-
-                                if (!sessionClassSubject.value) {
+                               if (!sessionClassSubject.value) {
                                     props.setErrorToastState('Subject must be selected');
                                     return;
-                                }
-
-                                console.log('2');
+                                };
                                 props.navigation.navigate({
                                     name: screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.create.name,
                                     params: {
@@ -112,7 +99,6 @@ function ClassGroupIndex(props: any) {
                                     }
                                 });
 
-                                console.log('3');
                             }}>
                             <MaterialCommunityIcons
                                 name="plus"
@@ -122,8 +108,8 @@ function ClassGroupIndex(props: any) {
                         </Pressable>
                     </FloatingButton>
                     <View style={styles.groupContainer}>
-                        <Stack spacing={10} style={{ flex: 1 }} >
-                            <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                         <Stack spacing={10} style={{marginBottom:20}} >
+                           <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}> 
                                 <Box w={184}  >
                                     <CustomDropdownInput data={props.classSubjects}
                                         searchPlaceHolder="Search"
@@ -141,11 +127,11 @@ function ClassGroupIndex(props: any) {
                                         }}
                                     />
                                 </Box>
-                            </HStack>
-                        </Stack>
+                            </HStack> 
+                         </Stack>
                         <ScrollView style={{zIndex: -2}}>
                             {
-                                filtered.map((group: ClassGroup, idx: number) => {
+                                classGroup?.map((group: ClassGroup, idx: number) => {
                                     return (
                                         <Pressable
                                             onPress={() => {
@@ -179,6 +165,7 @@ function ClassGroupIndex(props: any) {
                                 params: {
                                     sessionClass: sessionClass,
                                     sessionClassSubject: sessionClassSubject,
+                                    groupId:selectedItem,
                                 }
                             })
                         }} />

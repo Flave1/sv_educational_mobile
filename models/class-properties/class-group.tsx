@@ -18,5 +18,6 @@ export class ClassGroupStudents{
     firstName: string = "";
     lastName: string = "";
     middleName: string = "";
-    StudentContactId = "";
+    studentAccountId = "";
+    isAdded: Boolean = false;
 }

@@ -12,20 +12,54 @@ import { GetClassStudents, createClassGroup } from "../../store/actions/class-pr
 import { screens } from "../../screen-routes/navigation";
 import CustomTextInput from "../layouts/CustomTextInput";
 import { ClassGroupStudents } from "../../models/class-properties/class-group";
+import { useFormik } from "formik";
+import * as Yup from 'yup';
 
 function CreateClassGroup(props: any) {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [sessionClassSubject] = useState(props.route.params.sessionClassSubject);
     const [studentContactArray, setStudentContactArray] = useState<ClassGroupStudents[]>([]);
-
+    const screenLocalColor = "#868C8E";
+   
     useEffect(() => {
         sessionClass.value && props.getClassStudents(sessionClass.value)
     }, []);
 
-    
     useEffect(() => {
         props.classStudents && setStudentContactArray(props.classStudents)
     }, [props.classStudents]);
+    
+
+    const handleCheck = (item: ClassGroupStudents, isSelected: Boolean) => {
+        const updatedClassArray = studentContactArray.map((obj: any) => {
+            if (obj.studentAccountId === item.studentAccountId) {
+                return { ...obj, isAdded: isSelected };
+            }
+            return obj;
+        });
+        setStudentContactArray(updatedClassArray);
+    }
+
+    const validation = Yup.object().shape({
+        groupName: Yup.string()
+          .min(2, "Group Name Too Short!")
+          .required("Group Name is required"),
+      });
+
+    const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
+        initialValues: {
+         groupName:'',
+         sessionClassId: sessionClass.value, 
+         sessionClassSubjectId: sessionClassSubject.value,
+         studentContactIds: [], 
+        },
+        enableReinitialize: true,
+        validationSchema: validation,
+        onSubmit: (values:any) => {  
+        values.studentContactIds = studentContactArray.filter(d => d.isAdded == true).map(d => d.studentAccountId);
+          props.create(values,props.navigation);
+        }
+      });
 
     return (
         <>
@@ -33,42 +67,45 @@ function CreateClassGroup(props: any) {
                 <BottomSheetModalProvider>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', paddingHorizontal: 10 }}>Send class to : </Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold',fontSize:25, padding: 10, }}>Create Class Group</Text>
                         </HStack>
                     </Stack>
                     <ScrollView style={{ padding: 5 }}>
                         <View style={{ width: '100%' }}>
-                            {/* <View>
-                                {!groupName && validation && (
-                                    <Text style={styles.warningText}>
-                                        group name is required
-                                    </Text>
-                                )}
-                            </View> */}
+                            <Stack center>
+                                {(touched.groupName && errors.groupName) && <Text style={ styles.warningText }>{errors.groupName}</Text>}
+                            </Stack>
                             <Text style={styles.text}>Group Name:</Text>
                             <CustomTextInput
-                                icon={<MaterialIcons name="groupName" size={16} />}
+                                icon={<MaterialIcons name="edit" size={16} />}
                                 placeholder='Group Name'
                                 autoCapitalize='none'
                                 autoCompleteType='text'
                                 keyboardType='text'
                                 keyboardAppearance='dark'
-                                // onBlur={setValidation(true)}
+                                returnKeyType='next'
+                                returnKeyLabel='next'
+                                onBlur={handleBlur('groupName')}
+                                value={values.groupName}
+                                error={errors.groupName}
+                                touched={touched.groupName}
                                 disabled={true}
                                 onChange={(e: any) => {
-                                    // setGroupName(e.nativeEvent.text)
+                                    handleChange('groupName');
+                                    setFieldValue('groupName', e.nativeEvent.text)
                                 }}
                             />
                         </View>
-                        {studentContactArray?.map((item: any, idx: number) => {
+                        <Text style={[styles.text,{marginTop:10}]}>Add Students To Group:</Text>
+                        {studentContactArray?.map((item: ClassGroupStudents, idx: number) => {
                             return (
                                 <View key={idx} style={[styles.tableRow]}>
                                     <Text style={[styles.tableItem, { width: 250 }]}> {item.firstName} {item.lastName}</Text>
                                     <CustomCheckBox
                                         style={{ width: 100 }}
-                                        isSelected={true}
+                                        isSelected={item.isAdded}
                                         onValueChange={() => {
-                                            //handleCheck(item, !true);
+                                            handleCheck(item, !item.isAdded);
                                         }} />
                                     <Text style={[{ width: 50 }]}
                                         onPress={() => {
@@ -90,21 +127,17 @@ function CreateClassGroup(props: any) {
                         <View>
 
                             <CustomButton
-                                // backgroundColor={screenLocalColor}
+                                backgroundColor={screenLocalColor}
                                 title="CLOSE" onPress={() => {
                                     props.openOrCloseModal(false)
                                 }}
                             />
                         </View>
-                        {/* <View>
+                        <View>
                             <CustomButton title="SUBMIT" onPress={() => {
-                                props.create(groupName,
-                                    sessionClass.value,
-                                    sessionClassSubject.value,
-                                    studentContactIdArray.filter(d => d.isActive == true).map(d => d.studentAccountId),
-                                    props.navigation)
+                                handleSubmit()
                             }} />
-                        </View> */}
+                        </View> 
                     </HStack>
                 </BottomSheetModalProvider>
             </ProtectedTeacher>
@@ -126,8 +159,8 @@ const styles = StyleSheet.create({
     warningText: {
         color: 'red'
     },
-    text:{
-        color:'white'
+    text: {
+        color: 'white'
     }
 })
 const mapStateToProps = (state: any) => {
@@ -138,7 +171,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getClassStudents: (sessionClassId: string) => GetClassStudents(sessionClassId)(dispatch),
-        create: (groupName:string,sessionClassId: string,sessionClassSubjectId:string,studentContactIdArray:any[],navigation:any) => createClassGroup(groupName,sessionClassId,sessionClassSubjectId,studentContactIdArray,navigation)(dispatch),
+        create: (values:any,navigation: any) => createClassGroup(values,navigation)(dispatch),
     }
 }
 

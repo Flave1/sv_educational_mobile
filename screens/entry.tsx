@@ -27,7 +27,7 @@ import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
 import ClassnoteIndex from './classnote/index';
 import ClassNoteCreate from './classnote/create-classNote';
-import ClassNoteUpdate from './classnote/update-classnote';
+import ClassNoteUpdate from './classnote/update-classNote';
 import ClassStudents from './session-class/class-students';
 import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
