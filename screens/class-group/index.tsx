@@ -65,7 +65,7 @@ function ClassGroupIndex(props: any) {
                 {
                     text: 'YES',
                     onPress: () => {
-                        props.delete([selectedItem], sessionClass.value, sessionClassSubject.value)
+                        props.delete([selectedItem], sessionClass.value, sessionClassSubject.value,setClassGroup)
                     },
                 },
             ],
@@ -95,7 +95,7 @@ function ClassGroupIndex(props: any) {
                                     params: {
                                         sessionClass: sessionClass,
                                         sessionClassSubject: sessionClassSubject,
-                                        modalActionState: modalActionState
+                                        setClassGroup:setClassGroup,
                                     }
                                 });
 
@@ -166,6 +166,7 @@ function ClassGroupIndex(props: any) {
                                     sessionClass: sessionClass,
                                     sessionClassSubject: sessionClassSubject,
                                     groupId:selectedItem,
+                                    setClassGroup:setClassGroup,
                                 }
                             })
                         }} />
@@ -190,7 +191,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
-        delete: (item: string, sessionClassId: string, sessionClassSubjectId: string) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId)(dispatch),
+        delete: (item: string, sessionClassId: string, sessionClassSubjectId: string,setClassGroup:any) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId,setClassGroup)(dispatch),
         getSubjects: (sessionClassId: string) => GetClassSubjects(sessionClassId)(dispatch),
         getAll: (classId: string, sessionClassSubjectId: string) => GetClassGroups2(classId, sessionClassSubjectId)(dispatch),
     };

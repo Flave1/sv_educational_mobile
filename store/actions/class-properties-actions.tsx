@@ -107,7 +107,7 @@ export const GetSingleClassGroup = (sessionClassId: any, groupId: any) => (dispa
     })
 }
 
-export const deleteClassGroup = (items: string, sessionClassId: string, sessionClassSubjectId: string) => (dispatch: any) => {
+export const deleteClassGroup = (items: string, sessionClassId: string, sessionClassSubjectId: string,setClassGroup:any) => (dispatch: any) => {
 
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
@@ -115,10 +115,11 @@ export const deleteClassGroup = (items: string, sessionClassId: string, sessionC
             const payload = {
                 items
             }
-
             axiosInstance.post(`/smp/server/class/api/v1/delete/class-group`, payload)
                 .then((res) => {
-                    GetClassGroups2(sessionClassId, sessionClassSubjectId)(dispatch);
+                    GetClassGroups2(sessionClassId, sessionClassSubjectId)(dispatch).then((result: any) => {
+                        setClassGroup(result);
+                })
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     setSuccessToast('Successfully deleted Class Group')(dispatch)
                 }).catch((err) => {
@@ -129,14 +130,16 @@ export const deleteClassGroup = (items: string, sessionClassId: string, sessionC
     })
 }
 
-export const createClassGroup = (values:any, navigation: any) => (dispatch: any) => {
+export const createClassGroup = (values:any, navigation: any,setClassGroup:any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-        
+            
             axiosInstance.post('/smp/server/class/api/v1/create/class-group', values)
                 .then((res) => {
-                    GetClassGroups2(values.sessionClassId, values.sessionClassSubjectId)(dispatch);
+                    GetClassGroups2(values.sessionClassId, values.sessionClassSubjectId)(dispatch).then((result: any) => {
+                        setClassGroup(result);
+                })
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     navigation.goBack();
                     setSuccessToast(res.data.message.friendlyMessage)(dispatch);
@@ -148,14 +151,16 @@ export const createClassGroup = (values:any, navigation: any) => (dispatch: any)
     })
 }
 
-export const updateClassGroup = (values:any, navigation: any) => (dispatch: any) => {
+export const updateClassGroup = (values:any, navigation: any,setClassGroup:any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-        
+
             axiosInstance.post('/smp/server/class/api/v1/update/class-group', values)
                 .then((res) => {
-                    GetClassGroups2(values.sessionClassId, values.sessionClassSubjectId)(dispatch);
+                    GetClassGroups2(values.sessionClassId, values.sessionClassSubjectId)(dispatch).then((result: any) => {
+                        setClassGroup(result);
+                })
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                     navigation.goBack();
                     setSuccessToast(res.data.message.friendlyMessage)(dispatch);

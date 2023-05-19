@@ -19,6 +19,7 @@ function UpdateClassGroup(props: any) {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [sessionClassSubject] = useState(props.route.params.sessionClassSubject);
     const [groupId] = useState(props.route.params.groupId);
+    const setClassGroup = props.route.params.setClassGroup;
     const [studentContactArray, setStudentContactArray] = useState<ClassGroupStudents[]>([]);
     const [singleGroup, setSingleGroup] = useState<ClassGroup>()
     const screenLocalColor = "#868C8E";
@@ -69,7 +70,7 @@ function UpdateClassGroup(props: any) {
         validationSchema: validation,
         onSubmit: (values:any) => {  
         values.studentContactIds = studentContactArray.filter(d => d.isAdded == true).map(d => d.studentAccountId);
-          props.update(values,props.navigation);
+          props.update(values,props.navigation,setClassGroup);
         }
       });
 
@@ -183,7 +184,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getClassStudents: (sessionClassId: string) => GetClassStudents(sessionClassId)(dispatch),
-        update: (values:any,navigation: any) => updateClassGroup(values,navigation)(dispatch),
+        update: (values:any,navigation: any,setClassGroup:any) => updateClassGroup(values,navigation,setClassGroup)(dispatch),
         getSingleGroup: (sessionClassId:string,groupId:string) => GetSingleClassGroup(sessionClassId,groupId)(dispatch)
     }
 }

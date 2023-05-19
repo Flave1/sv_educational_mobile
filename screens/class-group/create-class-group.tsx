@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 function CreateClassGroup(props: any) {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
     const [sessionClassSubject] = useState(props.route.params.sessionClassSubject);
+    const setClassGroup = props.route.params.setClassGroup;
     const [studentContactArray, setStudentContactArray] = useState<ClassGroupStudents[]>([]);
     const screenLocalColor = "#868C8E";
    
@@ -57,7 +58,7 @@ function CreateClassGroup(props: any) {
         validationSchema: validation,
         onSubmit: (values:any) => {  
         values.studentContactIds = studentContactArray.filter(d => d.isAdded == true).map(d => d.studentAccountId);
-          props.create(values,props.navigation);
+          props.create(values,props.navigation,setClassGroup);
         }
       });
 
@@ -171,7 +172,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getClassStudents: (sessionClassId: string) => GetClassStudents(sessionClassId)(dispatch),
-        create: (values:any,navigation: any) => createClassGroup(values,navigation)(dispatch),
+        create: (values:any,navigation: any,setClassGroup:any) => createClassGroup(values,navigation,setClassGroup)(dispatch),
     }
 }
 
