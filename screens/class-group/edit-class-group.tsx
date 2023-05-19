@@ -22,21 +22,19 @@ function UpdateClassGroup(props: any) {
     const [studentContactArray, setStudentContactArray] = useState<ClassGroupStudents[]>([]);
     const [singleGroup, setSingleGroup] = useState<ClassGroup>()
     const screenLocalColor = "#868C8E";
+    const classGroupStudents = singleGroup?.classGroupStudents?.map((c:any) => c.studentContactId);
    
     useEffect(() => {
         sessionClass.value && props.getClassStudents(sessionClass.value)
     }, []);
-
-    // useEffect(() => {
-    //     props.classStudents && setStudentContactArray(props.classStudents)
-    // }, [props.classStudents]);
 
     useEffect(() => {
       sessionClassSubject && props.getSingleGroup(sessionClass.value,groupId).then((result: any) => {
         setSingleGroup(result);
       });
   }, [sessionClass.value, groupId]);
-  const classGroupStudents = singleGroup?.classGroupStudents?.map((c:any) => c.studentContactId)
+
+
   useEffect(() => {
   const addedBoolean = props.classStudents?.map((v:any) => ({...v, isAdded: classGroupStudents?.find(
     (arr:any) => arr === v.studentAccountId)? true : false}))
@@ -74,7 +72,6 @@ function UpdateClassGroup(props: any) {
           props.update(values,props.navigation);
         }
       });
-console.log("studentContactArray",studentContactArray)
 
     return (
         <>
