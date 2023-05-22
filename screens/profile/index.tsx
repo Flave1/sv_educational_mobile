@@ -94,8 +94,8 @@ const TeacherProfileIndex = (props: any) => {
                         </View>
                         <View style={styles.sectionStyle}>
                             <Text style={styles.label}>Classes As Form Teacher</Text>
-                            {props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: any, idx: number) => (
-                                                  <View>
+                            {props.teacherClassAndSubject?.classesAsFormTeacher?.map((item: any,index:number) => (
+                                                  <View key={index}>
                                                   <Text style={styles.item}>{item.class}</Text>
                                                   {item?.subjectsInClass?.map((sub: any, idx: number) => (
                                                     <Text key={idx} style={styles.item}>{` - ${sub}`}</Text>
@@ -106,8 +106,8 @@ const TeacherProfileIndex = (props: any) => {
                 
                         <View style={styles.sectionStyle}>
                             <Text style={styles.label}>Subjects As Subject Teacher</Text>
-                            {props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: any, idx: number) => (
-                                <View>
+                            {props.teacherClassAndSubject?.subjectsAsSubjectTeacher?.map((subj: any,index:number ) => (
+                                <View key={index}>
                                   <Text style={styles.item}>{subj.subject}</Text>
                                   {subj.class?.map((subjects: any, idx: number) => (
                                     <Text key={idx} style={styles.item}>{` - ${subjects}`}</Text>
@@ -122,7 +122,7 @@ const TeacherProfileIndex = (props: any) => {
                         <View
                                 style={styles.bottomBtns}>
                                 <Pressable>
-                                    <SimpleLineIcons name="logout" size={30} />
+                                    <SimpleLineIcons name="logout" size={30} color={'white'} />
                                 </Pressable>
                             </View>
                             <View
@@ -130,7 +130,7 @@ const TeacherProfileIndex = (props: any) => {
                                 <Pressable  onPress={() => {
                                         props.navigation.navigate(screens.scenes.auth.screens.profile.screens.profileedit.name)
                                     }}>
-                                    <Feather name="edit" size={30} />
+                                    <Feather name="edit" size={30} color={'white'}/>
                                 </Pressable>
                                
                             </View>

@@ -17,6 +17,8 @@ import { screens } from "../../screen-routes/navigation";
 import Feather from "react-native-vector-icons/Feather";
 import { setErrorToastState } from "../../store/actions/app-state-actions";
 import { _paginationGetStudentnotes, getStudentnotes } from "../../store/actions/studentnote-actions";
+import ScreenTitle from "../layouts/screen-title";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 const StudentNoteIndex = (props: any) => {
 
@@ -73,7 +75,9 @@ const StudentNoteIndex = (props: any) => {
                         getAction={props.__getAll}
                         params={{ 'sessionClassId': sessionClass?.value, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box w={184}  >
+                       
+                            <ScreenTitle  icon={<MaterialCommunityIcons name="bookshelf" color="white" size={30} />} title={'-' + sessionClass.text + ' STUDENT NOTE'} />
+                            <Box w={184} style={{marginTop:20}} >
 
                                 <View >
 
@@ -95,7 +99,7 @@ const StudentNoteIndex = (props: any) => {
                                 </View>
 
                             </Box>
-                            <Box w={184}  >
+                            <Box w={184} style={{marginTop:20, marginLeft:10}}  >
                                 <View >
                                     <CustomDropdownInput data={status}
                                         searchPlaceHolder="Search"

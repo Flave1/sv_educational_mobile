@@ -34,7 +34,7 @@ const ChangePassword = (props: any) => {
                 is: (val: any) => (val && val.length > 0 ? true : false),
                 then: Yup.string().oneOf(
                     [Yup.ref("password")],
-                    "Confirm password need to be the same with new password"
+                    "Confirm password needs to be the same with new password"
                 ),
             })
     });

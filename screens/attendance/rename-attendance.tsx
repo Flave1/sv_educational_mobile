@@ -48,11 +48,10 @@ function RenameRegister(props: any) {
             <Stack center>
                 {((touched.classRegisterLabel && errors.classRegisterLabel)) && <Text color='red'>{errors.classRegisterLabel}</Text>}
             </Stack>
-            <Stack spacing={10} style={{  height: '60%', justifyContent: 'center',padding:20 }}>
-                <View style={{ width: '80%' }}>
+            <Stack spacing={10} style={{  height: '60%', justifyContent: 'center',padding:40 }}>
+                <View style={{ width: '100%' }}>
                     <CustomTextInput
                         icon={<Feather name={'edit-3'} size={31} />}
-                        //placeholder='rename attendance'
                         autoCapitalize='none'
                         autoCompleteType='text'
                         keyboardType='text'
@@ -63,7 +62,7 @@ function RenameRegister(props: any) {
                         value={values.classRegisterLabel}
                         error={errors.classRegisterLabel}
                         touched={touched.classRegisterLabel}
-                        style={{ borderColor: 'black', borderWidth: 1, color: 'black' }}
+                        style={{ borderColor: 'black', borderWidth: 1, color: 'white', }}
                         onChange={(e: any) => {
                             handleChange('classRegisterLabel');
                             setFieldValue('classRegisterLabel', e.nativeEvent.text)

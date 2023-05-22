@@ -66,12 +66,12 @@ function CreateClassGroup(props: any) {
         <>
             <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Create Class Group">
                 <BottomSheetModalProvider>
-                    <Stack style={{ flex: 0 }}>
+                    <Stack style={{ flex: 0,padding:10 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <Text style={{ color: 'white', fontWeight: 'bold',fontSize:25, padding: 10, }}>Create Class Group</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold',fontSize:20, padding: 10, }}>{`CREATE GROUP FOR ${sessionClass.text} ${sessionClassSubject.text}`}</Text>
                         </HStack>
                     </Stack>
-                    <ScrollView style={{ padding: 5 }}>
+                    <ScrollView style={{ padding: 20 }}>
                         <View style={{ width: '100%' }}>
                             <Stack center>
                                 {(touched.groupName && errors.groupName) && <Text style={ styles.warningText }>{errors.groupName}</Text>}
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     text: {
         color: 'white'
     }
+    
 })
 const mapStateToProps = (state: any) => {
     return {

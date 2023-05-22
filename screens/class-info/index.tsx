@@ -43,23 +43,23 @@ const ClassInfoIndex = (props: any) => {
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>No of Subjects</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={sessionClassSubj?.length} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 100 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={sessionClassSubj?.length} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>No of Students</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.classStudents?.length} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 100 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={props.classStudents?.length} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Assessment Score</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.assessmentScore} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 100 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.assessmentScore} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Exam Score</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.examScore} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 100 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.examScore} /></Text>
                         </View>
                         <View style={[styles.tableRow]}>
                             <Text color="white" style={[styles.headerItem, { width: 200 }]}>Pass Mark</Text>
-                            <Text color="white" style={[styles.tableItem, { width: 200 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.passMark} /></Text>
+                            <Text color="white" style={[styles.tableItem, { width: 100 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={classInfoWithoutSubj?.passMark} /></Text>
                         </View>
 
                     </View>

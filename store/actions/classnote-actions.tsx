@@ -14,7 +14,6 @@ export const getClassnotes = (sessionClassId: string, subjectId: string, status:
             dispatch({ type: app_state_actions.SHOW_LOADING });
             axiosInstance.get(`smp/server/classnotes/api/v1/get/classnotes/by-teacher/mobile?classId=${sessionClassId}&subjectId=${subjectId}&status=${status}&pageNumber=${pageNumber}`)
                 .then((res) => {
-                    console.log('res', res);
                     dispatch({ type: actions.GET_CLASS_NOTES, payload: res.data.result });
                     dispatch({ type: app_state_actions.HIDE_LOADING });
                 }).catch((err: any) => {

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView, Pressable } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Pressable, FlatList } from "react-native";
 import { connect } from "react-redux";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -11,7 +11,7 @@ import CustomTextInput from "../layouts/CustomTextInput";
 import { GetClassGroups2, GetClassSubjects, deleteClassGroup, } from "../../store/actions/class-properties-actions";
 import { ClassSubjects } from "../../models/class-properties/class-subjects";
 import { ClassGroup } from "../../models/class-properties/class-group";
-import { Box, HStack, Stack } from "@react-native-material/core";
+import { Box, HStack, Stack, Badge } from "@react-native-material/core";
 import CustomDropdownInput from "../layouts/CustomDropdownInput";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import BottomUpComponent from "../layouts/bottom-up-component";
@@ -52,7 +52,7 @@ function ClassGroupIndex(props: any) {
         props.getSubjects(sessionClass?.value);
     }, [sessionClass.value, sessionClassSubject]);
 
-    
+
     const showDialog = () => {
         Alert.alert(
             'Delete Class Group',
@@ -65,7 +65,7 @@ function ClassGroupIndex(props: any) {
                 {
                     text: 'YES',
                     onPress: () => {
-                        props.delete([selectedItem], sessionClass.value, sessionClassSubject.value,setClassGroup)
+                        props.delete([selectedItem], sessionClass.value, sessionClassSubject.value, setClassGroup)
                     },
                 },
             ],
@@ -76,17 +76,33 @@ function ClassGroupIndex(props: any) {
 
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Group">
             <BottomSheetModalProvider>
-            <Stack style={{ flex: 0, marginHorizontal: 21 }}>
-                        <HStack style={{ alignItems: 'center' }}>
-                            <ScreenTitle icon={<FontAwesome5 name="user-friends"  color="white" size={25} />} title={'-' + sessionClass.text + 'CLASS GROUP'} />
-                          
-                           </HStack>
-                           </Stack>
+                <Stack style={{ flex: 0, marginHorizontal: 21 }}>
+                    <HStack style={{ flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center' }}>
+                        <ScreenTitle icon={<FontAwesome5 name="user-friends" color="white" size={25} />} title={'-' + sessionClass.text + ' GROUP'} />
+                        <Box w={184}  >
+                            <CustomDropdownInput data={props.classSubjects}
+                                searchPlaceHolder="Search"
+                                height={50}
+                                defaultButtonText="Select Subject"
+                                // search={true}
+                                buttonTextAfterSelection={(selectedItem: ClassSubjects, index: any) => {
+                                    return selectedItem.subjectName
+                                }}
+                                rowTextForSelection={(item: ClassSubjects, index: any) => {
+                                    return item.subjectName
+                                }}
+                                onSelect={(selectedItem: ClassSubjects, index: any) => {
+                                    setSubject({ value: selectedItem.sessionClassSubjectId, text: selectedItem.subjectName, lookUpId: selectedItem.subjectid })
+                                }}
+                            />
+                        </Box>
+                    </HStack>
+                </Stack>
                 <View style={styles.container}>
                     <FloatingButton>
                         <Pressable
                             onPress={() => {
-                               if (!sessionClassSubject.value) {
+                                if (!sessionClassSubject.value) {
                                     props.setErrorToastState('Subject must be selected');
                                     return;
                                 };
@@ -95,7 +111,7 @@ function ClassGroupIndex(props: any) {
                                     params: {
                                         sessionClass: sessionClass,
                                         sessionClassSubject: sessionClassSubject,
-                                        setClassGroup:setClassGroup,
+                                        setClassGroup: setClassGroup,
                                     }
                                 });
 
@@ -107,53 +123,58 @@ function ClassGroupIndex(props: any) {
                             />
                         </Pressable>
                     </FloatingButton>
-                    <View style={styles.groupContainer}>
-                         <Stack spacing={10} style={{marginBottom:20}} >
-                           <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}> 
-                                <Box w={184}  >
-                                    <CustomDropdownInput data={props.classSubjects}
-                                        searchPlaceHolder="Search"
-                                        height={40}
-                                        defaultButtonText="Select Subject"
-                                        // search={true}
-                                        buttonTextAfterSelection={(selectedItem: ClassSubjects, index: any) => {
-                                            return selectedItem.subjectName
+                    {/* <ScrollView style={{ zIndex: -2 }}>
+                        {
+                            classGroup?.map((group: ClassGroup, idx: number) => {
+                                return (
+                                    <Pressable
+                                        onPress={() => {
+                                            setSelectedItem(group.groupId)
+                                            openOrCloseModal(!modalActionState)
                                         }}
-                                        rowTextForSelection={(item: ClassSubjects, index: any) => {
-                                            return item.subjectName
-                                        }}
-                                        onSelect={(selectedItem: ClassSubjects, index: any) => {
-                                            setSubject({ value: selectedItem.sessionClassSubjectId, text: selectedItem.subjectName, lookUpId: selectedItem.subjectid })
-                                        }}
-                                    />
-                                </Box>
-                            </HStack> 
-                         </Stack>
-                        <ScrollView style={{zIndex: -2}}>
-                            {
-                                classGroup?.map((group: ClassGroup, idx: number) => {
-                                    return (
+                                        key={idx} style={styles.student}>
+                                        <View style={styles.avata}>
+                                            <Text style={styles.textStyle}>{group.groupName.charAt(0)}</Text>
+                                        </View>
+                                        <View style={styles.detail}>
+                                            <Text style={[styles.textStyle, { fontWeight: 'bold', fontSize: 20 }]}>{group.groupName}</Text>
+                                            <Text style={styles.textStyle}><Text style={styles.textStyle}>No of Students in Grp: </Text>{group?.numberOfStudentsInGroup}</Text>
+                                            <Text style={styles.textStyle}><Text style={styles.textStyle}>No of Students not in Grp: </Text>{group?.numberOfStudentNotInGroup}</Text>
+                                        </View>
+                                    </Pressable>
+                                )
+                            })
+                        }
+                    </ScrollView> */}
+                    <ScrollView horizontal={true} style={{ marginTop: 10, zIndex: -2 }} >
+                        <View>
+                            <View style={[styles.tableHeader]}>
+                                <Text style={[styles.headerItem, { width: 150 }]}>Group Name</Text>
+                                <Text style={[styles.headerItem, { width: 150 }]}>No of Students in Grp</Text>
+                                <Text style={[styles.headerItem, { width: 150 }]}>No of Students Not in Grp</Text>
+                            </View>
+
+                            <FlatList
+                                data={classGroup}
+                                keyExtractor={item => item?.groupName}
+                                renderItem={({ item, idx }: any) => (
+                                    <View key={idx} style={[styles.tableRow]}>
                                         <Pressable
                                             onPress={() => {
-                                                setSelectedItem(group.groupId)
+                                                setSelectedItem(item?.groupId)
                                                 openOrCloseModal(!modalActionState)
                                             }}
                                             key={idx} style={styles.student}>
-                                            <View style={styles.avata}>
-                                                <Text style={styles.textStyle}>{group.groupName.charAt(0)}</Text>
+                                            <Text style={[styles.tableItem, { width: 150 }]}>{item?.groupName}</Text>
+                                            <Text style={[styles.tableItem, { width: 150 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={item?.numberOfStudentsInGroup} /></Text>
+                                            <Text style={[styles.tableItem, { width: 150 }]}><Badge color={AppButtonColorDark} labelStyle={{ color: 'white', fontWeight: 'bold' }} label={item?.numberOfStudentNotInGroup} /></Text>
+                                        </Pressable> 
                                             </View>
-                                            <View style={styles.detail}>
-                                                <Text style={[styles.textStyle, { fontWeight: 'bold', fontSize: 20 }]}>{group.groupName}</Text>
-                                                <Text style={styles.textStyle}><Text style={styles.textStyle}>No of Students in Grp: </Text>{group?.numberOfStudentsInGroup}</Text>
-                                                <Text style={styles.textStyle}><Text style={styles.textStyle}>No of Students not in Grp: </Text>{group?.numberOfStudentNotInGroup}</Text>
-                                            </View>
-                                        </Pressable>
-                                    )
-                                })
-                            }
-                        </ScrollView>
+                                )}
+                            /></View>
+                    </ScrollView>
 
-                    </View>
+
                 </View>
 
                 <BottomUpComponent bottomSheetModalRef={bottomSheetModalRef} snapPoints={snapPoints} openOrCloseModal={openOrCloseModal}>
@@ -165,8 +186,8 @@ function ClassGroupIndex(props: any) {
                                 params: {
                                     sessionClass: sessionClass,
                                     sessionClassSubject: sessionClassSubject,
-                                    groupId:selectedItem,
-                                    setClassGroup:setClassGroup,
+                                    groupId: selectedItem,
+                                    setClassGroup: setClassGroup,
                                 }
                             })
                         }} />
@@ -191,7 +212,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
-        delete: (item: string, sessionClassId: string, sessionClassSubjectId: string,setClassGroup:any) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId,setClassGroup)(dispatch),
+        delete: (item: string, sessionClassId: string, sessionClassSubjectId: string, setClassGroup: any) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId, setClassGroup)(dispatch),
         getSubjects: (sessionClassId: string) => GetClassSubjects(sessionClassId)(dispatch),
         getAll: (classId: string, sessionClassSubjectId: string) => GetClassGroups2(classId, sessionClassSubjectId)(dispatch),
     };
@@ -208,11 +229,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems: 'center'
-    },
-    groupContainer: {
+        alignItems: 'center',
         padding: 10
     },
+
     student: {
         flexDirection: 'row',
         height: 50,
@@ -237,7 +257,26 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: 'white',
-    }
+    },
+    tableHeader: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        padding: 10,
+    },
+    headerItem: {
+        color: 'white',
+    },
+    tableRow: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        padding: 10
+
+    },
+    tableItem: {
+        color: 'white',
+    },
 })
 
 
