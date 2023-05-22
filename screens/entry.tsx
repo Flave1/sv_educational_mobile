@@ -35,11 +35,14 @@ import StudentnoteDetails from './studentnote/note-details';
 import StudentNoteIndex from './studentnote';
 import ClassInfoIndex from './class-info';
 import { connect } from 'react-redux';
-import TeacherProfile from './profile';
+import TeacherProfileIndex from './profile';
 import ForgotPassword from './authentication/forgot-password';
 import ForgotPasswordOtp from './authentication/forgot-password-otp';
 import ChangePassword from './authentication/change-password';
 import EditProfile from './profile/edit-teacher-profile';
+import ClassGroupIndex from './class-group';
+import CreateClassGroup from './class-group/create-class-group';
+import EditClassGroup from './class-group/edit-class-group';
 
 
 
@@ -109,7 +112,7 @@ const StackNavigator = (parentProps: any) => {
                     {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
-                    {props => <TeacherProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <TeacherProfileIndex {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={ screens.scenes.auth.screens.profile.screens.profileedit.name}>
                     {props => <EditProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
@@ -164,6 +167,15 @@ const StackNavigator = (parentProps: any) => {
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classSubjects.name}>
                     {props => <ClassSubjects {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classGroup.name}>
+                    {props => <ClassGroupIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.create.name}>
+                    {props => <CreateClassGroup {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classGroup.screen.update.name}>
+                    {props => <EditClassGroup {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.studentnote.name}>
                     {props => <StudentNoteIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}

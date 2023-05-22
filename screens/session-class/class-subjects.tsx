@@ -44,7 +44,7 @@ function ClassSubjects(props: any) {
 
     return (
 
-        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Students">
+        <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Class Subjects">
             <BottomSheetModalProvider>
                 <View style={styles.container}>
                     <View style={styles.searchContainer}>
@@ -67,11 +67,11 @@ function ClassSubjects(props: any) {
                                         <Pressable
                                             key={idx} style={styles.student}>
                                             <View style={styles.avata}>
-                                                <Text>{sub.subjectName.charAt(0)}</Text>
+                                                <Text style={styles.textStyle}>{sub.subjectName.charAt(0)}</Text>
                                             </View>
                                             <View style={styles.detail}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{sub.subjectName}</Text>
-                                                <Text><Text>teacher: </Text>{sub?.subjectTeacher?.toLowerCase()}</Text>
+                                                <Text style={[styles.textStyle,{ fontWeight: 'bold', fontSize: 20 }]}>{sub.subjectName}</Text>
+                                                <Text style={styles.textStyle}><Text style={styles.textStyle}>teacher: </Text>{sub?.subjectTeacher?.toLowerCase()}</Text>
                                             </View>
                                         </Pressable>
                                     )
@@ -135,6 +135,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'center',
         padding: 10
+    },
+    textStyle:{
+        color:'white',
     }
 })
 
