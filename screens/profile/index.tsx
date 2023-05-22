@@ -1,5 +1,5 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import { connect } from "react-redux";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import CustomButton from "../layouts/CustomButton";
 import { screens } from "../../screen-routes/navigation";
 import Feather from "react-native-vector-icons/Feather";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import { AuhtService } from "../../services/AuthService";
 
 
 const TeacherProfileIndex = (props: any) => {
@@ -19,6 +20,28 @@ const TeacherProfileIndex = (props: any) => {
         props.getClassAndSubject(props?.onboardedUser.id);
     }, [])
 
+
+    
+    const logoutDialog = () => {
+        Alert.alert(
+            'Logout',
+            'Do you really want to log out ?',
+            [
+                {
+                    text: 'CANCEL',
+                    onPress: () => { '' },
+                },
+                {
+                    text: 'YES',
+                    onPress: () => {
+                        props.logout();
+                         props.navigation.navigate(screens.scenes.auth.screens.signin.name)
+                },
+            },
+            ],
+            { cancelable: false }
+        );
+    };
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Profile">
             <BottomSheetModalProvider>
@@ -121,7 +144,7 @@ const TeacherProfileIndex = (props: any) => {
                         <Stack style={{ paddingHorizontal: 20, alignItems: 'center', justifyContent:'space-evenly', flexDirection: 'row' }}>
                         <View
                                 style={styles.bottomBtns}>
-                                <Pressable>
+                                <Pressable onPress={logoutDialog}>
                                     <SimpleLineIcons name="logout" size={30} />
                                 </Pressable>
                             </View>
@@ -148,8 +171,6 @@ const TeacherProfileIndex = (props: any) => {
                                 />
                             </View>
                         </Stack>
-
-
                     </View>
                 </ScrollView>
             </BottomSheetModalProvider>
@@ -171,6 +192,7 @@ function mapDispatchToProps(dispatch: any) {
     return {
         getDetails: (teacherAccountId: string) => GetTeacherDetails(teacherAccountId)(dispatch),
         getClassAndSubject: (teacherAccountId: string) => getTeacherClassAndSubject(teacherAccountId)(dispatch),
+        logout: () => dispatch(AuhtService.SignOutUser()),
     };
 }
 function get(onboardedUser: any) {

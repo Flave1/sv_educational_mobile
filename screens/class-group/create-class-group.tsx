@@ -21,7 +21,7 @@ function CreateClassGroup(props: any) {
     const setClassGroup = props.route.params.setClassGroup;
     const [studentContactArray, setStudentContactArray] = useState<ClassGroupStudents[]>([]);
     const screenLocalColor = "#868C8E";
-   
+
     useEffect(() => {
         sessionClass.value && props.getClassStudents(sessionClass.value)
     }, []);
@@ -29,7 +29,7 @@ function CreateClassGroup(props: any) {
     useEffect(() => {
         props.classStudents && setStudentContactArray(props.classStudents)
     }, [props.classStudents]);
-    
+
 
     const handleCheck = (item: ClassGroupStudents, isSelected: Boolean) => {
         const updatedClassArray = studentContactArray.map((obj: any) => {
@@ -43,24 +43,24 @@ function CreateClassGroup(props: any) {
 
     const validation = Yup.object().shape({
         groupName: Yup.string()
-          .min(2, "Group Name Too Short!")
-          .required("Group Name is required"),
-      });
+            .min(2, "Group Name Too Short!")
+            .required("Group Name is required"),
+    });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
-         groupName:'',
-         sessionClassId: sessionClass.value, 
-         sessionClassSubjectId: sessionClassSubject.value,
-         studentContactIds: [], 
+            groupName: '',
+            sessionClassId: sessionClass.value,
+            sessionClassSubjectId: sessionClassSubject.value,
+            studentContactIds: [],
         },
         enableReinitialize: true,
         validationSchema: validation,
-        onSubmit: (values:any) => {  
-        values.studentContactIds = studentContactArray.filter(d => d.isAdded == true).map(d => d.studentAccountId);
-          props.create(values,props.navigation,setClassGroup);
+        onSubmit: (values: any) => {
+            values.studentContactIds = studentContactArray.filter(d => d.isAdded == true).map(d => d.studentAccountId);
+            props.create(values, props.navigation, setClassGroup);
         }
-      });
+    });
 
     return (
         <>
@@ -68,13 +68,13 @@ function CreateClassGroup(props: any) {
                 <BottomSheetModalProvider>
                     <Stack style={{ flex: 0 }}>
                         <HStack style={{ alignItems: 'center' }}>
-                            <Text style={{ color: 'white', fontWeight: 'bold',fontSize:25, padding: 10, }}>Create Class Group</Text>
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 25, padding: 10, }}>Create Class Group</Text>
                         </HStack>
                     </Stack>
                     <ScrollView style={{ padding: 5 }}>
                         <View style={{ width: '100%' }}>
                             <Stack center>
-                                {(touched.groupName && errors.groupName) && <Text style={ styles.warningText }>{errors.groupName}</Text>}
+                                {(touched.groupName && errors.groupName) && <Text style={styles.warningText}>{errors.groupName}</Text>}
                             </Stack>
                             <Text style={styles.text}>Group Name:</Text>
                             <CustomTextInput
@@ -97,7 +97,7 @@ function CreateClassGroup(props: any) {
                                 }}
                             />
                         </View>
-                        <Text style={[styles.text,{marginTop:10}]}>Add Students To Group:</Text>
+                        <Text style={[styles.text, { marginTop: 10 }]}>Add Students To Group:</Text>
                         {studentContactArray?.map((item: ClassGroupStudents, idx: number) => {
                             return (
                                 <View key={idx} style={[styles.tableRow]}>
@@ -138,7 +138,7 @@ function CreateClassGroup(props: any) {
                             <CustomButton title="SUBMIT" onPress={() => {
                                 handleSubmit()
                             }} />
-                        </View> 
+                        </View>
                     </HStack>
                 </BottomSheetModalProvider>
             </ProtectedTeacher>
@@ -172,7 +172,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getClassStudents: (sessionClassId: string) => GetClassStudents(sessionClassId)(dispatch),
-        create: (values:any,navigation: any,setClassGroup:any) => createClassGroup(values,navigation,setClassGroup)(dispatch),
+        create: (values: any, navigation: any, setClassGroup: any) => createClassGroup(values, navigation, setClassGroup)(dispatch),
     }
 }
 
