@@ -1,62 +1,55 @@
 import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { offboard } from '../../store/actions/app-state-actions';
-import { signIn } from '../../store/actions/auth-actions';
+import { changePassword } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AppPurple } from '../../tools/color';
-import { AuhtService } from '../../services/AuthService';
 import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
-const SignIn = (props: any) => {
-    // useEffect(() => {
-    //     props.signin(null);
-    // },[])
+const ChangePassword = (props: any) => {
 
-    const [clicked, setClicked] = useState(false)
+    const [email, setEmail] = useState(props.route.params.email);
 
-
-    React.useEffect(() => {
-        if (props.onboardedUser) {
-            AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
-                console.log('loggedIn', loggedIn);
-                console.log('props.onboardedUser', props.onboardedUser);
-
-                if (loggedIn)
-                    props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
-            })
-        } else {
-            props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
-        }
-    }, [clicked])
+    useEffect(() => {
+        setEmail(props.route.params.email)
+    }, [props.route.params.email])
 
     const validation = Yup.object().shape({
-        userName: Yup.string()
-            .min(2, 'Username Too Short!')
-            .max(50, 'Username Too Long!')
-            .required('Username is required to login'),
-        password: Yup.string().required("Password Required")
-            .min(4, 'Password must be a minimum of 4 characters'),
+        email: Yup.string()
+            .required("Email is Required")
+            .email("Must be a valid email"),
+        password: Yup.string()
+            .required("Password is Required")
+            .min(4, "Password must be a minimum of 4 characters"),
+        confirmNewPassword: Yup.string()
+            .required("Confirm Password Required")
+            .min(4, "Password must be a minimum of 4 characters")
+            .when("password", {
+                is: (val: any) => (val && val.length > 0 ? true : false),
+                then: Yup.string().oneOf(
+                    [Yup.ref("password")],
+                    "Confirm password need to be the same with new password"
+                ),
+            })
     });
 
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
+            confirmNewPassword: "",
             password: "",
-            schoolUrl: props.onboardedUser?.baseUrlSuffix,
-            userName: props.onboardedUser?.userName ? props.onboardedUser?.userName : "",
+            email: email,
+            clientId: props.onboardedUser?.clientId,
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
-            props.signin(values).then((resp: any) => {
-                setClicked(!clicked)
-            });
+            props.changePassword(values, props.navigation)
         }
     });
 
@@ -72,35 +65,24 @@ const SignIn = (props: any) => {
                     </View>
                 </Stack>
                 <Stack center>
+                    {((touched.email && errors.email)) && <Text color='red' >{errors.email}</Text>}
                     {((touched.password && errors.password)) && <Text color='red' >{errors.password}</Text>}
-                    {((touched.userName && errors.userName)) && <Text color='red' >{errors.userName}</Text>}
+                    {((touched.confirmNewPassword && errors.confirmNewPassword)) && <Text color='red' >{errors.confirmNewPassword}</Text>}
                 </Stack>
                 <Stack spacing={10} style={{ padding: 20, height: '60%' }}>
+
                     <View style={{ width: '100%' }}>
                         <CustomTextInput
-                            icon={<Feather name={'user-check'} size={16} />}
-                            placeholder='Email / Registration Number'
-                            autoCapitalize='none'
-                            autoCompleteType='email'
-                            keyboardType='email-address'
-                            keyboardAppearance='dark'
-                            returnKeyType='next'
-                            returnKeyLabel='next'
-                            onBlur={handleBlur('userName')}
-                            value={values.userName}
-                            error={errors.userName}
-                            touched={touched.userName}
-                            onChange={(e: any) => {
-                                handleChange('userName');
-                                setFieldValue('userName', e.nativeEvent.text)
-                            }}
+                            icon={<FontAwesome name={'user'} size={16} />}
+                            value={values.email}
+                            editable={false}
                         />
                     </View>
 
                     <View style={{ marginBottom: 16, width: '100%' }}>
                         <CustomTextInput
                             icon={<FontAwesome name={'key'} size={16} />}
-                            placeholder='Enter your password'
+                            placeholder='Enter your New Password'
                             secureTextEntry
                             autoCompleteType='password'
                             autoCapitalize='none'
@@ -116,26 +98,38 @@ const SignIn = (props: any) => {
                             }}
                         />
                     </View>
+                    <View style={{ marginBottom: 16, width: '100%' }}>
+                        <CustomTextInput
+                            icon={<FontAwesome name={'key'} size={16} />}
+                            placeholder='Confirm your new password'
+                            secureTextEntry
+                            autoCompleteType='confirmNewPassword'
+                            autoCapitalize='none'
+                            keyboardAppearance='dark'
+                            returnKeyType='go'
+                            returnKeyLabel='go'
+                            onBlur={handleBlur('confirmNewPassword')}
+                            error={errors.confirmNewPassword}
+                            touched={touched.confirmNewPassword}
+                            onChange={(e: any) => {
+                                handleChange('confirmNewPassword');
+                                setFieldValue('confirmNewPassword', e.nativeEvent.text)
+                            }}
+                        />
+                    </View>
                     <Stack style={{ marginHorizontal: 50, marginTop: 10, alignItems: 'center' }}>
                         <CustomButton
                             width={200}
                             title={'LOGIN'}
                             onPress={handleSubmit} />
                     </Stack>
-                    <Stack center style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
-                        <Pressable onPress={() => {
-                            props.offboard().then((res: any) => {
-                                props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
-                            })
-                        }}>
-                            <CustomText style={{ fontWeight: 'bold' }} title="Off Board Account" />
-                        </Pressable>
+                    <Stack center style={{ flexDirection: 'row', justifyContent: 'flex-end', marginVertical: 10 }}>
                         <Pressable onPress={() => {
                             props.navigation.navigate({
-                                name: screens.scenes.auth.screens.forgotpassword.name,
+                                name: screens.scenes.auth.screens.forgotpasswordotp.name,
                             })
                         }}  >
-                            <CustomText style={{ fontWeight: 'bold' }} title="Forgot Password" />
+                            <CustomText style={{ fontWeight: 'bold' }} title="return" />
                         </Pressable>
                     </Stack>
                 </Stack>
@@ -146,14 +140,13 @@ const SignIn = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        onboardedUser: state.appState.onboardedUser
+        onboardedUser: get(state.appState.onboardedUser)
     }
 }
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        offboard: () => offboard()(dispatch),
-        signin: (values: any) => signIn(values)(dispatch)
+        changePassword: (values: any, navigation: any) => changePassword(values, navigation)(dispatch)
     };
 }
 
@@ -165,4 +158,4 @@ function get(onboardedUser: any) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

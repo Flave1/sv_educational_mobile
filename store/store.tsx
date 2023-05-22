@@ -10,6 +10,7 @@ import { assessmentReducer } from './reducers/assessment-reducer';
 import { attendanceReducer } from './reducers/attendance-reducer';
 import { classnotesReducer } from './reducers/classnote-reducer';
 import { studentnotesReducer } from './reducers/studentnote-reducer';
+import { profileReducer } from './reducers/profile-reducer';
 
 
 const rootReducer = combineReducers({
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     assessmentState: assessmentReducer,
     attendanceState: attendanceReducer,
     classnotesState: classnotesReducer,
-    studentnotesState: studentnotesReducer
+    studentnotesState: studentnotesReducer,
+    profileState: profileReducer,
 })
 
 

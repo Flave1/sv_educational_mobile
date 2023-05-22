@@ -25,6 +25,7 @@ import Animated, { Transitioning, Transition } from 'react-native-reanimated';
 
 const ProtectedTeacher = (props: any) => {
     const [revealed, setRevealed] = useState(false);
+    const [revealUser, setRevealUser] = useState(false);
     const [isFullScreen, setFullScreen] = useState<false>(props.appState.fullScreen);
     const [mainDisplayHeight, setMainDisplayHeight] = useState<string>('85%');
     const transitionRef = useRef<any>(null);
@@ -46,8 +47,9 @@ const ProtectedTeacher = (props: any) => {
                     text: 'YES',
                     onPress: () => {
                         props.logout();
-                    },
+                         navigation.navigate(screens.scenes.auth.screens.signin.name)
                 },
+            },
             ],
             { cancelable: false }
         );
@@ -105,7 +107,7 @@ const ProtectedTeacher = (props: any) => {
     return (
         <Backdrop
             style={{ backgroundColor: props.backgroundColor }}
-            revealed={revealed}
+            revealed={revealed ? revealed : revealUser && revealUser}
             header={
                 <Transitioning.View
                     transition={transition}
@@ -144,7 +146,9 @@ const ProtectedTeacher = (props: any) => {
                             transparent
                             leading={smd => (
                                 <IconButton
-                                    onPress={logoutDialog}
+                                    onPress={() => {
+                                        navigation.navigate(screens.scenes.auth.screens.profile.name)
+                                    }}
                                     icon={(<FontAwesome5 name={"user-circle"} size={20} color={isDarkMode ? AppLight : AppLight} />)}
                                 />
                             )}
@@ -153,14 +157,28 @@ const ProtectedTeacher = (props: any) => {
                 </Transitioning.View>
             }
             backLayer={
-                <Transitioning.View
-                    transition={transition}
-                    style={{ display: isFullScreen ? 'none' : 'flex', height: 120, margin: 10, padding: 10, marginTop: 0 }}>
-                    <ListComponent text={'JSS 1'} icon={<Feather name="file-plus" size={20} />} />
-                    <ListComponent text={'JSS 2'} icon={<Feather name="file-plus" size={20} />} />
-                    <ListComponent text={'JSS 3'} icon={<Feather name="file-plus" size={20} />} />
-                    <ListComponent text={'JSS 4'} icon={<Feather name="file-plus" size={20} />} />
-                </Transitioning.View>
+                revealed ?
+                    <Transitioning.View
+                        transition={transition}
+                        style={{ display: isFullScreen ? 'none' : 'flex', height: 120, margin: 10, padding: 10, marginTop: 0 }}>
+                        <ListComponent text={'JSS 1'} icon={<Feather name="file-plus" size={20} />} />
+                        <ListComponent text={'JSS 2'} icon={<Feather name="file-plus" size={20} />} />
+                        <ListComponent text={'JSS 3'} icon={<Feather name="file-plus" size={20} />} />
+                        <ListComponent text={'JSS 4'} icon={<Feather name="file-plus" size={20} />} />
+                    </Transitioning.View>
+                    : revealUser &&
+                    <Transitioning.View
+                        transition={transition}
+                        style={{ display: isFullScreen ? 'none' : 'flex', height: 150, margin: 10, marginLeft: '65%', padding: 10, marginTop: 0 }}>
+                        <ListComponent text={'Reset password'} icon={<Feather name="lock" size={20} />} onPress={() => {
+                            // navigation.navigate(screens.scenes.auth.screens.resetpassword.name)
+                        }} />
+                        <ListComponent text={'Profile'} icon={<Feather name="user" size={20} />} onPress={() => {
+                            // navigation.navigate(screens.scenes.auth.screens.profile.name)
+                        }} />
+                        <ListComponent text={'Logout'} icon={<Feather name="log-out" size={20} />} onPress={()=>{logoutDialog()}} />
+                    </Transitioning.View>
+
             }
         >
             <Stack>
