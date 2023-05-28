@@ -34,26 +34,6 @@ const ProtectedTeacher = (props: any) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
 
-    const logoutDialog = () => {
-        Alert.alert(
-            'Logout',
-            'Do you really want to log out ?',
-            [
-                {
-                    text: 'CANCEL',
-                    onPress: () => { '' },
-                },
-                {
-                    text: 'YES',
-                    onPress: () => {
-                        props.logout();
-                         navigation.navigate(screens.scenes.auth.screens.signin.name)
-                },
-            },
-            ],
-            { cancelable: false }
-        );
-    };
 
     const transition = (
         <Transition.Sequence>
@@ -176,7 +156,7 @@ const ProtectedTeacher = (props: any) => {
                         <ListComponent text={'Profile'} icon={<Feather name="user" size={20} />} onPress={() => {
                             // navigation.navigate(screens.scenes.auth.screens.profile.name)
                         }} />
-                        <ListComponent text={'Logout'} icon={<Feather name="log-out" size={20} />} onPress={()=>{logoutDialog()}} />
+                        {/* <ListComponent text={'Logout'} icon={<Feather name="log-out" size={20} color={'white'}/>} onPress={()=>{logoutDialog()}} /> */}
                     </Transitioning.View>
 
             }
@@ -210,7 +190,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        logout: () => dispatch(AuhtService.SignOutUser()),
         displayFullScreen: (display: boolean) => dispatch(displayFullScreen(display))
     }
 }

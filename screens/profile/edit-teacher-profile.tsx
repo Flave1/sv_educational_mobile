@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { HStack, Stack, Text, TextInput } from "@react-native-material/core";
 import ScreenTitle from "../layouts/screen-title";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { ScrollView, View, StyleSheet } from "react-native";
 import CustomTextInput from "../layouts/CustomTextInput";
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import CustomButton from "../layouts/CustomButton";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomTextArea from "../layouts/CustomTextArea";
-import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
 import ProtectedTeacher from "../authentication/protected-teacher";
-import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
 import Feather from "react-native-vector-icons/Feather";
 import { GetTeacherDetails, updateStaffDetails } from "../../store/actions/profile-actions";
@@ -61,33 +57,34 @@ const EditProfile = (props: any) => {
     }
   };
   React.useEffect(() => {
-    // settextAreaUser(props.teacherDetail?.shortBiography);
     if (props.teacherDetail?.hobbies) {
       setTags([...props.teacherDetail?.hobbies]);
     }
   }, [props.teacherDetail]);
 
+  function removeTag(index:number) {
+    setTags(tags.filter((el:any, i:number) => i !== index))
+}
 
   const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
     initialValues: {
-      TeacherUserAccountId: props.teacherDetail?.teacherUserAccountId,
+      TeacherUserAccountId: props.teacherDetail?.teacherUserAccountId||'',
       Hobbies: [],
-      ProfileImage: null,
-      Email: props.teacherDetail?.email,
-      FirstName: props.teacherDetail?.firstNam,
-      LastName: props.teacherDetail?.lastName,
-      MiddleName: props.teacherDetail?.middleName,
-      Phone: props.teacherDetail?.phone,
-      DOB: props.teacherDetail?.dob,
-      Address: props.teacherDetail?.address,
-      ShortBiography: props.teacherDetail?.shortBiography,
+      ProfileImage: props.teacherDetail?.profileImage||'',
+      Email: props.teacherDetail?.email||'',
+      FirstName: props.teacherDetail?.firstName||'',
+      LastName: props.teacherDetail?.lastName||'',
+      MiddleName: props.teacherDetail?.middleName||'',
+      Phone: props.teacherDetail?.phone||'',
+      DOB: props.teacherDetail?.dob||'',
+      Address: props.teacherDetail?.address||'',
+      ShortBiography: props.teacherDetail?.shortBiography||'',
     },
     enableReinitialize: true,
     validationSchema: validation,
     onSubmit: (values) => {
       values.TeacherUserAccountId = values.TeacherUserAccountId;
       values.Hobbies = tags;
-      // values.ShortBiography = textAreaUser;
       const params = new FormData();
       params.append("TeacherUserAccountId", values.TeacherUserAccountId);
       params.append("Hobbies", values.Hobbies);
@@ -100,7 +97,6 @@ const EditProfile = (props: any) => {
       params.append("Address", values.Address);
       params.append("ShortBiography", values.ShortBiography);
       params.append("ProfileImage", values.ProfileImage);
-      console.log("values",values);
       props.update(params, props?.onboardedUser.id, props.navigation);
     }
   });
@@ -190,31 +186,11 @@ const EditProfile = (props: any) => {
               />
             </View>
 
-            <View style={{ width: '100%' }}>
-              <Text color='white'>Last Name:</Text>
-              <CustomTextInput
-                icon={<Feather name="user" size={16} />}
-                placeholder='Last Name'
-                autoCapitalize='none'
-                autoCompleteType='text'
-                keyboardType='text'
-                keyboardAppearance='dark'
-                returnKeyType='next'
-                returnKeyLabel='next'
-                onBlur={handleBlur('LastName')}
-                value={values.LastName}
-                error={errors.LastName}
-                touched={touched.LastName}
-                onChange={(e: any) => {
-                  handleChange('LastName');
-                  setFieldValue('LastName', e.nativeEvent.text)
-                }}
-              />
-            </View>
+            
             <View style={{ width: '100%' }}>
               <Text color='white'>Email:</Text>
               <CustomTextInput
-                icon={<Feather name="user" size={16} />}
+                icon={<Feather name="mail" size={16} />}
                 placeholder='Email '
                 autoCapitalize='none'
                 autoCompleteType='email'
@@ -222,6 +198,7 @@ const EditProfile = (props: any) => {
                 keyboardAppearance='dark'
                 returnKeyType='next'
                 returnKeyLabel='next'
+                editable={false}
                 onBlur={handleBlur('Email')}
                 value={values.Email}
                 error={errors.Email}
@@ -235,7 +212,7 @@ const EditProfile = (props: any) => {
             <View style={{ width: '100%' }}>
               <Text color='white'>Address:</Text>
               <CustomTextInput
-                icon={<Feather name="user" size={16} />}
+                icon={<Feather name="map-pin" size={16} />}
                 placeholder='Address'
                 autoCapitalize='none'
                 autoCompleteType='text'
@@ -257,7 +234,7 @@ const EditProfile = (props: any) => {
             <View style={{ width: '100%' }}>
               <Text color='white'>Date Of Birth:</Text>
               <CustomTextInput
-                icon={<Feather name="user" size={16} />}
+                icon={<Feather name="calendar" size={16} />}
                 placeholder='Date Of Birth'
                 autoCapitalize='none'
                 autoCompleteType='text'
@@ -277,34 +254,40 @@ const EditProfile = (props: any) => {
             </View>
 
             <View>
-              <Text color='white'>Hobbies:</Text>
-              <View style={styles.tagsContainer}>
-                {tags.map((tag: any) => (
-                  <TouchableOpacity
-                    key={tag}
-                    style={styles.tag}
-                    onPress={() => handleTagPress(tag)}
-                  >
-                    <Text style={styles.tagText}>{tag}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Hobbies"
-                value={inputValue}
-                onChangeText={handleInputChange}
-              />
-            </View>
+  <Text color='white'>Hobbies:</Text>
+  <View style={styles.tagsContainer}>
+    {tags.map((tag: any, index: number) => (
+      <TouchableOpacity
+        key={tag}
+        style={styles.tag}
+        onPress={() => handleTagPress(tag)}
+      >
+        <Text style={styles.tagText}>{tag}</Text>
+        <Text style={styles.close} onPress={() => removeTag(index)}>
+          &times;
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+  <View style={{    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,}}>
+    <TextInput
+      style={{width:'68%'}}
+      placeholder="Enter Hobbies"
+      value={inputValue}
+      onChangeText={handleInputChange}
+    />
+    <CustomButton
+      style={{ marginLeft: 10,paddingHorizontal:10 }}
+      title="Add Hobbies"
+      onPress={() => {
+        handleInputSubmit();
+      }}
+    />
+  </View>
+</View>
 
-            <View style={{ justifyContent: 'flex-end', alignItems: 'center',marginTop:10,  }}>
-              <CustomButton
-              style={{padding:5}}
-                title="Add Hobbies" onPress={() => {
-                  handleInputSubmit()
-                }}
-              />
-            </View>
 
             <View style={{ width: '100%' }}>
               <Text color='white'>Biography:</Text>
@@ -378,6 +361,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     margin: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   tagText: {
     color: '#333',
@@ -391,6 +376,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
   },
+  close: {
+    width: 20,
+    borderRadius: 5,
+    marginLeft: 5,
+    fontSize: 22,
+    fontWeight: 'bold',
+    cursor:' pointer',
+    color:'red',
+},
 });
 function mapStateToProps(state: any) {
   return {
@@ -403,7 +397,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     getDetails: (teacherAccountId: string) => GetTeacherDetails(teacherAccountId)(dispatch),
-    update: (values: any, teacherAccountId: string, navigation: any) => updateStaffDetails(values, teacherAccountId, navigation)(dispatch),
+    update: (params: any, teacherAccountId: string, navigation: any) => updateStaffDetails(params, teacherAccountId, navigation)(dispatch),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfile)

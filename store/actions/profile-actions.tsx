@@ -23,11 +23,13 @@ export const GetTeacherDetails = (teacherAccountId: any) => (dispatch: any) => {
 
 
 
-export const updateStaffDetails = (values: any, teacherAccountId: any,navigation:any) => (dispatch: any) => {
+export const updateStaffDetails = (params: any, teacherAccountId: any,navigation:any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        console.log("val",params);
+        
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
-            axiosInstance.post('/smp/server/update/teacher-profile/by-teacher', values)
+            axiosInstance.post('/smp/server/update/teacher-profile/by-teacher', params)
                 .then((res) => {
                     console.log("res",res);
                     navigation.goBack();

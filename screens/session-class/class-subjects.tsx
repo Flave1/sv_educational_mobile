@@ -22,22 +22,24 @@ function ClassSubjects(props: any) {
         sessionClass.value && props.getAll(sessionClass.value).then((result: any) => {
             setSubjects(result);
         });
-    }, [sessionClass.value]);
+    }, []);
 
     useEffect(() => {
         subjects && setFilteredSubjects(subjects);
     }, [subjects]);
+
+    
     const handleSearch = (text: any) => {
         setQuery(text);
-        const filteredData = subjects.filter(item => {
-            if (query === "") {
-                return subjects;
-            } else if (item.subjectName.toLowerCase().includes(query.toLowerCase())) {
+        const filteredData = subjects?.filter(item => {
+            if (text === "") {
                 return item;
-            } else if (item.subjectTeacher.toLowerCase().includes(query.toLowerCase())) {
+            } else if (item.subjectName.toLowerCase().includes(text.toLowerCase())) {
+                return item;
+            } else if (item.subjectTeacher.toLowerCase().includes(text.toLowerCase())) {
                 return item;
             } else
-                subjects
+                item
         });
         setFilteredSubjects(filteredData);
     };
@@ -62,7 +64,7 @@ function ClassSubjects(props: any) {
                     <View style={styles.studentsContainer}>
                         <ScrollView>
                             {
-                                filtered.map((sub: Subject, idx: number) => {
+                                filtered?.map((sub: Subject, idx: number) => {
                                     return (
                                         <Pressable
                                             key={idx} style={styles.student}>

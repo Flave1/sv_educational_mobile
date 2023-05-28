@@ -27,20 +27,22 @@ function ClassStudents(props: any) {
         props.classStudents && setStudents(props.classStudents.filter((x: any) => x.sessionClassID === sessionClass.value));
     }, [sessionClass.value]);
 
+
+
     const handleSearch = (text: any) => {
         setQuery(text);
         const filteredData = students.filter(item => {
 
-            if (query === "") {
-                return students;
-            } else if (item.firstName.toLowerCase().includes(query.toLowerCase())) {
+            if (text === '') {
                 return item;
-            } else if (item.lastName.toLowerCase().includes(query.toLowerCase())) {
+            } else if (item.firstName.toLowerCase().includes(text.toLowerCase())) {
                 return item;
-            } else if (item.registrationNumber.toLowerCase().includes(query.toLowerCase())) {
+            } else if (item.lastName.toLowerCase().includes(text.toLowerCase())) {
+                return item;
+            } else if (item.registrationNumber.toLowerCase().includes(text.toLowerCase())) {
                 return item;
             } else
-                students
+                item
         });
         setFilteredStudents(filteredData);
     };
@@ -81,11 +83,11 @@ function ClassStudents(props: any) {
                                             }}
                                             key={idx} style={styles.student}>
                                             <View style={styles.avata}>
-                                                <Text>{std.lastName.charAt(0)}</Text>
+                                                <Text style={{color:'white', }}>{std.lastName.charAt(0)}</Text>
                                             </View>
                                             <View style={styles.detail}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{std.lastName + " " + std.firstName + " " + std.middleName}</Text>
-                                                <Text>{std.registrationNumber.toUpperCase()}</Text>
+                                                <Text style={{ fontWeight: 'bold', fontSize: 20,color:'white', }}>{std.lastName + " " + std.firstName + " " + std.middleName}</Text>
+                                                <Text style={{color:'white', }}>{std.registrationNumber.toUpperCase()}</Text>
                                             </View>
                                         </Pressable>
                                     )
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
         width: '90%',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        padding: 10
+        padding: 10,
     }
 })
 

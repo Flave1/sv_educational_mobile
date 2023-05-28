@@ -28,6 +28,8 @@ import SendClassnote from "./send-classnote";
 import ShareClassnote from "./share-classnote";
 import { FloatingButton } from "../layouts/floating-button";
 import { saveAsFile } from "../../Utils/downloaded-files";
+import ScreenTitle from "../layouts/screen-title";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 
 const ClassnoteIndex = (props: any) => {
     const [sessionClass] = useState<SelectItem>(props.route.params.sessionClass);
@@ -174,7 +176,9 @@ const ClassnoteIndex = (props: any) => {
                         getAction={props.__getAll}
                         params={{ 'sessionClassId': sessionClass?.lookUpId, 'subjectId': sessionClassSubject.lookUpId, 'status': selectedStatus.value, pageNumber: 0 }}>
                         <HStack spacing={1} style={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box w={184}  >
+                        <ScreenTitle  icon={<MaterialIcons name="library-books" color="white" size={30} />} title={'-' + sessionClass.text + ' CLASS NOTE'} />
+                            <Box w={184} style={{marginTop:20}} >
+
 
                                 <View >
 
@@ -196,14 +200,12 @@ const ClassnoteIndex = (props: any) => {
                                 </View>
 
                             </Box>
-                            <Box w={184}  >
+                            <Box w={184} style={{marginTop:20, marginLeft:10}} >
                                 <View >
                                     <CustomDropdownInput data={status}
                                         searchPlaceHolder="Search"
                                         height={40}
                                         defaultButtonText="Select Status"
-                                        // disabled={sessionClass.value === ''}
-                                        // search={true}
                                         default={-2}
                                         buttonTextAfterSelection={(selectedItem: SelectItem, index: any) => {
                                             return selectedItem.text

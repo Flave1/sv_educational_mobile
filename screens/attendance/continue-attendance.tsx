@@ -33,7 +33,7 @@ const ContinueAttendanceRecord = (props: any) => {
         // for (let i = 0; i < props.register.attendanceList.length; i++) {
         //     records.push(props.register.attendanceList[i])
         // }
-        setRecords(props.register.attendanceList)
+        setRecords(props.register?.attendanceList)
     }, [props.register]);
 
     const handleCheck = async (item: any, isSelected: Boolean) => {
@@ -48,7 +48,7 @@ const ContinueAttendanceRecord = (props: any) => {
 
         Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
             if (hasInternetAccess) {
-                props.changeStatus(props.register.classRegisterId, sessionClass.value, item.studentContactId, isSelected, props.register.classRegisterLabel)
+                props.changeStatus(props.register?.classRegisterId, sessionClass.value, item.studentContactId, isSelected, props.register?.classRegisterLabel)
             } else {
                 AttendanceService.updateRegister(props.register, props.unsynchronized, updatedStudentsArray).then((res) => {
                     res.forEach(d => {
