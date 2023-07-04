@@ -21,6 +21,7 @@ const SessionClassIndex = (props: any) => {
     }, [classInfo.sessionClassId]);
 
     const sessionClass = { value: classInfo.sessionClassId, text: classInfo.sessionClass, lookUpId: classInfo.classLookupId };
+   
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Assessment">
             <Stack style={{ flex: 1 }}>

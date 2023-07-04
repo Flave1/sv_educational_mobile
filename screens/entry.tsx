@@ -27,7 +27,7 @@ import TakeAttendanceRecord from './attendance/take-attendance';
 import ContinueAttendance from './attendance/continue-attendance';
 import ClassnoteIndex from './classnote/index';
 import ClassNoteCreate from './classnote/create-classNote';
-import ClassNoteUpdate from './classnote/update-classNote';
+import ClassNoteUpdate from './classnote/update-classnote';
 import ClassStudents from './session-class/class-students';
 import ClassStudentInfo from './session-class/class-student-info';
 import ClassSubjects from './session-class/class-subjects';
@@ -43,15 +43,18 @@ import EditProfile from './profile/edit-teacher-profile';
 import ClassGroupIndex from './class-group';
 import CreateClassGroup from './class-group/create-class-group';
 import EditClassGroup from './class-group/edit-class-group';
+import ProtectedTeacher from './authentication/protected-teacher';
+import { AuhtService } from '../services/AuthService';
+import { Screen } from 'react-native-screens';
 
-
+const Stack = createNativeStackNavigator();
 
 const Entry = (props: any) => {
     const isDarkMode = useColorScheme() === 'dark';
     const backgroundStyle = { backgroundColor: isDarkMode ? AppDark : AppDark };
     const statusBar = <StatusBar barStyle={isDarkMode ? 'light-content' : 'light-content'} backgroundColor={backgroundStyle.backgroundColor} />
     const [persistedUser, setPersistedUser] = useState<OnboardedUser>();
-
+    const navigation = useNavigation();
     useEffect(() => {
         props.getState().then((res: any) => {
             try {
@@ -61,13 +64,31 @@ const Entry = (props: any) => {
             }
         });
     }, []);
+    const [isLoggedIn, setLogin] = useState<Boolean>(false);
+    React.useEffect(() => {
+        if (props.onboardedUser) {
+            AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
+                console.log('loggedIn', loggedIn);
+                setLogin(loggedIn)
+            })
+        } else {
+            setLogin(false);
+        }
+    }, [isLoggedIn])
 
 
     return (
         <>
             {statusBar}
-            <StackNavigator state={props.state} dispatch={props.dispatch} backgroundStyle={backgroundStyle} persistedUser={persistedUser} />
+            {
+                <>
+                    <TeacherStackNavigator state={props.state} dispatch={props.dispatch} backgroundStyle={backgroundStyle} persistedUser={persistedUser} />
+
+                </>
+            }
+
         </>
+
     );
 };
 
@@ -84,38 +105,19 @@ function mapDispatchToProps(dispatch: any) {
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Entry);
 
-const StackNavigator = (parentProps: any) => {
 
-    const Stack = createNativeStackNavigator();
+const TeacherStackNavigator = (parentProps: any) => {
+
+
     const navigation = useNavigation();
-
     return (//screens.scenes.onBoarding.screens.setup.name
-    
         <>
             <Stack.Navigator initialRouteName={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
-                <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
-                    {props => <Onboarding {...props} navigation={navigation} />}
-                </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.onBoarding.screens.setup.name}>
-                    {props => <SchoolSetup {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
-                </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
-                    {props => <SignIn {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpassword.name}>
-                    {props => <ForgotPassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpasswordotp.name}>
-                    {props => <ForgotPasswordOtp {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.changepassword.name}>
-                    {props => <ChangePassword {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
-                </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.name}>
-                    {props => <TeacherProfileIndex {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                    {props => <TeacherProfileIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-                <Stack.Screen options={{ headerShown: false }} name={ screens.scenes.auth.screens.profile.screens.profileedit.name}>
-                    {props => <EditProfile {...props}  backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.profile.screens.profileedit.name}>
+                    {props => <EditProfile {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.home.name}>
                     {props => <TeacherDashboard {...props} dispatch={parentProps.dispatch} state={parentProps.state} backgroundColor={parentProps.backgroundStyle.backgroundColor} persistedUser={parentProps.persistedUser} navigation={navigation} />}
@@ -186,15 +188,26 @@ const StackNavigator = (parentProps: any) => {
                 <Stack.Screen options={{ headerShown: false }} name={screens.scenes.mainapp.scenes.tutor.screens.classInfo.name}>
                     {props => <ClassInfoIndex {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
                 </Stack.Screen>
-
-
+                <Stack.Screen name={screens.scenes.onBoarding.screens.viewpagers.name} options={{ headerShown: false }}>
+                    {(props: any) => <Onboarding {...props} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.onBoarding.screens.setup.name}>
+                    {(props: any) => <SchoolSetup {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} dispatch={parentProps.dispatch} state={parentProps.state} persistedUser={parentProps.persistedUser} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.signin.name}>
+                    {(props: any) => <SignIn {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpassword.name}>
+                    {(props: any) => <ForgotPassword {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.forgotpasswordotp.name}>
+                    {(props: any) => <ForgotPasswordOtp {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
+                <Stack.Screen options={{ headerShown: false }} name={screens.scenes.auth.screens.changepassword.name}>
+                    {(props: any) => <ChangePassword {...props} backgroundColor={parentProps.backgroundStyle.backgroundColor} navigation={navigation} />}
+                </Stack.Screen>
             </Stack.Navigator>
         </>
 
     )
 }
-
-
-
-
-

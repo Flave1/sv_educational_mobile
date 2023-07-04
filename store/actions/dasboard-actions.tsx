@@ -19,6 +19,5 @@ export const GetDashboardData = () => (dispatch: any) => {
                 })
         }
     })
-
-
 }
+    

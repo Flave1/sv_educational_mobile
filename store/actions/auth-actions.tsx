@@ -8,9 +8,12 @@ import { screens } from "../../screen-routes/navigation";
 import { AuhtService } from "../../services/AuthService";
 
 export const signIn = (payload: any) => (dispatch: any): Promise<any> => {
+    console.log('payload', payload);
+    
     return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
+            payload.userType = 1;
             return axiosInstance.post(`smp/server/user/api/v1/mobile-login`, payload)
                 .then((res) => {
                     AsyncStorage.setItem('token', res.data.result.authResult.token).then(() => {

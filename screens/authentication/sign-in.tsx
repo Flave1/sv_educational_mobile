@@ -50,6 +50,7 @@ const SignIn = (props: any) => {
             password: "",
             schoolUrl: props.onboardedUser?.baseUrlSuffix,
             userName: props.onboardedUser?.userName ? props.onboardedUser?.userName : "",
+            userType:1
         },
         enableReinitialize: true,
         validationSchema: validation,

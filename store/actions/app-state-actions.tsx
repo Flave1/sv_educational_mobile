@@ -56,15 +56,13 @@ export const ValidateMobileUser = (payload: any) => (dispatch: any) => {
                     dispatch({ type: actions.HIDE_LOADING });
                 }).catch((err: any) => {
                     const error: any = JSON.stringify(err.response);
-                    ErrorHandler.HandleUnexpectedError(error, actions.REQUEST_FAILED, dispatch);;
+                    ErrorHandler.HandleUnexpectedError(error, actions.REQUEST_FAILED, dispatch);
                 })
         }
     })
 }
 
 export const displayFullScreen = (display: boolean) => {
-    console.log('some one clicked it');
-
     return {
         type: actions.DISPLAY_FULL_SCREEN,
         payload: display

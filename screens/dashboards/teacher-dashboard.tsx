@@ -12,6 +12,7 @@ import SquareBox from "../layouts/sqaure-box";
 import TeacherAnnouncementBox from "../layouts/teacher-announcement-box";
 import { HStack, Stack } from "@react-native-material/core";
 import { connect } from "react-redux";
+import { setCurrentClass } from "../../store/actions/class-properties-actions";
 const TeacherDashboard = (props: any) => {
 
 
@@ -32,8 +33,11 @@ const TeacherDashboard = (props: any) => {
             params: item
         }
         setParams(param);
+        props.setSelectedClass(param);
         props.navigation.navigate(param);
     }
+
+
 
     return (
         <ProtectedTeacher backgroundColor={props.backgroundColor} currentScreen="Dashboard" params={params}>
@@ -86,7 +90,8 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: any) {
     return {
-        get: () => GetDashboardData()(dispatch)
+        get: () => GetDashboardData()(dispatch),
+        setSelectedClass: (selectedClass: any) => setCurrentClass(selectedClass)(dispatch)
     };
 }
 

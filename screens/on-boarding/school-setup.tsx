@@ -26,6 +26,7 @@ import BottomUpComponent from "../layouts/bottom-up-component";
 import { Search } from "../../Utils/generate";
 import CustomSearchInput from "../layouts/CustomSearchInput";
 import { useNavigation } from "@react-navigation/native";
+import { Alert } from "native-base";
 
 const SchoolSetup = (props: any) => {
     const [selectedSchool, setSelectedSchool] = useState<School>(new School());
@@ -57,13 +58,15 @@ const SchoolSetup = (props: any) => {
     useEffect(() => {
         allSchools && setFilteredSubjects(allSchools);
     }, [allSchools]);
-    
+
     useEffect(() => {
-        props.onboardedUser.doneWithOnBoarding && props.navigation.navigate(screens.scenes.auth.screens.signin.name);
-    }, [props.onboardedUser])
+        props.appState.doneWithOnBoarding && props.navigation.navigate(screens.scenes.auth.screens.signin.name);
+    }, [props.appState])
+
+    console.log('props.appState', props.appState);
+    
 
     const handleSearch = (text: any) => {
-
         // Search({ allSchools, text, columns: ["schoolName", "address"] })
         //     .then((res: any) => {
         //         setFilteredSubjects(res);
@@ -120,7 +123,7 @@ const SchoolSetup = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        onboardedUser: state.appState
+        appState: state.appState
     }
 }
 
@@ -147,7 +150,7 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
         initialValues: {
             clientId: selectedSchool.clientId,
             usernameOrRegNumber: "",
-            userType: 0,
+            userType: 1,
             schoolUrl: selectedSchool.schoolUrl
         },
         validationSchema: validation,
@@ -188,7 +191,8 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                         <Divider style={{ marginBottom: 4, marginTop: 10, opacity: -4 }} leadingInset={16} trailingInset={32} />
                         <CustomDropdownInput data={userTypes}
                             searchPlaceHolder="Search"
-                            defaultButtonText="Select User Type"
+                            defaultButtonText={userTypes[1]}
+                            default={1}
                             buttonTextAfterSelection={(selectedItem: string, index: any) => {
                                 return selectedItem
                             }}
@@ -255,6 +259,7 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                             backgroundColor={'#7c68ee'}
                             onPress={() => {
                                 handleSubmit()
+
                             }}
                         />
                     </View>

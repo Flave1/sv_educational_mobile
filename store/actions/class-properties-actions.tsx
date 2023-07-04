@@ -247,3 +247,7 @@ export const getSessionClassSubjects = (sessionClassId: string) => (dispatch: an
     })
 
 }
+
+export const setCurrentClass = (selectedClass: any) => (dispatch: any) => {
+    dispatch({ type: actions.SET_CURRENT_CLASS, payload: selectedClass });
+}

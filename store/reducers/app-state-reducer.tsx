@@ -61,9 +61,9 @@ export const appStateReducer = (state = appState, { type, payload }: any) => {
             }
 
         case actions.VALIDATE_MOBILE_USER_SUCCESS: {
+            AsyncStorage.setItem('onboardedUser', JSON.stringify(payload));
             console.log('payload', payload);
             
-            AsyncStorage.setItem('onboardedUser', JSON.stringify(payload));
             return {
                 ...state,
                 doneWithOnBoarding: true,
