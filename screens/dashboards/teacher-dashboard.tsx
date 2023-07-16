@@ -15,18 +15,21 @@ import { connect } from "react-redux";
 import { setCurrentClass } from "../../store/actions/class-properties-actions";
 const TeacherDashboard = (props: any) => {
 
+    React.useEffect(() => {
+        props.get()
+    }, [])
 
     React.useEffect(() => {
         AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
             if (!loggedIn) {
                 props.navigation.navigate(screens.scenes.auth.screens.signin.name);
                 return
-            } else
-                props.get()
+            }
         })
     }, []);
-    const [params, setParams] = useState({});
 
+
+    const [params, setParams] = useState({});
     const handleClick = (item: any) => {
         const param = {
             name: screens.scenes.mainapp.scenes.tutor.screens.sessionClass.name,

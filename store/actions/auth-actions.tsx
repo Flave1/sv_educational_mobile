@@ -5,20 +5,21 @@ import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { Device } from "../../tools/device-properties";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { screens } from "../../screen-routes/navigation";
-import { AuhtService } from "../../services/AuthService";
+import { GetDashboardData } from "./dasboard-actions";
 
-export const signIn = (payload: any) => (dispatch: any): Promise<any> => {
-    console.log('payload', payload);
-    
+export const signIn = (payload: any) => (dispatch: any): Promise<any> => {    
     return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });
             payload.userType = 1;
+            console.log('payload', payload);
+            
             return axiosInstance.post(`smp/server/user/api/v1/mobile-login`, payload)
                 .then((res) => {
                     AsyncStorage.setItem('token', res.data.result.authResult.token).then(() => {
                         dispatch({ type: actions.SIGN_IN_USER, payload: res.data.result.authResult });
                         dispatch({ type: app_state_actions.HIDE_LOADING });
+                        GetDashboardData()(dispatch)
                         return res.data.result.authResult
                     });
                 }).catch((err: any) => {

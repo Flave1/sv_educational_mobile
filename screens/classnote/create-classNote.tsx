@@ -14,7 +14,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import CustomTextArea from "../layouts/CustomTextArea";
 import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
 import { SelectItem } from "../../models/select-item";
-import { displayFullScreen, setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayFullScreen, displayError } from "../../store/actions/app-state-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
@@ -196,7 +196,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         create:(values : any, navigation : any) => createClassNote(values, navigation)(dispatch),
-        setErrorToastState:(error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState:(error: string) => displayError(error)(dispatch),
     }
 }
 

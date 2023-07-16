@@ -16,9 +16,9 @@ export const getAppState = () => (dispatch: any): Promise<any> => {
     })
 }
 
-export const setErrorToastState = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST, payload: message });
+export const displayError = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_ERROR_TOAST, payload: message });
 export const resetSuccessToastState = () => (dispatch: any) => dispatch({ type: actions.RESET_SUCCESS_TOAST });
-export const setSuccessToast = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_SUCCESS_TOAST, payload: message });
+export const displaySuccess = (message: string = "") => (dispatch: any) => dispatch({ type: actions.SET_SUCCESS_TOAST, payload: message });
 
 export const offboard = () => (dispatch: any): Promise<boolean> => {
     return AsyncStorage.removeItem(ONBOARDEDUSER).then(() => {
@@ -68,3 +68,16 @@ export const displayFullScreen = (display: boolean) => {
         payload: display
     }
 }
+
+
+export const Spin = (spin: boolean) => {
+    if (spin)
+        return {
+            type: actions.SHOW_LOADING
+        }
+    else
+        return {
+            type: actions.HIDE_LOADING
+        }
+}
+

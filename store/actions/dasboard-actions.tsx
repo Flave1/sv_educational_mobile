@@ -6,6 +6,7 @@ import { Device } from "../../tools/device-properties";
 
 export const GetDashboardData = () => (dispatch: any) => { 
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
+        console.log('Called');
         
         if (hasInternetAccess) {
             dispatch({ type: app_state_actions.SHOW_LOADING });

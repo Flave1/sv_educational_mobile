@@ -6,7 +6,7 @@ import { FETCH_NO_INTERNET_ACCESS } from "../../Utils/constants";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/attendance-actions-types";
-import { setSuccessToast } from "./app-state-actions";
+import { displaySuccess } from "./app-state-actions";
 
 export const getRegisters = (sessionClassId: any, pageNumber: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
@@ -135,7 +135,7 @@ export const renameRegister = (values: any,openModal:any) => (dispatch: any) => 
                     openModal(false)
                     getRegisters(values.sessionClass, 1)(dispatch);
                     dispatch({ type: app_state_actions.HIDE_LOADING });
-                    setSuccessToast('Successfully renamed register')(dispatch)
+                    displaySuccess('Successfully renamed register')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
@@ -154,7 +154,7 @@ export const deleteRegister = (item: string, sessionClassId: string) => (dispatc
                 .then((res) => {
                     getRegisters(sessionClassId, 1)(dispatch);
                     dispatch({ type: app_state_actions.HIDE_LOADING });
-                    setSuccessToast('Successfully deleted register')(dispatch)
+                    displaySuccess('Successfully deleted register')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);

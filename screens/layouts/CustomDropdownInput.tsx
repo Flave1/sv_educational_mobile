@@ -15,6 +15,7 @@ export default function CustomDropdownInput({ data, height, backgroundColor, onS
       buttonTextStyle={{ color: AppLight }}
       buttonStyle={{ borderRadius: 5, backgroundColor: bgColor, width: '100%', height: boxHeight }}
       data={data}
+      disabled={true}
       dropdownStyle={{ overflow: 'scroll' }}
       onSelect={onSelect}
       dropdownIconPosition={'right'}

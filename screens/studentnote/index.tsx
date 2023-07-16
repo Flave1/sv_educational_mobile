@@ -15,7 +15,7 @@ import ListComponent from "../layouts/list-component";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { screens } from "../../screen-routes/navigation";
 import Feather from "react-native-vector-icons/Feather";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import { _paginationGetStudentnotes, getStudentnotes } from "../../store/actions/studentnote-actions";
 import ScreenTitle from "../layouts/screen-title";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
@@ -181,7 +181,7 @@ function mapDispatchToProps(dispatch: any) {
             getStudentnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
         __getAll: (params: any) => _paginationGetStudentnotes(params)(dispatch),
-        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => displayError(error)(dispatch),
     };
 }
 

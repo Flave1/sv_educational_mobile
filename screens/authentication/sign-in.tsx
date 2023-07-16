@@ -2,7 +2,7 @@ import { Avatar, Pressable, Stack, Text } from '@react-native-material/core';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
-import { offboard } from '../../store/actions/app-state-actions';
+import { Spin, displayError, offboard } from '../../store/actions/app-state-actions';
 import { signIn } from '../../store/actions/auth-actions';
 import { View } from 'react-native';
 import { screens } from '../../screen-routes/navigation';
@@ -14,25 +14,33 @@ import CustomButton from '../layouts/CustomButton';
 import CustomText from '../layouts/CustomText';
 import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
+import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 const SignIn = (props: any) => {
-    // useEffect(() => {
-    //     props.signin(null);
-    // },[])
+
+    let onboardedUser: OnboardedUser;
+    if (props.onboardedUser as OnboardedUser) {
+        onboardedUser = props.onboardedUser;
+    } else {
+        onboardedUser = JSON.parse(props.onboardedUser);
+    }
 
     const [clicked, setClicked] = useState(false)
-
-
     React.useEffect(() => {
         if (props.onboardedUser) {
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
-                console.log('loggedIn', loggedIn);
-                console.log('props.onboardedUser', props.onboardedUser);
+                if (!props.doneWithOnBoarding) {
+
+                    props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name);
+                    return;
+                }
 
                 if (loggedIn)
                     props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
+
             })
         } else {
             props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
+            return;
         }
     }, [clicked])
 
@@ -48,13 +56,22 @@ const SignIn = (props: any) => {
     const { handleChange, handleSubmit, values, setFieldValue, handleBlur, errors, touched }: any = useFormik({
         initialValues: {
             password: "",
-            schoolUrl: props.onboardedUser?.baseUrlSuffix,
-            userName: props.onboardedUser?.userName ? props.onboardedUser?.userName : "",
-            userType:1
+            schoolUrl: onboardedUser?.baseUrlSuffix,
+            userName: onboardedUser?.userName ? onboardedUser?.userName : "",
+            userType: 1
         },
         enableReinitialize: true,
         validationSchema: validation,
         onSubmit: (values) => {
+            if (!props.doneWithOnBoarding) {
+                props.spin(true);
+                props.showError("You will be redirected to onboard in 2 seconds!!")
+                setTimeout(() => {
+                    props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name);
+                    props.spin(false)
+                }, 2000)
+                return;
+            }
             props.signin(values).then((resp: any) => {
                 setClicked(!clicked)
             });
@@ -147,14 +164,17 @@ const SignIn = (props: any) => {
 
 function mapStateToProps(state: any) {
     return {
-        onboardedUser: state.appState.onboardedUser
+        onboardedUser: state.appState.onboardedUser,
+        doneWithOnBoarding: state.appState.doneWithOnBoarding
     }
 }
 
 function mapDispatchToProps(dispatch: any) {
     return {
         offboard: () => offboard()(dispatch),
-        signin: (values: any) => signIn(values)(dispatch)
+        signin: (values: any) => signIn(values)(dispatch),
+        spin: (spin: boolean) => dispatch(Spin(spin)),
+        showError: (msg: string) => displayError(msg)(dispatch)
     };
 }
 

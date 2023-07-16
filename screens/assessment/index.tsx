@@ -20,7 +20,7 @@ import { ClassSubjects } from "../../models/class-properties/class-subjects";
 import { HomeAssessment } from "../../models/class-properties/home-assessment";
 import { SelectItem } from "../../models/select-item";
 import { screens } from "../../screen-routes/navigation";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import { GetAssessments, deleteHomeAssessment, open_closeHomeAssessment, getHomeAssessmentScoreRecords } from "../../store/actions/assessment-actions";
 import { GetTutorClasses, GetClassSubjects, GetClassGroups } from "../../store/actions/class-properties-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
@@ -163,15 +163,15 @@ const AssessmentIndex = ({ dispatch, state, backgroundColor, navigation, route }
                                 style={{ paddingHorizontal: 10 }}
                                 onPress={() => {
                                     if (!sessionClass.value) {
-                                        setErrorToastState('Class must be selected')(dispatch);
+                                        displayError('Class must be selected')(dispatch);
                                         return;
                                     }
                                     if (!sessionClassSubject.value) {
-                                        setErrorToastState('Subject must be selected')(dispatch);
+                                        displayError('Subject must be selected')(dispatch);
                                         return;
                                     }
                                     if (!group.value) {
-                                        setErrorToastState('Class  group must be selected')(dispatch);
+                                        displayError('Class  group must be selected')(dispatch);
                                         return;
                                     }
 

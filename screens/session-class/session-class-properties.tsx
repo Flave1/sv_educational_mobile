@@ -16,9 +16,9 @@ const SessionClassProperties = (props: any) => {
     });
 
     const sessionClass = {
-        value: props.currentClass.params.sessionClassId,
-        text: props.currentClass.params.sessionClass,
-        lookUpId: props.currentClass.params.classLookupId
+        value: props.currentClass?.params?.sessionClassId,
+        text: props.currentClass?.params?.sessionClass,
+        lookUpId: props.currentClass?.params?.classLookupId
     };
 
     return (

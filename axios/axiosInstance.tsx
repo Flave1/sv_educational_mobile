@@ -1,8 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 const axiosInstance = axios.create({
-    baseURL: 'http://flavetechs.com/',
-    // baseURL:'https://localhost:44357/',
+    baseURL: 'http://gateway.flaveconsole.com/',
     headers: {
         Authorization: '',
     },

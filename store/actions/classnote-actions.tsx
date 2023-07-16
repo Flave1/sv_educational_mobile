@@ -5,7 +5,7 @@ import { FETCH_NO_INTERNET_ACCESS } from "../../Utils/constants";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/classnote-actions-types";
-import { setSuccessToast } from "./app-state-actions";
+import { displaySuccess } from "./app-state-actions";
 
 export const getClassnotes = (sessionClassId: string, subjectId: string, status: number = -2, pageNumber: number = 1) => (dispatch: any) => {
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import CustomText from '../layouts/CustomText';
 import { AppLightBlue } from '../../tools/color';
@@ -16,15 +16,18 @@ const Page = ({ backgroundColor, iconName, title }: any) => {
           backgroundColor: backgroundColor,
         }]}
     >
-      <CustomText style={{color: AppLightBlue}} title={icon} />
+      <Text style={{ color: AppLightBlue }}>{icon}</Text>
       <View style={{ marginTop: 16 }}>
-        <CustomText style={{
-          margin: 10,
-          padding: 10,
-          textAlign: 'center',
-          fontSize: 24,
-          color: AppLightBlue
-        }} title={title} />
+        <Text
+
+          style={{
+            fontWeight:'bold',
+            margin: 10,
+            padding: 10,
+            textAlign: 'center',
+            fontSize: 24,
+            color: AppLightBlue,
+          }}>{title}</Text>
       </View>
     </View>
   );

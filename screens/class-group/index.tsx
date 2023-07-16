@@ -21,7 +21,7 @@ import { screens } from "../../screen-routes/navigation";
 import Feather from "react-native-vector-icons/Feather";
 import { FloatingButton } from "../layouts/floating-button";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import ScreenTitle from "../layouts/screen-title";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
@@ -211,7 +211,7 @@ function mapStateToProps(state: any) {
 }
 function mapDispatchToProps(dispatch: any) {
     return {
-        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => displayError(error)(dispatch),
         delete: (item: string, sessionClassId: string, sessionClassSubjectId: string, setClassGroup: any) => deleteClassGroup(item, sessionClassId, sessionClassSubjectId, setClassGroup)(dispatch),
         getSubjects: (sessionClassId: string) => GetClassSubjects(sessionClassId)(dispatch),
         getAll: (classId: string, sessionClassSubjectId: string) => GetClassGroups2(classId, sessionClassSubjectId)(dispatch),

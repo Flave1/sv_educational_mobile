@@ -33,8 +33,6 @@ const ProtectedTeacher = (props: any) => {
     const navigation = useNavigation();
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-
-
     const transition = (
         <Transition.Sequence>
             <Transition.In type="slide-left" durationMs={500} delayMs={1000} />
@@ -174,7 +172,8 @@ const ProtectedTeacher = (props: any) => {
                     // ref={transitionRef} 
                     style={{ display: isFullScreen ? 'none' : 'flex', height: '15%', backgroundColor: props.backgroundColor, justifyContent: 'center', alignItems: 'center' }}>
                     <SessionClassProperties hide={false} params={props.params}
-                        selectedClass={{ value: param?.sessionClassId, text: param?.sessionClass }} />
+                        selectedClass={{ value: param?.sessionClassId, text: param?.sessionClass }} 
+                        navigation={navigation}/>
                 </Transitioning.View>
 
             </Stack>

@@ -11,7 +11,7 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CustomTextArea from "../layouts/CustomTextArea";
 import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
 import { SelectItem } from "../../models/select-item";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
 import CustomFileInput from "../layouts/CustomFileInput";
 import { connect } from "react-redux";
@@ -200,7 +200,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
     return {
         update: (values: any, navigation: any) => updateClassNote(values, navigation)(dispatch),
-        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => displayError(error)(dispatch),
         sendForApproval: (classNoteId: any) => sendForApproval({classNoteId})(dispatch),
     }
 }

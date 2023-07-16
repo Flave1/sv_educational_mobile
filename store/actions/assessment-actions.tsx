@@ -3,7 +3,7 @@ import { Device } from "../../tools/device-properties";
 import { ErrorHandler } from "../../Utils/ErrorHandler";
 import { actions as app_state_actions } from "../action-types/app-state-action-types";
 import { actions } from "../action-types/assessment-actions-types";
-import { setSuccessToast } from "./app-state-actions";
+import { displaySuccess } from "./app-state-actions";
 
 export const GetAssessments = (sessionClassId: any, sessionClassSubjectId: any, groupId: any, pageNumber: any) => (dispatch: any) => {
     Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
@@ -117,7 +117,7 @@ export const open_closeHomeAssessment = (homeAssessmentId: any, sessionClassId: 
             axiosInstance.post(`smp/server/homeassessment/api/v1/close/home-assessment`, payload)
                 .then((res) => {
                     GetAssessments(sessionClassId, sessionClassSubjectId, groupId, 1)(dispatch);
-                    setSuccessToast('Successfully changed the status of assessment')(dispatch)
+                    displaySuccess('Successfully changed the status of assessment')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);;
@@ -137,7 +137,7 @@ export const deleteHomeAssessment = (item: string, sessionClassId: string, sessi
                 .then((res) => {
                     GetAssessments(sessionClassId, sessionClassSubjectId, groupId, 1)(dispatch);
                     dispatch({ type: app_state_actions.HIDE_LOADING });
-                    setSuccessToast('Successfully deleted assessment')(dispatch)
+                    displaySuccess('Successfully deleted assessment')(dispatch)
                 }).catch((err) => {
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, app_state_actions.REQUEST_FAILED, dispatch);

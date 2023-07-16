@@ -1,14 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const persistConfig = {
-    key: 'root',
-    storage: AsyncStorage,
-    // whitelist: [
-    //   'appState', 
-    //   'authState', 
-    //   'dasboardState', 
-    //   'announcementState', 
-    //   'classPropsState', 
-    //   'assessmentState'
-    // ]
-  };
+  key: 'root',
+  storage: AsyncStorage,
+  blacklist: ['dasboardReducer']
+  // whitelist: [
+  //   'appState', 
+  //   'authState', 
+  //   'dasboardState', 
+  //   'announcementState', 
+  //   'classPropsState', 
+  //   'assessmentState'
+  // ]
+};

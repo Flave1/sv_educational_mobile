@@ -15,7 +15,7 @@ import CustomTextArea from "../layouts/CustomTextArea";
 import CustomCheckBoxWithBorder from "../layouts/checkbox-component";
 import { ClassAssessment } from "../../models/class-properties/assessment";
 import { SelectItem } from "../../models/select-item";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import { getSingleHomeAssessment, createHomeAssessment, updateHomeAssessment } from "../../store/actions/assessment-actions";
 import ProtectedTeacher from "../authentication/protected-teacher";
 const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route }: any) => {
@@ -81,9 +81,9 @@ const AssessmentCreate = ({ dispatch, state, backgroundColor, navigation, route 
 
 
     useEffect(() => {
-        touched.title && errors.title && (setErrorToastState(errors.title)(dispatch))
-        touched.content && errors.content && (setErrorToastState(errors.content)(dispatch))
-        touched.assessmentScore && errors.assessmentScore && (setErrorToastState(errors.assessmentScore)(dispatch))
+        touched.title && errors.title && (displayError(errors.title)(dispatch))
+        touched.content && errors.content && (displayError(errors.content)(dispatch))
+        touched.assessmentScore && errors.assessmentScore && (displayError(errors.assessmentScore)(dispatch))
     }, [touched, errors])
 
     return (

@@ -26,7 +26,6 @@ import BottomUpComponent from "../layouts/bottom-up-component";
 import { Search } from "../../Utils/generate";
 import CustomSearchInput from "../layouts/CustomSearchInput";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from "native-base";
 
 const SchoolSetup = (props: any) => {
     const [selectedSchool, setSelectedSchool] = useState<School>(new School());
@@ -64,7 +63,7 @@ const SchoolSetup = (props: any) => {
     }, [props.appState])
 
     console.log('props.appState', props.appState);
-    
+
 
     const handleSearch = (text: any) => {
         // Search({ allSchools, text, columns: ["schoolName", "address"] })
@@ -137,7 +136,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(SchoolSetup);
 
 
 const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any) => {
-    const [usernameOrRegNumberLabel, setUsernameOrRegNumberPlaceHolder] = useState<String>('Student Reg Number OR Email');
+    const [usernameOrRegNumberLabel, setUsernameOrRegNumberPlaceHolder] = useState<String>('Registered Email');
     const userTypes = ["STUDENT", "TEACHER", "PARENT"];
 
     const validation = Yup.object().shape({
@@ -165,12 +164,12 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
 
     return (
         <ScrollView>
-            <Stack style={{ padding: 30 }}>
-                <Stack style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+            <Stack style={{ padding: 20 }}>
+                <Stack style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                     <Avatar image={{ uri: !selectedSchool.schoolLogo ? "https://www.kaleo-asbl.be/content/uploads/2017/05/Profil-site.jpg" : selectedSchool.schoolLogo }} size={150} />
                 </Stack>
 
-                <HStack style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
+                <HStack style={{ alignItems: 'center', justifyContent: 'center', marginTop: 0 }}>
                     <Text style={{ textTransform: 'uppercase', color: 'white', fontWeight: 'bold' }} >{selectedSchool.schoolName}</Text>
                 </HStack>
                 <Stack spacing={3}>
@@ -187,12 +186,13 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                         {((touched.usernameOrRegNumber && errors.usernameOrRegNumber)) && <Text color='red' >{errors.usernameOrRegNumber}</Text>}
                     </Stack>
                     <View style={{ width: '100%' }}>
-                        <Text color={screenLocalColor}>Select user type here</Text>
+                        <Text color={screenLocalColor}>User type</Text>
                         <Divider style={{ marginBottom: 4, marginTop: 10, opacity: -4 }} leadingInset={16} trailingInset={32} />
                         <CustomDropdownInput data={userTypes}
                             searchPlaceHolder="Search"
                             defaultButtonText={userTypes[1]}
                             default={1}
+                            disabled={true}
                             buttonTextAfterSelection={(selectedItem: string, index: any) => {
                                 return selectedItem
                             }}
@@ -202,11 +202,13 @@ const UserValidationForm = ({ selectedSchool, dispatch, openOrCloseModal }: any)
                             onSelect={(selectedItem: string, index: number) => {
                                 handleChange;
                                 setFieldValue('userType', index)
+                                if (index === 2) {
+                                    setUsernameOrRegNumberPlaceHolder('Parent Registered Email')
+                                }
                                 if (index === 0) {
                                     setUsernameOrRegNumberPlaceHolder('Student Reg Number OR Email')
-                                } if (index === 2) {
-                                    setUsernameOrRegNumberPlaceHolder('Parent Registered Email')
-                                } else {
+                                } 
+                                if (index == 1) {
                                     setUsernameOrRegNumberPlaceHolder('Teacher Registered Email')
                                 }
                             }}

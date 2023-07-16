@@ -21,7 +21,7 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import ReadClassnote from "./read-classnots";
-import { setErrorToastState } from "../../store/actions/app-state-actions";
+import { displayError } from "../../store/actions/app-state-actions";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AppButtonColorDark, AppLightBlue } from "../../tools/color";
 import SendClassnote from "./send-classnote";
@@ -317,7 +317,7 @@ function mapDispatchToProps(dispatch: any) {
             getClassnotes(sessionClassId, subjectId, status, pageNumber)(dispatch),
 
         __getAll: (params: any) => _paginationGetClassnotes(params)(dispatch),
-        setErrorToastState: (error: string) => setErrorToastState(error)(dispatch),
+        setErrorToastState: (error: string) => displayError(error)(dispatch),
         download:(classNoteId:string) => downloadClassNote(classNoteId)(dispatch),
     };
 }

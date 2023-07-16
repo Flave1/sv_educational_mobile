@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 
 
 const Onboarding = (props: any) => {
+
   React.useEffect(() => {
 
     if(props.persistedUser){
@@ -19,7 +20,6 @@ const Onboarding = (props: any) => {
       }
     }
   }, [props.onboardedUser])
-
 
   const pagerRef: any = useRef(null);
   const [pageNumber, setPageNumber] = useState(0);
@@ -43,9 +43,8 @@ const Onboarding = (props: any) => {
         <View key="1">
           <Page
             backgroundColor={backgroundStyle.backgroundColor}
-            iconName="cpu"
-            title="Welcome to school pro, as you take the next step of your 
-            educational career by stepping into high school."
+            iconName="clock"
+            title="We seek to revolutionize the way school, college and university administrations manage their operations"
           />
           <Footer
             backgroundColor={backgroundStyle.backgroundColor}
@@ -59,9 +58,8 @@ const Onboarding = (props: any) => {
         <View key="2">
           <Page
             backgroundColor={backgroundStyle.backgroundColor}
-            iconName="activity"
-            title="A sought after tools and features in a School Management 
-            Software; with capacity of handling all school activities"
+            iconName="video"
+            title="Platform for conducting virtual meetings and classes, presentations, or discussions"
           />
           <Footer
             backgroundColor={backgroundStyle.backgroundColor}
@@ -81,8 +79,8 @@ const Onboarding = (props: any) => {
         <View key="3">
           <Page
             backgroundColor={backgroundStyle.backgroundColor}
-            iconName="airplay"
-            title="Get updates on weather"
+            iconName="frown"
+            title="Child gadget monitor monitor to manage children use of electronic devices to promote responsible and safe technology usage"
           />
           <Footer
             backgroundColor={backgroundStyle.backgroundColor}

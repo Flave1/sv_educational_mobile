@@ -43,9 +43,7 @@ import EditProfile from './profile/edit-teacher-profile';
 import ClassGroupIndex from './class-group';
 import CreateClassGroup from './class-group/create-class-group';
 import EditClassGroup from './class-group/edit-class-group';
-import ProtectedTeacher from './authentication/protected-teacher';
 import { AuhtService } from '../services/AuthService';
-import { Screen } from 'react-native-screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,7 +66,6 @@ const Entry = (props: any) => {
     React.useEffect(() => {
         if (props.onboardedUser) {
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
-                console.log('loggedIn', loggedIn);
                 setLogin(loggedIn)
             })
         } else {
