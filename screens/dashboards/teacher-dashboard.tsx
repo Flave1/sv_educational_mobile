@@ -15,17 +15,23 @@ import { connect } from "react-redux";
 import { setCurrentClass } from "../../store/actions/class-properties-actions";
 const TeacherDashboard = (props: any) => {
 
-    React.useEffect(() => {
-        props.get()
-    }, [])
+    // React.useEffect(() => {
+    //     props.get()
+    // }, [])
 
     React.useEffect(() => {
         AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
+            console.log('dasboard 1');
+            
             if (!loggedIn) {
+                console.log('dasboard 2');
                 props.navigation.navigate(screens.scenes.auth.screens.signin.name);
                 return
             }
         })
+        return () => {
+            console.log('Clean-up function');
+          };
     }, []);
 
 

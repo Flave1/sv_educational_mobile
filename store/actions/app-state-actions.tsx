@@ -32,11 +32,11 @@ export const getAllSchools = async () => (dispatch: any): Promise<Array<School>>
     return Device.isInternetAvailable().then((hasInternetAccess: boolean) => {
         if (hasInternetAccess) {
             dispatch({ type: actions.SHOW_LOADING });
-            return axiosInstance.get('fws/client/fws/api/v1/sms-mobile/get-all/clients')
+            return axiosInstance.get('smp/server/user/api/v1/get/allschools')//fws/api/v1/sms-mobile/get-all/clients')
                 .then((res) => {
                     dispatch({ type: actions.HIDE_LOADING });
                     return res.data.result as Array<School>;
-                }).catch((err: any) => {
+                }).catch((err: any) => {                    
                     const error: any = JSON.stringify(err.response);
                     ErrorHandler.HandleUnexpectedError(error, actions.REQUEST_FAILED, dispatch);
                     return new Array<School>();

@@ -8,11 +8,11 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.jamesisaac.rnbackgroundtask.RNJobCreator;
 import com.multitenantsmpmobile.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.evernote.android.job.JobManager;
+import com.swmansion.reanimated.BuildConfig;
 
 
 public class MainApplication extends Application implements ReactApplication {
@@ -55,9 +55,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-      JobManager.create(this);
-      RNJobCreator jobCreator = new RNJobCreator();
-      JobManager.instance().addJobCreator(jobCreator);
+//      JobManager.create(this);
+//      RNJobCreator jobCreator = new RNJobCreator();
+//      JobManager.instance().addJobCreator(jobCreator);
 //      JobManager.create(this);
 //    // If you opted-in for the New Architecture, we enable the TurboModule system
 //    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;

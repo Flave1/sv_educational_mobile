@@ -16,29 +16,39 @@ import CustomTextInput from '../layouts/CustomTextInput';
 import { connect } from 'react-redux';
 import { OnboardedUser } from '../../models/on-boarding/onboarded-user';
 const SignIn = (props: any) => {
+    const [onboardedUser, set] = useState<OnboardedUser>();
 
-    let onboardedUser: OnboardedUser;
-    if (props.onboardedUser as OnboardedUser) {
-        onboardedUser = props.onboardedUser;
-    } else {
-        onboardedUser = JSON.parse(props.onboardedUser);
-    }
+    React.useEffect(() => {
+
+        if (props.onboardedUser as OnboardedUser) {
+            console.log('here 1');
+            set(props.onboardedUser);
+        } else {
+            console.log('here 3');
+            set(JSON.parse(props.onboardedUser));
+        }
+
+    }, [props.onboardedUser])
 
     const [clicked, setClicked] = useState(false)
     React.useEffect(() => {
-        if (props.onboardedUser) {
+        if (onboardedUser) {
+
             AuhtService.IsUserAuthenticated().then((loggedIn: Boolean) => {
                 if (!props.doneWithOnBoarding) {
-
+                    console.log('pager');
                     props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name);
                     return;
                 }
 
-                if (loggedIn)
+                if (loggedIn) {
+                    console.log('is logged in');
                     props.navigation.navigate(screens.scenes.mainapp.scenes.tutor.screens.home.name);
+                }
 
             })
         } else {
+            console.log('pager 2');
             props.navigation.navigate(screens.scenes.onBoarding.screens.viewpagers.name)
             return;
         }
@@ -83,10 +93,11 @@ const SignIn = (props: any) => {
             <Stack style={{ backgroundColor: props.backgroundColor }}>
                 <Stack style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 30, height: '40%' }}>
                     <View style={{ borderColor: AppPurple, borderWidth: 6, borderRadius: 100 }}>
-                        <Avatar size={150} image={{
-                            uri: props.onboardedUser?.schoolLogo ? props?.onboardedUser?.schoolLogo
-                                : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
-                        }} />
+                        <Avatar
+                            size={150}
+                            image={{
+                                uri: onboardedUser?.schoolLogo ? props.onboardedUser?.schoolLogo : 'https://img.lovepik.com/free-png/20211213/lovepik-mens-business-avatar-icon-png-image_401551171_wh1200.png'
+                            }} />
                     </View>
                 </Stack>
                 <Stack center>
